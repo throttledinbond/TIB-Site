@@ -328,7 +328,7 @@ a{color:inherit;text-decoration:none;}
 }
 .bottle-detail-img{height:260px;width:auto;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));}
 
-.bottle-detail-info{padding:32px 40px;background:var(--cream);}
+.bottle-detail-info{padding:32px 40px;}
 .bottle-detail-badge{
  display:inline-block;
  font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
@@ -353,7 +353,7 @@ a{color:inherit;text-decoration:none;}
 }
 .bottle-detail-close:hover{color:var(--gold);}
 
-.whiskey-cta-row{display:flex;gap:12px;margin-top:20px;}
+.whiskey-cta-row{display:flex;gap:12px;margin-top:48px;}
 
 /* ══════════════════════════════════════
  SECTION 3, STORY
@@ -829,34 +829,19 @@ sup.tm, .tm {
 }
 
 
-/* ── FLOATING SHARE BUTTON ── */
-#float-share{
-  position:fixed;
-  bottom:28px;
-  left:24px;
-  z-index:800;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  background:var(--charcoal2);
-  border:1px solid var(--gold);
-  padding:10px 16px;
-  cursor:pointer;
-  box-shadow:0 4px 20px rgba(0,0,0,.4);
-  transition:background .2s,transform .2s;
-  animation:float-pulse 3s ease-in-out infinite;
-}
+#float-share{position:fixed;bottom:28px;left:24px;z-index:800;display:flex;align-items:center;gap:8px;background:var(--charcoal2);border:1px solid var(--gold);padding:10px 16px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:background .2s,transform .2s;animation:float-pulse 3s ease-in-out infinite;}
 #float-share:hover{background:var(--charcoal3);transform:translateY(-2px);}
 #float-share-icon{font-size:16px;color:var(--gold);}
 #float-share-text{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--cream3);white-space:nowrap;}
-@keyframes float-pulse{
-  0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0 rgba(200,149,42,.3);}
-  50%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 6px rgba(200,149,42,0);}
-}
-@media(max-width:600px){
-  #float-share{bottom:72px;left:16px;padding:9px 13px;}
-  #float-share-text{display:none;}
-}
+@keyframes float-pulse{0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0 rgba(200,149,42,.3);}50%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 6px rgba(200,149,42,0);}}
+@media(max-width:600px){#float-share{bottom:72px;left:16px;padding:9px 13px;}#float-share-text{display:none;}}
+
+@keyframes bottle-invite{0%,100%{transform:translateY(0);filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));}40%{transform:translateY(-8px);filter:drop-shadow(0 22px 52px rgba(200,149,42,.25));}}
+@keyframes bottle-invite-2{0%,100%{transform:rotate(-5deg) translateX(14px) translateY(0);filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));}40%{transform:rotate(-5deg) translateX(14px) translateY(-8px);filter:drop-shadow(0 22px 52px rgba(200,149,42,.25));}}
+@keyframes bottle-invite-3{0%,100%{transform:rotate(5deg) translateX(-14px) translateY(0);filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));}40%{transform:rotate(5deg) translateX(-14px) translateY(-8px);filter:drop-shadow(0 22px 52px rgba(200,149,42,.25));}}
+.hero-bottle-img.invite:nth-child(1){animation:bottle-invite-2 3s ease-in-out infinite;}
+.hero-bottle-img.invite:nth-child(2){animation:bottle-invite 3s ease-in-out infinite 0.3s;}
+.hero-bottle-img.invite:nth-child(3){animation:bottle-invite-3 3s ease-in-out infinite 0.6s;}
 </style>
 </head>
 <body>
@@ -967,7 +952,7 @@ sup.tm, .tm {
 <!-- ══════════════════════════════════════
  SECTION 2, WHISKEY
 ══════════════════════════════════════ -->
-<section id="whiskey" class="section" style="min-height:auto;position:relative;">
+<section id="whiskey" class="section" style="min-height:auto;">
  <div class="section-inner">
 
  <div class="whiskey-intro">
@@ -975,7 +960,7 @@ sup.tm, .tm {
  <div class="eyebrow reveal">First Generation &nbsp;·&nbsp; G1 &nbsp;·&nbsp; June 2026</div>
  <h2 class="display-sm reveal reveal-delay-1">The Inaugural<br>Release</h2>
  <div class="gold-line reveal reveal-delay-2"></div>
- <p class="body-copy reveal reveal-delay-2">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story. Nothing added, nothing removed.</p>
+ <p class="body-copy reveal reveal-delay-2">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
  <p class="body-copy reveal reveal-delay-3" style="margin-top:16px;">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
  </div>
  <div class="whiskey-intro-bottles reveal reveal-delay-2">
@@ -1063,23 +1048,23 @@ sup.tm, .tm {
  <div class="section-inner">
  <div class="label-grid">
 
- <!-- LEFT: Label image -->
- <div class="reveal" style="display:flex;align-items:center;justify-content:center;">
+ <!-- LEFT: Copy -->
+ <div class="reveal">
+ <div class="eyebrow" style="margin-bottom:12px;">The Label &nbsp;·&nbsp; Every Detail Matters</div>
+ <h2 class="display-sm" style="margin-bottom:16px;">Why The Label<br>Matters</h2>
+ <div class="gold-line" style="margin-bottom:24px;"></div>
+ <p class="body-copy" style="margin-bottom:0;">Every bottle carries a VIN-TAGe<span class="tm">™</span>, a unique code that traces your whiskey back to the exact year, series, generation and release. Use the decoder to learn all the details about your favorite expression.</p>
+ </div>
+
+ <!-- RIGHT: Label image + button below -->
+ <div class="reveal reveal-delay-1" style="display:flex;flex-direction:column;align-items:center;gap:20px;">
  <img
  src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS%20G1%20Label%20Render.png"
  alt="Founders Select Label"
  crossorigin="anonymous"
  loading="lazy"
  style="width:100%;height:auto;display:block;filter:drop-shadow(0 28px 56px rgba(0,0,0,.6));">
- </div>
-
- <!-- RIGHT: Copy -->
- <div class="reveal reveal-delay-1">
- <div class="eyebrow" style="margin-bottom:12px;">The Label &nbsp;·&nbsp; Every Detail Matters</div>
- <h2 class="display-sm" style="margin-bottom:16px;">Why The Label<br>Matters</h2>
- <div class="gold-line" style="margin-bottom:24px;"></div>
- <p class="body-copy" style="margin-bottom:20px;">Every bottle carries a VIN-TAGe<span class="tm">&#8482;</span>, a unique code that traces your whiskey back to the exact year, series, generation and release. Use the decoder to learn all the details about your favorite expression.</p>
- <button class="btn-ghost" onclick="navTo('vintage')" style="margin-top:8px;">Decode Your VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
+ <button class="btn-ghost" onclick="navTo('vintage')">Decode Your VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
  </div>
 
  </div>
@@ -1097,7 +1082,7 @@ sup.tm, .tm {
 
     <!-- Section header -->
     <div class="eyebrow reveal">The Founders &nbsp;·&nbsp; The Origin</div>
-    <h2 class="display-sm reveal reveal-delay-1" style="margin-bottom:clamp(20px,3vh,32px);">The Story</h2>
+    <h2 class="display-sm reveal reveal-delay-1" style="margin-bottom:clamp(40px,6vh,64px);">The Story</h2>
 
     <!-- Part 1: Born From The Garage + Video -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start;margin-bottom:clamp(32px,5vh,56px);" class="garage-grid">
@@ -1106,7 +1091,7 @@ sup.tm, .tm {
         <div class="gold-line" style="margin-bottom:24px;"></div>
         <p class="body-copy" style="margin-bottom:16px;">It began with a '68 Mustang GT, and a dream rooted in American muscle car culture. What followed was a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
       </div>
-      <div class="reveal reveal-delay-1" style="display:flex;align-items:flex-start;justify-content:center;margin-top:calc(-1 * clamp(20px,3vh,32px));">
+      <div class="reveal reveal-delay-1" style="display:flex;align-items:flex-start;justify-content:center;">
                 <div
           onclick="openVideoModal()"
           style="position:relative;width:100%;max-width:360px;aspect-ratio:9/16;background:var(--charcoal2);overflow:hidden;cursor:pointer;group:;"
@@ -1313,6 +1298,7 @@ sup.tm, .tm {
           <span class="footer-link" onclick="navTo('story')">The Story</span>
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
+ <a class="footer-link" href="https://www.throttledinbond.com/blog" target="_blank" style="color:var(--charcoal4);text-decoration:none;">Blog</a>
  <span class="footer-link" onclick="openMapModal()">Availability Map</span>
  <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
  <span class="footer-link" onclick="openModal('bring-it-modal')">Liquor Store &amp; Bar Managers</span>
@@ -1404,7 +1390,7 @@ sup.tm, .tm {
  <button class="modal-close-x" onclick="closeModal('find-bottle-modal')">✕</button>
  <div class="modal-eyebrow">Purchase</div>
  <div class="modal-title">Available Summer 2026</div>
- <div class="modal-body">Our whiskey will be available Summer 2026. Join The Barrel Inventory to be first in line when bottles drop.</div>
+ <div class="modal-body">Our whiskey will be listed on Bourbon Outfitter when bottles are available. Join The Barrel Inventory to be first in line when bottles drop.</div>
  <div class="modal-actions">
  <button class="btn-primary" onclick="navTo('inventory');closeModal('find-bottle-modal')">Join The Barrel Inventory</button>
  <button class="btn-ghost" onclick="closeModal('find-bottle-modal')">Close</button>
@@ -1481,6 +1467,21 @@ sup.tm, .tm {
       <a href="mailto:info@throttledinbond.com?subject=Trade Inquiry — Throttled In Bond&body=Hi, I am a buyer interested in carrying Throttled In Bond. Please send me information about availability and terms." class="btn-primary" style="display:inline-block;text-decoration:none;">Email Our Trade Team</a>
       <button class="btn-ghost" onclick="openModal('share-modal')">Share This Page</button>
       <button class="btn-ghost" onclick="closeModal('trade-info-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="share-modal">
+  <div class="modal-bg" onclick="closeModal('share-modal')"></div>
+  <div class="modal-box">
+    <button class="modal-close-x" onclick="closeModal('share-modal')">&times;</button>
+    <div class="modal-eyebrow">Share</div>
+    <div class="modal-title">Share This Page</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+      <button onclick="shareVia('sms')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;">&#128172; Text Message</button>
+      <button onclick="shareVia('email')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;">&#9993; Email</button>
+      <button id="copy-btn" onclick="shareVia('copy')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;">&#128279; Copy Link</button>
     </div>
   </div>
 </div>
@@ -1574,7 +1575,7 @@ const BOTTLES = [
  name: 'Kentucky Straight Bourbon Whiskey',
  proof: '[Pending]', age: '6 Years', origin: 'Kentucky', gen: 'G1',
  img: 'https://raw.githubusercontent.com/throttledinbond/Bottle_Showcase/main/FS_G1_Render.png',
- desc: 'Single barrel, barrel strength Kentucky Straight Bourbon. Selected by the founders for character, complexity, and proof.',
+ desc: 'Single barrel, barrel strength. Selected by the founders for character, complexity, and source.',
  mashBill: [{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}],
  },
  {
@@ -1583,7 +1584,7 @@ const BOTTLES = [
  name: 'High Rye Bourbon, Rum Cask Finish',
  proof: '[Pending]', age: '6 Years', origin: 'Kentucky', gen: 'G1',
  img: 'https://raw.githubusercontent.com/throttledinbond/Bottle_Showcase/main/CS_G1_Render.png',
- desc: 'A high-rye mash bill finished in rum casks, an unexpected crossover that rewards the adventurous collector.',
+ desc: 'A high-rye with exceptional rum cask finish, an unexpected reward for the adventurous collector.',
  mashBill: [{k:'C',p:60},{k:'R',p:36},{k:'W',p:0},{k:'MB',p:4}],
  },
  {
@@ -1592,7 +1593,7 @@ const BOTTLES = [
  name: 'Vintage Barrel American Whiskey',
  proof: '[Pending]', age: '11 Years', origin: 'Kentucky', gen: 'G1',
  img: 'https://raw.githubusercontent.com/throttledinbond/Bottle_Showcase/main/BF_G1_Render.png',
- desc: 'A true Barn Find. A single barrel discovered after years in the wood. Deep, complex, and impossibly rare.',
+ desc: 'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.',
  mashBill: [{k:'C',p:70},{k:'R',p:21},{k:'W',p:0},{k:'MB',p:9}],
  },
 ];
@@ -1611,16 +1612,8 @@ function openBottle(id) {
  document.querySelectorAll('.bottle-card').forEach(c => c.classList.remove('active'));
  document.getElementById('bottle-card-' + id)?.classList.add('active');
  const b = BOTTLES[id];
- const mash = b.mashBill.map(g => {
- const col = GRAIN_COLORS[g.k] || 'background:#888;color:#fff';
- if (g.p === 0) return '';
- return `<div class="vin-mash-seg" data-target="${g.p}" style="width:0%;${col}">${g.p}%</div>`;
- }).join('');
- const legend = b.mashBill.filter(g=>g.p>0).map(g => {
- const names = {C:'Corn',R:'Rye',W:'Wheat',MB:'Malted Barley'};
- const dots = {C:'#C8952A',R:'#8B3A2A',W:'#8B7355',MB:'#3E3B35'};
- return `<div class="vin-mash-legend-item"><div class="vin-mash-dot" style="background:${dots[g.k]||'#888'}"></div>${g.p}% ${names[g.k]||g.k}</div>`;
- }).join('');
+ const mash = ''; const legend = '';
+
 
  document.getElementById('bottle-detail-inner').innerHTML = `
  <div class="bottle-detail-img-col">
@@ -1638,9 +1631,8 @@ function openBottle(id) {
  </div>
  <div class="bottle-detail-desc">${b.desc}</div>
  <div style="margin-top:16px;background:var(--cream2);padding:10px 12px;">
- <div style="font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:5px;">Mash Bill</div>
- <div class="vin-mash-bar">${mash}</div>
- <div class="vin-mash-legend">${legend}</div>
+ <div style="font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:8px;">Mash Bill</div>
+ <div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;height:14px;background:var(--cream3);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--cream3) 0,var(--cream3) 5px,var(--cream2) 5px,var(--cream2) 10px);"></div></div><span style="font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);">Available at Release</span></div>
  </div>
  </div>`;
 
@@ -1751,7 +1743,7 @@ function vinBuildResult(b, p) {
  <div class="vin-stat-block"><div class="vin-stat-lbl">Origin</div><div class="vin-stat-val">${b.origin}</div></div>
  <div class="vin-stat-block"><div class="vin-stat-lbl">Series</div><div class="vin-stat-val">${si.name}</div></div>
  <div class="vin-stat-block full"><div class="vin-stat-lbl">Generation</div><div class="vin-stat-val">${gi.name}</div><div class="vin-stat-sub">${gi.desc}</div></div>
- <div class="vin-mash-wrap"><div class="vin-mash-lbl">Mash Bill</div><div class="vin-mash-bar">${mash}</div><div class="vin-mash-legend">${legend}</div></div>
+ <div class="vin-mash-wrap"><div class="vin-mash-lbl">Mash Bill</div><div class="vin-mash-bar"><div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;height:14px;background:var(--cream3);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--cream3) 0,var(--cream3) 5px,var(--cream2) 5px,var(--cream2) 10px);"></div></div><span style="font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);">Available at Release</span></div></div></div>
  <div class="vin-garage-cta"><div class="vin-garage-text"><strong>Save to My Garage</strong>Log in to add this VIN-TAG<span class="lowercase-e">e</span>™ to your collection</div><button class="vin-btn-garage" onclick="openModal('garage-modal')">Open My Garage →</button></div>
  </div>
  </div>`;
@@ -1810,25 +1802,17 @@ async function submitEmail() {
    const res = await fetch('https://api.anthropic.com/v1/messages', {
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
-     body: JSON.stringify({
-       model: 'claude-sonnet-4-20250514', max_tokens: 1000,
-       messages: [{role: 'user', content: 'Add email ' + email + ' to Wix contacts site 7a63fd18-b14a-4731-8624-cf488c10e84b label custom.the-barrel-inventory'}]
-     })
+     body: JSON.stringify({model: 'claude-sonnet-4-20250514', max_tokens: 1000,
+       messages: [{role: 'user', content: 'Add email ' + email + ' to Wix contacts site 7a63fd18-b14a-4731-8624-cf488c10e84b label custom.the-barrel-inventory'}]})
    });
    const data = await res.json();
    const text = data.content && data.content[0] ? data.content[0].text : '';
    if (text.toLowerCase().includes('success') || text.toLowerCase().includes('created')) {
-     msg.style.color = 'var(--gold)';
-     msg.textContent = "You're on The Barrel Inventory. We'll be in touch.";
-     input.value = '';
+     msg.style.color = 'var(--gold)'; msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch."; input.value = '';
    } else throw new Error('failed');
  } catch(e) {
-   msg.style.color = 'var(--gold)';
-   msg.textContent = "You're on The Barrel Inventory. We'll be in touch.";
-   input.value = '';
- } finally {
-   btn.disabled = false; btn.textContent = 'Register';
- }
+   msg.style.color = 'var(--gold)'; msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch."; input.value = '';
+ } finally { btn.disabled = false; btn.textContent = 'Register'; }
 }
 
 // ── MODALS ──
@@ -1869,9 +1853,10 @@ function selectBottle(id) {
  // Open the bottle detail panel
  openBottle(id);
 
- // Scroll to the revealed section smoothly
+ // Scroll so Select A Release header is at top
  setTimeout(() => {
- if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+   const gs = document.getElementById('bottle-grid-section');
+   if (gs) { const top = gs.getBoundingClientRect().top + window.scrollY - 80; window.scrollTo({ top: top, behavior: 'smooth' }); }
  }, 100);
 }
 
@@ -1981,45 +1966,42 @@ function renderMap() {
 }
 
 // ── SHARE TRADE CARD ──
+async function shareTradeCard() {
+  const shareData = {
+    title: 'Throttled In Bond™ — Trade Inquiry',
+    text: 'Single barrel, barrel strength whiskey now available. Three unique expressions, each hand selected. Available through Bourbon Outfitter in 42 states. Trade inquiries: info@throttledinbond.com',
+    url: window.location.href
+  };
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(shareData.url + '\n\n' + shareData.text);
+      alert('Link copied to clipboard. Share it with your buyer or distributor.');
+    }
+  } catch(e) {
+    await navigator.clipboard.writeText(window.location.href);
+  }
+}
 
-// ── SHARE ──
+
 function shareVia(method) {
   var url = window.location.href;
-  var text = 'Check out Throttled In Bond\u2122 \u2014 Single barrel, barrel strength whiskey. The Spirit of American Muscle\u2122.';
-  if (method === 'sms') {
-    window.location.href = 'sms:?body=' + encodeURIComponent(text + ' ' + url);
-  } else if (method === 'email') {
-    window.location.href = 'mailto:?subject=Throttled In Bond\u2122&body=' + encodeURIComponent(text + '\n\n' + url);
-  } else if (method === 'copy') {
+  var text = 'Check out Throttled In Bond - Single barrel, barrel strength whiskey. The Spirit of American Muscle.';
+  if (method === 'sms') { window.location.href = 'sms:?body=' + encodeURIComponent(text + ' ' + url); }
+  else if (method === 'email') { window.location.href = 'mailto:?subject=Throttled In Bond&body=' + encodeURIComponent(text + '\n\n' + url); }
+  else if (method === 'copy') {
     navigator.clipboard.writeText(url).then(function() {
       var btn = document.getElementById('copy-btn');
-      if (btn) { btn.innerHTML = '<span style="font-size:18px;">&#10003;</span> Link Copied!'; btn.style.borderColor='var(--gold)'; setTimeout(function(){btn.innerHTML='<span style=\"font-size:18px;\">&#128279;</span> Copy Link';btn.style.borderColor='var(--charcoal4)';},2000); }
+      if (btn) { btn.textContent = 'Link Copied!'; btn.style.borderColor='var(--gold)'; setTimeout(function(){ btn.textContent = 'Copy Link'; btn.style.borderColor='var(--charcoal4)'; }, 2000); }
     });
   }
   closeModal('share-modal');
 }
 
-// ── DOWNLOAD TRADE CARD ──
-function downloadTradeCard(suf) {
-  var card = document.getElementById('trade-card' + (suf||''));
-  if (!card) return;
-  // Use html2canvas if available, otherwise open print dialog
-  if (typeof html2canvas !== 'undefined') {
-    html2canvas(card, {backgroundColor:'#1A1917',scale:2}).then(function(canvas){
-      var a = document.createElement('a');
-      a.download = 'ThrottledInBond-TradeCard.png';
-      a.href = canvas.toDataURL('image/png');
-      a.click();
-    });
-  } else {
-    var s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    s.onload = function(){ downloadTradeCard(suf); };
-    document.head.appendChild(s);
-  }
-}
-
-
+setTimeout(function() {
+  document.querySelectorAll('.hero-bottle-img').forEach(function(el) { el.classList.add('invite'); });
+}, 1800);
 
 // ── INIT ──
 triggerReveals();
@@ -2050,30 +2032,6 @@ function closeVideoModal() {
 </div>
 
 
-<!-- Share Modal -->
-<div class="modal-overlay" id="share-modal">
-  <div class="modal-bg" onclick="closeModal('share-modal')"></div>
-  <div class="modal-box">
-    <button class="modal-close-x" onclick="closeModal('share-modal')">&times;</button>
-    <div class="modal-eyebrow">Share</div>
-    <div class="modal-title">Share This Page</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-      <button onclick="shareVia('sms')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--charcoal4)'">
-        <span style="font-size:18px;">&#128172;</span> Text Message
-      </button>
-      <button onclick="shareVia('email')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--charcoal4)'">
-        <span style="font-size:18px;">&#9993;</span> Email
-      </button>
-      <button onclick="shareVia('copy')" id="copy-btn" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--charcoal4)'">
-        <span style="font-size:18px;">&#128279;</span> Copy Link
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="float-share" onclick="openModal('share-modal')">
-  <span id="float-share-icon">&#8679;</span>
-  <span id="float-share-text">Share This</span>
-</div>
+<div id="float-share" onclick="openModal('share-modal')"><span id="float-share-icon">&#8679;</span><span id="float-share-text">Share This</span></div>
 </body>
 </html>
