@@ -828,6 +828,35 @@ sup.tm, .tm {
   #bring-it-modal .modal-box > div > div { grid-template-columns:1fr!important; }
 }
 
+
+/* ── FLOATING SHARE BUTTON ── */
+#float-share{
+  position:fixed;
+  bottom:28px;
+  left:24px;
+  z-index:800;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--charcoal2);
+  border:1px solid var(--gold);
+  padding:10px 16px;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+  transition:background .2s,transform .2s;
+  animation:float-pulse 3s ease-in-out infinite;
+}
+#float-share:hover{background:var(--charcoal3);transform:translateY(-2px);}
+#float-share-icon{font-size:16px;color:var(--gold);}
+#float-share-text{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--cream3);white-space:nowrap;}
+@keyframes float-pulse{
+  0%,100%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 0 rgba(200,149,42,.3);}
+  50%{box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 0 6px rgba(200,149,42,0);}
+}
+@media(max-width:600px){
+  #float-share{bottom:72px;left:16px;padding:9px 13px;}
+  #float-share-text{display:none;}
+}
 </style>
 </head>
 <body>
@@ -1284,6 +1313,9 @@ sup.tm, .tm {
           <span class="footer-link" onclick="navTo('story')">The Story</span>
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
+ <span class="footer-link" onclick="openMapModal()">Availability Map</span>
+ <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
+ <span class="footer-link" onclick="openModal('bring-it-modal')">Liquor Store &amp; Bar Managers</span>
  </div>
  </div>
  <div>
@@ -2037,6 +2069,11 @@ function closeVideoModal() {
       </button>
     </div>
   </div>
+</div>
+
+<div id="float-share" onclick="openModal('share-modal')">
+  <span id="float-share-icon">&#8679;</span>
+  <span id="float-share-text">Share This</span>
 </div>
 </body>
 </html>
