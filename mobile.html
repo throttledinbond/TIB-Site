@@ -571,9 +571,9 @@ a{color:inherit;text-decoration:none;}
 
 <script>
 var BOTTLES_M=[
-  {id:0,series:'FS',seriesName:'Founders Select',code:'TIB 26 FS G1 00001',barrel:'00001',name:'Kentucky Straight Bourbon Whiskey',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'Single barrel, barrel strength Kentucky Straight Bourbon. Selected by the founders for character, complexity, and story.',mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}]},
-  {id:1,series:'CS',seriesName:'Collection Series',code:'TIB 26 CS G1 00002',barrel:'00002',name:'High Rye Bourbon, Rum Cask Finish',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'A high-rye mash bill finished in rum casks. An unexpected crossover that rewards the adventurous collector.',mashBill:[{k:'C',p:60},{k:'R',p:36},{k:'W',p:0},{k:'MB',p:4}]},
-  {id:2,series:'BF',seriesName:'Barn Find',code:'TIB 26 BF G1 00003',barrel:'00003',name:'Vintage Barrel American Whiskey',proof:'[Pending]',age:'11 Years',origin:'Kentucky',gen:'G1',desc:'A true Barn Find. A single barrel discovered after years in the wood. Deep, complex, and impossibly rare.',mashBill:[{k:'C',p:70},{k:'R',p:21},{k:'W',p:0},{k:'MB',p:9}]}
+  {id:0,series:'FS',seriesName:'Founders Select',code:'TIB 26 FS G1 00001',barrel:'00001',name:'Kentucky Straight Bourbon Whiskey',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'Single barrel, barrel strength. Selected by the founders for character, complexity, and source.',mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}]},
+  {id:1,series:'CS',seriesName:'Collection Series',code:'TIB 26 CS G1 00002',barrel:'00002',name:'High Rye Bourbon, Rum Cask Finish',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'A high-rye with exceptional rum cask finish, an unexpected reward for the adventurous collector.',mashBill:[{k:'C',p:60},{k:'R',p:36},{k:'W',p:0},{k:'MB',p:4}]},
+  {id:2,series:'BF',seriesName:'Barn Find',code:'TIB 26 BF G1 00003',barrel:'00003',name:'Vintage Barrel American Whiskey',proof:'[Pending]',age:'11 Years',origin:'Kentucky',gen:'G1',desc:'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.',mashBill:[{k:'C',p:70},{k:'R',p:21},{k:'W',p:0},{k:'MB',p:9}]}
 ];
 var GRAIN_C={C:'background:#C8952A;color:#1A1917',R:'background:#8B3A2A;color:#fff',W:'background:#8B7355;color:#fff',MB:'background:#3E3B35;color:#D6CCBA'};
 var GRAIN_N={C:'Corn',R:'Rye',W:'Wheat',MB:'Malted Barley'};
@@ -707,12 +707,15 @@ function renderMapMob(){
       .attr('opacity',function(d){return UNAVAIL_MOB.has(d.properties.name)?.5:.75;})
       .attr('stroke','#1A1917').attr('stroke-width',.5)
       .style('cursor',function(d){return UNAVAIL_MOB.has(d.properties.name)?'default':'pointer';})
-      .on('click',function(event,d){
+      .on('click touchend',function(event,d){
+        event.preventDefault();
         var avail=!UNAVAIL_MOB.has(d.properties.name);
+        var clientX = event.changedTouches ? event.changedTouches[0].clientX : event.clientX;
+        var clientY = event.changedTouches ? event.changedTouches[0].clientY : event.clientY;
         tipName.textContent=d.properties.name;
         tipStatus.textContent=avail?'Available — Tap to Shop':'Not yet available for shipping to this state';
         tipStatus.style.color=avail?'#C8952A':'#D6CCBA';
-        tip.style.left=(event.clientX+8)+'px';tip.style.top=(event.clientY-44)+'px';tip.style.opacity='1';
+        tip.style.left=(clientX+8)+'px';tip.style.top=(clientY-44)+'px';tip.style.opacity='1';
         setTimeout(function(){tip.style.opacity='0';},2000);
         if(avail)openModal('find-bottle-modal-mob');
       });
