@@ -842,9 +842,39 @@ sup.tm, .tm {
 .hero-bottle-img.invite:nth-child(1){animation:bottle-invite-2 3s ease-in-out infinite;}
 .hero-bottle-img.invite:nth-child(2){animation:bottle-invite 3s ease-in-out infinite 0.3s;}
 .hero-bottle-img.invite:nth-child(3){animation:bottle-invite-3 3s ease-in-out infinite 0.6s;}
+
+/* ── AGE GATE ── */
+#age-gate{position:fixed;inset:0;z-index:9999;background:var(--charcoal);display:flex;align-items:center;justify-content:center;padding:var(--pad,20px);}
+#age-gate.hidden{display:none;}
+.age-gate-inner{max-width:480px;width:100%;text-align:center;}
+.age-gate-inner img{height:20px;width:auto;margin:0 auto 32px;}
+.age-gate-inner .display-sm{margin-bottom:12px;}
+.age-gate-inner .gold-line{margin:0 auto 20px;}
+.age-gate-inner p{font-size:14px;color:var(--cream3);line-height:1.7;margin-bottom:28px;}
+.age-gate-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.age-gate-deny{font-size:11px;color:var(--charcoal4);margin-top:16px;letter-spacing:.06em;}
+.age-gate-legal{font-size:10px;color:var(--charcoal4);margin-top:20px;letter-spacing:.06em;line-height:1.6;font-style:italic;}
+
 </style>
 </head>
 <body>
+<!-- Age Gate -->
+<div id="age-gate">
+  <div class="age-gate-inner">
+    <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond" crossorigin="anonymous">
+    <div class="eyebrow" style="margin-bottom:10px;">Welcome</div>
+    <h2 class="display-sm" style="margin-bottom:12px;">Are You 21 or Older?</h2>
+    <div class="gold-line"></div>
+    <p>You must be of legal drinking age to visit this site. Please confirm your age to continue.</p>
+    <div class="age-gate-btns">
+      <button class="btn-primary" onclick="ageGatePass()">Yes, I Am 21+</button>
+      <button class="btn-ghost" onclick="ageGateFail()">No, I Am Not</button>
+    </div>
+    <div class="age-gate-deny" id="age-gate-deny" style="display:none;">We&#8217;re sorry, you must be 21 or older to visit this site.</div>
+    <div class="age-gate-legal">By entering you agree to our Terms &amp; Conditions.<br>Drink Responsibly &mdash; Don&rsquo;t Drink and Drive.</div>
+  </div>
+</div>
+
 
 <!-- ══ NAV ══ -->
 <nav id="nav">
@@ -857,7 +887,7 @@ sup.tm, .tm {
  <span class="nav-link" onclick="navTo('whiskey')">Whiskey</span>
  <span class="nav-link" onclick="navTo('story')">The Story</span>
  <span class="nav-link" onclick="navTo('vintage')">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
- <a class="nav-link" href="https://www.throttledinbond.com/blog" target="_blank" style="color:var(--cream3);text-decoration:none;">Blog</a>
+ <a class="nav-link" href="https://blog.throttledinbond.com" target="_blank" style="color:var(--cream3);text-decoration:none;">Blog</a>
  </div>
  <button class="nav-cta" onclick="navTo('inventory')">Never Miss A Release</button>
  <div class="nav-hamburger" onclick="toggleMenu()" id="hamburger">
@@ -1298,7 +1328,7 @@ sup.tm, .tm {
           <span class="footer-link" onclick="navTo('story')">The Story</span>
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
- <a class="footer-link" href="https://www.throttledinbond.com/blog" target="_blank" style="color:var(--charcoal4);text-decoration:none;">Blog</a>
+ <a class="footer-link" href="https://blog.throttledinbond.com" target="_blank" style="color:var(--charcoal4);text-decoration:none;">Blog</a>
  <span class="footer-link" onclick="openMapModal()">Availability Map</span>
  <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
  <span class="footer-link" onclick="openModal('bring-it-modal')">Liquor Store &amp; Bar Managers</span>
@@ -2002,6 +2032,23 @@ function shareVia(method) {
 setTimeout(function() {
   document.querySelectorAll('.hero-bottle-img').forEach(function(el) { el.classList.add('invite'); });
 }, 1800);
+
+
+// ── AGE GATE ──
+function ageGatePass() {
+  sessionStorage.setItem('tib_age_verified', '1');
+  document.getElementById('age-gate').classList.add('hidden');
+}
+function ageGateFail() {
+  document.getElementById('age-gate-deny').style.display = 'block';
+  document.querySelectorAll('.age-gate-btns button').forEach(function(b){ b.style.display='none'; });
+}
+(function() {
+  if (sessionStorage.getItem('tib_age_verified') === '1') {
+    var ag = document.getElementById('age-gate');
+    if (ag) ag.classList.add('hidden');
+  }
+})();
 
 // ── INIT ──
 triggerReveals();
