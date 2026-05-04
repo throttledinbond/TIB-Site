@@ -317,16 +317,7 @@ a{color:inherit;text-decoration:none;}
 }
 #bottle-detail.open{max-height:600px;}
 
-.bottle-detail-inner{
- display:grid;grid-template-columns:1fr 2fr;gap:0;
-}
-.bottle-detail-img-col{
- background:var(--charcoal3);
- display:flex;align-items:flex-end;justify-content:center;
- padding:32px 24px 0;
- min-height:280px;
-}
-.bottle-detail-img{height:260px;width:auto;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));}
+.bottle-detail-inner{display:block;}
 
 .bottle-detail-info{padding:32px 40px;}
 .bottle-detail-badge{
@@ -589,8 +580,6 @@ a{color:inherit;text-decoration:none;}
 @media(max-width:900px){
  .whiskey-intro{grid-template-columns:1fr;gap:40px;}
  .bottle-grid{grid-template-columns:1fr;}
- .bottle-detail-inner{grid-template-columns:1fr;}
- .bottle-detail-img-col{min-height:200px;}
  .story-grid{grid-template-columns:1fr;gap:40px;}
  .vintage-cols{grid-template-columns:1fr;}
  .vintage-decoder-col{position:static;}
@@ -1112,11 +1101,11 @@ sup.tm, .tm {
 
     <!-- Section header -->
     <div class="eyebrow reveal">The Founders &nbsp;·&nbsp; The Origin</div>
-    <h2 class="display-sm reveal reveal-delay-1" style="margin-bottom:clamp(40px,6vh,64px);">The Story</h2>
 
     <!-- Part 1: Born From The Garage + Video -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start;margin-bottom:clamp(32px,5vh,56px);" class="garage-grid">
       <div class="reveal">
+        <h2 class="display-sm reveal reveal-delay-1" style="margin-bottom:clamp(40px,6vh,64px);">The Story</h2>
         <h3 class="display-sm" style="margin-bottom:16px;white-space:nowrap;font-size:clamp(22px,3.5vw,42px);">Born From The Garage</h3>
         <div class="gold-line" style="margin-bottom:24px;"></div>
         <p class="body-copy" style="margin-bottom:16px;">It began with a '68 Mustang GT, and a dream rooted in American muscle car culture. What followed was a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
@@ -1646,9 +1635,6 @@ function openBottle(id) {
 
 
  document.getElementById('bottle-detail-inner').innerHTML = `
- <div class="bottle-detail-img-col">
- <img class="bottle-detail-img" src="${b.img}" alt="${b.seriesName}">
- </div>
  <div class="bottle-detail-info">
  <div class="bottle-detail-badge">${b.series} · ${b.seriesName} · Barrel ${b.barrel}</div>
  <div class="bottle-detail-name">${b.name}</div>
