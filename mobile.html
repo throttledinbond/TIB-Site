@@ -84,6 +84,7 @@ a{color:inherit;text-decoration:none;}
 .detail-mob-code{font-size:10px;color:var(--gold-lt);letter-spacing:.12em;margin-top:2px;}
 .detail-mob-badge{background:var(--gold);color:var(--charcoal);font-size:10px;font-weight:700;letter-spacing:.1em;padding:3px 8px;white-space:nowrap;flex-shrink:0;}
 .detail-mob-body{padding:14px;}
+.detail-mob-release-name{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:4px;}
 .detail-mob-name{font-size:17px;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.1;margin-bottom:4px;}
 .detail-mob-series{font-size:12px;font-style:italic;color:var(--gold-dk);margin-bottom:14px;}
 .detail-stats-mob{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:12px;}
@@ -501,6 +502,17 @@ a{color:inherit;text-decoration:none;}
   </div>
 </footer>
 
+<div class="modal-overlay-mob" id="more-info-modal-mob" style="z-index:960;align-items:flex-end;">
+  <div class="modal-bg-mob" onclick="closeModal('more-info-modal-mob')"></div>
+  <div class="modal-sheet" style="background:var(--cream);max-height:85vh;overflow-y:auto;">
+    <button class="modal-close-x" onclick="closeModal('more-info-modal-mob')" style="color:var(--charcoal4);">&#x2715;</button>
+    <div class="modal-eyebrow-mob" style="color:var(--gold-dk);">Release Details</div>
+    <div class="modal-title-mob" id="more-info-title-mob" style="color:var(--ink);"></div>
+    <div id="more-info-body-mob" style="margin-top:14px;"></div>
+    <button class="btn-ghost btn-block" onclick="closeModal('more-info-modal-mob')" style="color:var(--charcoal);border-color:var(--charcoal4);margin-top:16px;">Close</button>
+  </div>
+</div>
+
 <div class="modal-overlay-mob" id="find-bottle-modal-mob" style="z-index:960;">
   <div class="modal-bg-mob" onclick="closeModal('find-bottle-modal-mob')"></div>
   <div class="modal-sheet">
@@ -597,10 +609,14 @@ a{color:inherit;text-decoration:none;}
 </div>
 
 <script>
+// Set MORE_INFO_ENABLED to true to expose the "More Information" button to all visitors.
+// While false, append ?preview=more-info to the URL to preview the feature.
+var MORE_INFO_ENABLED=false;
+var moreInfoVisible=MORE_INFO_ENABLED||/[?&]preview=more-info\b/.test(window.location.search);
 var BOTTLES_M=[
-  {id:0,series:'FS',seriesName:'Founders Select',code:'TIB 26 FS G1 00001',barrel:'00001',name:'Kentucky Straight Bourbon Whiskey',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'Single barrel, barrel strength. Selected by the founders for character, complexity, and source.',mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}]},
-  {id:1,series:'CS',seriesName:'Collection Series',code:'TIB 26 CS G1 00002',barrel:'00002',name:'High Rye Bourbon, Rum Cask Finish',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'A high-rye with exceptional rum cask finish, an unexpected reward for the adventurous collector.',mashBill:[{k:'C',p:60},{k:'R',p:36},{k:'W',p:0},{k:'MB',p:4}]},
-  {id:2,series:'BF',seriesName:'Barn Find',code:'TIB 26 BF G1 00003',barrel:'00003',name:'Vintage Barrel American Whiskey',proof:'[Pending]',age:'11 Years',origin:'Kentucky',gen:'G1',desc:'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.',mashBill:[{k:'C',p:70},{k:'R',p:21},{k:'W',p:0},{k:'MB',p:9}]}
+  {id:0,series:'FS',seriesName:'Founders Select',code:'TIB 26 FS G1 00001',barrel:'00001',name:'Kentucky Straight Bourbon Whiskey',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'Single barrel, barrel strength. Selected by the founders for character, complexity, and source.',mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}],moreInfo:{distiller:'[To be added]',distillationDate:'[To be added]',ageAtBottling:'[To be added]',expressionNotes:'[To be added]',tastingNotes:'[To be added]',story:'[To be added]'}},
+  {id:1,series:'CS',seriesName:'Collection Series',code:'TIB 26 CS G1 00002',barrel:'00002',name:'High Rye Bourbon, Rum Cask Finish',proof:'[Pending]',age:'6 Years',origin:'Kentucky',gen:'G1',desc:'A high-rye with exceptional rum cask finish, an unexpected reward for the adventurous collector.',mashBill:[{k:'C',p:60},{k:'R',p:36},{k:'W',p:0},{k:'MB',p:4}],moreInfo:{distiller:'[To be added]',distillationDate:'[To be added]',ageAtBottling:'[To be added]',expressionNotes:'[To be added]',tastingNotes:'[To be added]',story:'[To be added]'}},
+  {id:2,series:'BF',seriesName:'Barn Find',code:'TIB 26 BF G1 00003',barrel:'00003',name:'Vintage Barrel American Whiskey',proof:'[Pending]',age:'11 Years',origin:'Kentucky',gen:'G1',desc:'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.',mashBill:[{k:'C',p:70},{k:'R',p:21},{k:'W',p:0},{k:'MB',p:9}],moreInfo:{distiller:'[To be added]',distillationDate:'[To be added]',ageAtBottling:'[To be added]',expressionNotes:'[To be added]',tastingNotes:'[To be added]',story:'[To be added]'}}
 ];
 var GRAIN_C={C:'background:#C8952A;color:#1A1917',R:'background:#8B3A2A;color:#fff',W:'background:#8B7355;color:#fff',MB:'background:#3E3B35;color:#D6CCBA'};
 var GRAIN_N={C:'Corn',R:'Rye',W:'Wheat',MB:'Malted Barley'};
@@ -645,13 +661,20 @@ function selectBottleMob(id){
   var b=BOTTLES_M[id];
   var mash=b.mashBill.map(function(g){if(g.p===0)return'';return'<div class="mash-seg-mob" data-target="'+g.p+'" style="width:0%;'+( GRAIN_C[g.k]||'background:#888;color:#fff')+'">'+( g.p>8?g.p+'%':'')+'</div>';}).join('');
   var legend=b.mashBill.filter(function(g){return g.p>0;}).map(function(g){return'<div class="mash-legend-item-mob"><div class="mash-dot-mob" style="background:'+(GRAIN_D[g.k]||'#888')+'"></div>'+g.p+'% '+(GRAIN_N[g.k]||g.k)+'</div>';}).join('');
-  document.getElementById('bottle-detail-mob').innerHTML='<div class="detail-mob"><div class="detail-mob-header"><div><div class="detail-mob-tag">VIN-TAGe™ Verified</div><div class="detail-mob-code">'+b.code+'</div></div><div class="detail-mob-badge">BARREL '+b.barrel+'</div></div><div class="detail-mob-body"><div class="detail-mob-name">'+b.name+'</div><div class="detail-mob-series">'+b.seriesName+' · Single Barrel · Barrel Strength</div><div class="detail-stats-mob"><div class="detail-stat-mob"><span class="detail-stat-val">'+b.proof+'</span><span class="detail-stat-lbl">Proof</span></div><div class="detail-stat-mob"><span class="detail-stat-val">'+b.age+'</span><span class="detail-stat-lbl">Age</span></div><div class="detail-stat-mob"><span class="detail-stat-val">'+b.origin+'</span><span class="detail-stat-lbl">Origin</span></div><div class="detail-stat-mob"><span class="detail-stat-val">'+b.gen+'</span><span class="detail-stat-lbl">Gen</span></div></div><div class="detail-mob-desc">'+b.desc+'</div><div class="mash-mob"><div class="mash-lbl-mob">Mash Bill</div><div style="display:flex;align-items:center;gap:8px;margin-top:4px;"><div style="flex:1;height:14px;background:var(--cream3);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--cream3) 0,var(--cream3) 5px,var(--cream2) 5px,var(--cream2) 10px);"></div></div><span style="font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);">Available at Release</span></div></div></div><button class="detail-mob-close" onclick="closeMobBottle()">← Back to All Releases</button></div>';
+  document.getElementById('bottle-detail-mob').innerHTML='<div class="detail-mob"><div class="detail-mob-header"><div><div class="detail-mob-tag">VIN-TAGe™ Verified</div><div class="detail-mob-code">'+b.code+'</div></div><div class="detail-mob-badge">BARREL '+b.barrel+'</div></div><div class="detail-mob-body"><div class="detail-mob-release-name">'+b.seriesName+'</div><div class="detail-mob-name">'+b.name+'</div><div class="detail-mob-series">Single Barrel · Barrel Strength</div><div class="detail-stats-mob"><div class="detail-stat-mob"><span class="detail-stat-val">'+b.proof+'</span><span class="detail-stat-lbl">Proof</span></div><div class="detail-stat-mob"><span class="detail-stat-val">'+b.age+'</span><span class="detail-stat-lbl">Age</span></div><div class="detail-stat-mob"><span class="detail-stat-val">'+b.origin+'</span><span class="detail-stat-lbl">Origin</span></div><div class="detail-stat-mob"><span class="detail-stat-val">'+b.gen+'</span><span class="detail-stat-lbl">Gen</span></div></div><div class="detail-mob-desc">'+b.desc+'</div><div class="mash-mob"><div class="mash-lbl-mob">Mash Bill</div><div style="display:flex;align-items:center;gap:8px;margin-top:4px;"><div style="flex:1;height:14px;background:var(--cream3);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--cream3) 0,var(--cream3) 5px,var(--cream2) 5px,var(--cream2) 10px);"></div></div><span style="font-size:8px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);">Available at Release</span></div></div>'+(moreInfoVisible?'<div style="margin-top:16px;"><button class="btn-primary btn-block" onclick="openMoreInfoMob('+b.id+')">More Information</button></div>':'')+'</div><button class="detail-mob-close" onclick="closeMobBottle()">← Back to All Releases</button></div>';
   document.getElementById('bottle-detail-mob').classList.add('open');
   setTimeout(function(){document.querySelectorAll('#bottle-detail-mob .mash-seg-mob[data-target]').forEach(function(s){s.style.width=s.dataset.target+'%';});document.getElementById('bottle-detail-mob').scrollIntoView({behavior:'smooth',block:'nearest'});},80);
   var ls=document.getElementById('label-section-mob');
   if(ls&&!ls.classList.contains('revealed'))setTimeout(function(){ls.classList.add('revealed');},400);
 }
 function closeMobBottle(){activeMob=null;[0,1,2].forEach(function(i){var c=document.getElementById('mob-bottle-'+i);if(c)c.classList.remove('active');});document.getElementById('bottle-detail-mob').classList.remove('open');}
+function openMoreInfoMob(id){
+  var b=BOTTLES_M[id];var m=b.moreInfo||{};
+  document.getElementById('more-info-title-mob').textContent=b.seriesName+' — '+b.name;
+  var sections=[['Distiller',m.distiller],['Distillation Date',m.distillationDate],['Age at Bottling',m.ageAtBottling],['Expression Notes',m.expressionNotes],['Tasting Notes',m.tastingNotes],['Release Story',m.story]];
+  document.getElementById('more-info-body-mob').innerHTML=sections.map(function(s){return '<div style="margin-bottom:14px;"><div style="font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:4px;">'+s[0]+'</div><div style="font-size:13px;line-height:1.6;color:var(--ink);white-space:pre-wrap;">'+(s[1]||'[To be added]')+'</div></div>';}).join('');
+  openModal('more-info-modal-mob');
+}
 
 var vinExampleMob=false;
 function vinFillMob(code){vinExampleMob=true;document.getElementById('vin-input-mob').value=code;vinDecodeMob();}

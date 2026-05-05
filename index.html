@@ -310,7 +310,7 @@ a{color:inherit;text-decoration:none;}
 
 /* Bottle detail panel */
 #bottle-detail{
- background:var(--charcoal2);
+ background:var(--cream);
  overflow:hidden;
  max-height:0;transition:max-height .5s cubic-bezier(.4,0,.2,1);
 }
@@ -325,6 +325,7 @@ a{color:inherit;text-decoration:none;}
  background:var(--gold);color:var(--charcoal);
  padding:4px 10px;margin-bottom:16px;
 }
+.bottle-detail-release-name{font-size:clamp(11px,1vw,13px);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:6px;}
 .bottle-detail-name{font-size:clamp(20px,2.5vw,32px);font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.1;margin-bottom:6px;}
 .bottle-detail-series{font-size:13px;font-weight:400;font-style:italic;color:var(--gold-dk);margin-bottom:24px;}
 
@@ -337,11 +338,11 @@ a{color:inherit;text-decoration:none;}
 .bottle-detail-close{
  position:absolute;top:16px;right:16px;
  background:none;border:none;cursor:pointer;
- color:var(--cream3);font-size:18px;width:32px;height:32px;
+ color:var(--charcoal4);font-size:18px;width:32px;height:32px;
  display:flex;align-items:center;justify-content:center;
  transition:color .2s;
 }
-.bottle-detail-close:hover{color:var(--gold);}
+.bottle-detail-close:hover{color:var(--gold-dk);}
 
 .whiskey-cta-row{display:flex;gap:12px;margin-top:48px;}
 
@@ -1399,6 +1400,20 @@ sup.tm, .tm {
   </div>
 </div>
 
+<!-- More Information (preview-only until launch) -->
+<div class="modal-overlay" id="more-info-modal">
+ <div class="modal-bg" onclick="closeModal('more-info-modal')"></div>
+ <div class="modal-box" style="max-width:640px;max-height:85vh;overflow-y:auto;background:var(--cream);border-top-color:var(--gold);">
+ <button class="modal-close-x" onclick="closeModal('more-info-modal')" style="color:var(--charcoal4);">&#x2715;</button>
+ <div class="modal-eyebrow" id="more-info-eyebrow" style="color:var(--gold-dk);">Release Details</div>
+ <div class="modal-title" id="more-info-title" style="color:var(--ink);font-size:clamp(22px,3vw,32px);"></div>
+ <div id="more-info-body" style="margin-top:18px;"></div>
+ <div class="modal-actions" style="margin-top:24px;">
+ <button class="btn-ghost" onclick="closeModal('more-info-modal')" style="color:var(--charcoal);border-color:var(--charcoal4);">Close</button>
+ </div>
+ </div>
+</div>
+
 <!-- Find a Bottle -->
 <div class="modal-overlay" id="find-bottle-modal">
  <div class="modal-bg" onclick="closeModal('find-bottle-modal')"></div>
@@ -1584,6 +1599,11 @@ function triggerReveals() {
 window.addEventListener('load', triggerReveals);
 
 // ── BOTTLES ──
+// Set MORE_INFO_ENABLED to true to expose the "More Information" button to all visitors.
+// While false, append ?preview=more-info to the URL to preview the feature.
+const MORE_INFO_ENABLED = false;
+const moreInfoVisible = MORE_INFO_ENABLED || /[?&]preview=more-info\b/.test(window.location.search);
+
 const BOTTLES = [
  {
  id: 0, series: 'FS', seriesName: 'Founders Select',
@@ -1593,6 +1613,14 @@ const BOTTLES = [
  img: 'https://raw.githubusercontent.com/throttledinbond/Bottle_Showcase/main/FS_G1_Render.png',
  desc: 'Single barrel, barrel strength. Selected by the founders for character, complexity, and source.',
  mashBill: [{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}],
+ moreInfo: {
+   distiller: '[To be added]',
+   distillationDate: '[To be added]',
+   ageAtBottling: '[To be added]',
+   expressionNotes: '[To be added]',
+   tastingNotes: '[To be added]',
+   story: '[To be added]'
+ },
  },
  {
  id: 1, series: 'CS', seriesName: 'Collection Series',
@@ -1602,6 +1630,14 @@ const BOTTLES = [
  img: 'https://raw.githubusercontent.com/throttledinbond/Bottle_Showcase/main/CS_G1_Render.png',
  desc: 'A high-rye with exceptional rum cask finish, an unexpected reward for the adventurous collector.',
  mashBill: [{k:'C',p:60},{k:'R',p:36},{k:'W',p:0},{k:'MB',p:4}],
+ moreInfo: {
+   distiller: '[To be added]',
+   distillationDate: '[To be added]',
+   ageAtBottling: '[To be added]',
+   expressionNotes: '[To be added]',
+   tastingNotes: '[To be added]',
+   story: '[To be added]'
+ },
  },
  {
  id: 2, series: 'BF', seriesName: 'Barn Find',
@@ -1611,6 +1647,14 @@ const BOTTLES = [
  img: 'https://raw.githubusercontent.com/throttledinbond/Bottle_Showcase/main/BF_G1_Render.png',
  desc: 'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.',
  mashBill: [{k:'C',p:70},{k:'R',p:21},{k:'W',p:0},{k:'MB',p:9}],
+ moreInfo: {
+   distiller: '[To be added]',
+   distillationDate: '[To be added]',
+   ageAtBottling: '[To be added]',
+   expressionNotes: '[To be added]',
+   tastingNotes: '[To be added]',
+   story: '[To be added]'
+ },
  },
 ];
 
@@ -1634,8 +1678,9 @@ function openBottle(id) {
  document.getElementById('bottle-detail-inner').innerHTML = `
  <div class="bottle-detail-info">
  <div class="bottle-detail-badge">${b.series} · ${b.seriesName} · Barrel ${b.barrel}</div>
+ <div class="bottle-detail-release-name">${b.seriesName}</div>
  <div class="bottle-detail-name">${b.name}</div>
- <div class="bottle-detail-series">${b.seriesName} · Single Barrel · Barrel Strength</div>
+ <div class="bottle-detail-series">Single Barrel · Barrel Strength</div>
  <div class="bottle-detail-stats">
  <div class="detail-stat"><span class="detail-stat-val">${b.proof}</span><span class="detail-stat-lbl">Proof</span></div>
  <div class="detail-stat"><span class="detail-stat-val">${b.age}</span><span class="detail-stat-lbl">Age</span></div>
@@ -1647,6 +1692,7 @@ function openBottle(id) {
  <div style="font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:8px;">Mash Bill</div>
  <div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;height:14px;background:var(--cream3);position:relative;overflow:hidden;"><div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--cream3) 0,var(--cream3) 5px,var(--cream2) 5px,var(--cream2) 10px);"></div></div><span style="font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);">Available at Release</span></div>
  </div>
+ ${moreInfoVisible ? `<div style="margin-top:24px;"><button class="btn-primary" onclick="openMoreInfo(${b.id})">More Information</button></div>` : ''}
  </div>`;
 
  document.getElementById('bottle-detail').classList.add('open');
@@ -1657,6 +1703,27 @@ function openBottle(id) {
  });
  document.getElementById('bottle-detail').scrollIntoView({ behavior:'smooth', block:'nearest' });
  }, 80);
+}
+
+function openMoreInfo(id) {
+ const b = BOTTLES[id];
+ const m = b.moreInfo || {};
+ document.getElementById('more-info-title').textContent = b.seriesName + ' — ' + b.name;
+ const sections = [
+   ['Distiller', m.distiller],
+   ['Distillation Date', m.distillationDate],
+   ['Age at Bottling', m.ageAtBottling],
+   ['Expression Notes', m.expressionNotes],
+   ['Tasting Notes', m.tastingNotes],
+   ['Release Story', m.story],
+ ];
+ document.getElementById('more-info-body').innerHTML = sections.map(([label, value]) =>
+   `<div style="margin-bottom:18px;">
+     <div style="font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:6px;">${label}</div>
+     <div style="font-size:14px;line-height:1.6;color:var(--ink);white-space:pre-wrap;">${value || '[To be added]'}</div>
+   </div>`
+ ).join('');
+ openModal('more-info-modal');
 }
 
 function closeBottle() {
