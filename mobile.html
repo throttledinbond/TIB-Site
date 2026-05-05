@@ -75,7 +75,6 @@ a{color:inherit;text-decoration:none;}
 .bottle-card-info-mob{padding:10px 12px 14px;}
 .bottle-series-mob{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
 .bottle-name-mob{font-size:12px;font-weight:600;color:var(--cream);line-height:1.3;margin-bottom:4px;}
-.bottle-code-mob{font-size:9px;letter-spacing:.12em;color:var(--charcoal4);}
 .bottle-ribbon-mob{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--gold);color:var(--charcoal);padding:3px 8px;margin-bottom:6px;}
 #bottle-detail-mob{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s;opacity:0;margin-top:2px;}
 #bottle-detail-mob.open{max-height:800px;opacity:1;}
@@ -269,7 +268,7 @@ a{color:inherit;text-decoration:none;}
   <span class="mobile-link" onclick="navTo('whiskey');toggleMenu()">Whiskey</span>
   <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
   <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">&#8482;</span></span>
-  <a class="mobile-link" href="https://blog.throttledinbond.com/blog" target="_blank" style="color:var(--cream3);">Blog</a>
+  <a class="mobile-link" href="https://blog.throttledinbond.com/blog" style="color:var(--cream3);">Blog</a>
   <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
 </div>
 
@@ -322,7 +321,6 @@ a{color:inherit;text-decoration:none;}
       <div class="bottle-card-info-mob">
         <div class="bottle-series-mob">FS &middot; Founders Select</div>
         <div class="bottle-name-mob">Kentucky Straight Bourbon Whiskey</div>
-        <div class="bottle-code-mob">TIB 26 FS G1 00001</div>
       </div>
     </div>
     <div class="bottle-card-mob" id="mob-bottle-2" onclick="selectBottleMob(2)">
@@ -331,7 +329,6 @@ a{color:inherit;text-decoration:none;}
       <div class="bottle-card-info-mob">
         <div class="bottle-series-mob">BF &middot; Barn Find</div>
         <div class="bottle-name-mob">Vintage Barrel American Whiskey</div>
-        <div class="bottle-code-mob">TIB 26 BF G1 00003</div>
       </div>
     </div>
     <div class="bottle-card-mob" id="mob-bottle-1" onclick="selectBottleMob(1)">
@@ -340,7 +337,6 @@ a{color:inherit;text-decoration:none;}
       <div class="bottle-card-info-mob">
         <div class="bottle-series-mob">CS &middot; Collection Series</div>
         <div class="bottle-name-mob">High Rye Bourbon, Rum Cask Finish</div>
-        <div class="bottle-code-mob">TIB 26 CS G1 00002</div>
       </div>
     </div>
   </div>
@@ -363,11 +359,13 @@ a{color:inherit;text-decoration:none;}
 
 <section id="story" class="section">
   <div class="pad">
-    <div class="eyebrow reveal">The Founders &middot; The Origin</div>
+    <div class="eyebrow reveal">The Origin &middot; The Founders</div>
     <h2 class="display-sm reveal d1" style="margin-bottom:24px;">The Story</h2>
     <h3 class="display-sm reveal" style="font-size:clamp(20px,5vw,30px);margin-bottom:12px;white-space:nowrap;">Born From The Garage</h3>
     <div class="gold-line reveal d1" style="margin-bottom:16px;"></div>
-    <p class="body-copy reveal d1" style="margin-bottom:20px;">It began with a &lsquo;68 Mustang GT, and a dream rooted in American muscle car culture. What followed was a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
+    <p class="body-copy reveal d1" style="margin-bottom:20px;">It began with a &lsquo;68 Mustang GT, and a dream rooted in American muscle car culture. What followed is a whiskey with the same precision and appeal as the most iconic cars of an era.</p>
+    <p class="body-copy reveal d1" style="margin-bottom:20px;">The sight of American muscle on modern streets is a reminder that the right vintage has no equal. Character, heritage, and provenance are a rare combination, yet you will find them all in THROTTLED IN BOND<span class="tm">&#8482;</span></p>
+    <p class="body-copy reveal d1" style="margin-bottom:20px;">In every sip is a memory, and in every bottle is a story. From the barrel selection, to the age, to the expression, THROTTLED IN BOND<span class="tm">&#8482;</span> celebrates the vision, passion, and influence of American Muscle.</p>
     <div class="video-thumb-mob reveal d2" onclick="openVideoMob()" style="margin-bottom:clamp(28px,5vh,44px);">
       <img src="https://img.youtube.com/vi/yy_83iFcsTM/maxresdefault.jpg" alt="Born From The Garage" crossorigin="anonymous">
       <div class="video-overlay-mob"></div>
@@ -376,10 +374,9 @@ a{color:inherit;text-decoration:none;}
     </div>
     <div class="gold-line" style="margin-bottom:clamp(28px,5vh,44px);margin-top:0;opacity:.6;"></div>
     <div class="story-copy-mob reveal">
-      <p>We&rsquo;ve spent the beginning years under the hood and on the road, sourcing parts, solving problems, and staying stubborn about the details. Nothing compares to the feeling of driving a piece of American history.</p>
-      <p>This whiskey comes from that same mindset. Putting in the time following every lead, and trusting the process until we get it right.</p>
-      <p>Throttled In Bond<span class="tm">&#8482;</span> is a whiskey with some horsepower, but it drinks as smooth as a perfectly tuned V8. Every choice from the barrel, to the age, to the expression, was made with the same care we&rsquo;d give to any build.</p>
-      <p>A whiskey with character and vintage, celebrating the vision, passion, and influence of American Muscle. It took real work to get here, but that&rsquo;s what we live for.</p>
+      <p>THROTTLED IN BOND<span class="tm">&#8482;</span> is our expression of nostalgia and passion for American Muscle car culture. We&rsquo;re passionate about hunting for the most exciting barn finds, whether that be a rare muscle car, ready for revival, or a unique whiskey barrel, aged to perfection.</p>
+      <p>Join us as we celebrate THE SPIRIT OF AMERICAN MUSCLE<span class="tm">&#8482;</span>.</p>
+      <a href="https://blog.throttledinbond.com/blog" class="btn-ghost" style="text-decoration:none;margin-top:8px;">Read More on the Blog</a>
     </div>
     <div class="story-photos-mob reveal d1">
       <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/IMG_6423.jpeg" alt="" crossorigin="anonymous" loading="lazy">
@@ -479,7 +476,7 @@ a{color:inherit;text-decoration:none;}
       <span class="footer-link-mob" onclick="navTo('story')">The Story</span>
       <span class="footer-link-mob" onclick="navTo('vintage')">VIN-TAGe<span class="tm">&#8482;</span></span>
       <span class="footer-link-mob" onclick="navTo('inventory')">The Barrel Inventory</span>
-      <a class="footer-link-mob" href="https://blog.throttledinbond.com/blog" target="_blank" style="color:var(--charcoal4);">Blog</a>
+      <a class="footer-link-mob" href="https://blog.throttledinbond.com/blog" style="color:var(--charcoal4);">Blog</a>
       <span class="footer-link-mob" onclick="openMapMob()">Availability Map</span>
       <span class="footer-link-mob" onclick="openModal('trade-info-modal-mob')">Help Us Bring TIB&#8482; To Your Area</span>
       <span class="footer-link-mob" onclick="openModal('bring-it-modal-mob')">Liquor Store &amp; Bar Managers</span>
