@@ -169,12 +169,16 @@ a{color:inherit;text-decoration:none;}
 .vin-watermark-mob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:20px;font-weight:700;letter-spacing:.2em;color:rgba(200,149,42,.15);white-space:nowrap;pointer-events:none;z-index:10;text-transform:uppercase;border:2px solid rgba(200,149,42,.15);padding:5px 10px;}
 #inventory{background:var(--charcoal);}
 .email-form-mob{margin-top:24px;}
-.email-row-mob{display:flex;gap:0;width:100%;}
-.email-input-mob{flex:1;min-width:0;background:var(--charcoal2);border:1px solid var(--charcoal4);border-right:none;color:var(--cream);font-family:var(--f);font-size:14px;padding:14px;outline:none;border-radius:0;-webkit-appearance:none;transition:border-color .2s;}
+.email-row-mob{display:flex;flex-direction:column;gap:0;width:100%;text-align:left;}
+.email-input-mob{flex:1;min-width:0;width:100%;background:var(--charcoal2);border:1px solid var(--charcoal4);border-bottom:none;color:var(--cream);font-family:var(--f);font-size:14px;padding:14px;outline:none;border-radius:0;-webkit-appearance:none;transition:border-color .2s;box-sizing:border-box;}
+.email-input-mob:last-of-type{border-bottom:1px solid var(--charcoal4);}
 .email-input-mob::placeholder{color:var(--charcoal4);}
-.email-input-mob:focus{border-color:var(--gold);}
-.email-submit-mob{flex-shrink:0;background:var(--gold);color:var(--charcoal);border:none;font-family:var(--f);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:0 18px;cursor:pointer;}
+.email-input-mob:focus{border-color:var(--gold);position:relative;z-index:1;}
+.email-submit-mob{flex-shrink:0;background:var(--gold);color:var(--charcoal);border:none;font-family:var(--f);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;padding:14px 18px;cursor:pointer;width:100%;margin-top:12px;}
 .email-note-mob{font-size:11px;color:var(--charcoal4);letter-spacing:.06em;margin-top:8px;}
+.sms-consent-mob{display:flex;align-items:flex-start;gap:8px;margin-top:12px;text-align:left;}
+.sms-consent-mob input[type=checkbox]{flex-shrink:0;margin-top:2px;accent-color:var(--gold);width:16px;height:16px;cursor:pointer;}
+.sms-consent-mob label{font-size:11px;color:var(--charcoal4);letter-spacing:.04em;line-height:1.5;cursor:pointer;}
 #footer{background:var(--charcoal2);border-top:1px solid var(--charcoal4);padding:clamp(36px,6vh,56px) var(--pad) clamp(24px,4vh,36px);}
 .footer-brand-mob{margin-bottom:24px;display:flex;align-items:center;gap:8px;}
 .footer-brand-mob img{height:16px;width:auto;}
@@ -270,7 +274,7 @@ a{color:inherit;text-decoration:none;}
   <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
   <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">&#8482;</span></span>
   <a class="mobile-link" href="https://blog.throttledinbond.com/blog" style="color:var(--cream3);">Blog</a>
-  <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
+  <button class="mobile-cta" onclick="focusInventoryMob();toggleMenu()">Never Miss A Release</button>
 </div>
 
 <section id="home" class="section">
@@ -455,10 +459,17 @@ a{color:inherit;text-decoration:none;}
     <p class="body-copy reveal d2" style="max-width:320px;margin:0 auto 0;">Join The Barrel Inventory. Be the first to know what&rsquo;s in the rickhouse, what&rsquo;s ready to be bottled, and when the next release drops.</p>
     <div class="email-form-mob reveal d3">
       <div class="email-row-mob">
-        <input type="email" class="email-input-mob" id="email-input-mob" placeholder="Your email address" onkeydown="if(event.key==='Enter')submitEmailMob()">
-        <button class="email-submit-mob" id="email-submit-mob" onclick="submitEmailMob()">Register</button>
+        <input type="text" class="email-input-mob" id="first-name-mob" placeholder="First name" autocomplete="given-name">
+        <input type="text" class="email-input-mob" id="last-name-mob" placeholder="Last name" autocomplete="family-name">
+        <input type="email" class="email-input-mob" id="email-input-mob" placeholder="Email address" autocomplete="email" onkeydown="if(event.key==='Enter')submitEmailMob()">
+        <input type="tel" class="email-input-mob" id="phone-input-mob" placeholder="Phone (optional, US only)" autocomplete="tel" inputmode="tel" onkeydown="if(event.key==='Enter')submitEmailMob()">
       </div>
-      <div class="email-note-mob">No spam. Release alerts and brand updates only.</div>
+      <div class="sms-consent-mob">
+        <input type="checkbox" id="sms-consent-mob">
+        <label for="sms-consent-mob">By providing your phone number, you agree to receive occasional marketing SMS from Throttled In Bond. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help.</label>
+      </div>
+      <button class="email-submit-mob" id="email-submit-mob" onclick="submitEmailMob()">Register</button>
+      <div class="email-note-mob" style="text-align:center;">No spam. Release alerts and brand updates only.</div>
       <div id="email-msg-mob" style="font-size:12px;margin-top:8px;display:none;text-align:center;"></div>
     </div>
   </div>
@@ -639,6 +650,7 @@ window.addEventListener('scroll',function(){
 },{passive:true});
 
 function navTo(id){var el=document.getElementById(id);if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-56,behavior:'smooth'});}
+function focusInventoryMob(){navTo('inventory');setTimeout(function(){var f=document.getElementById('first-name-mob');if(f)f.focus({preventScroll:true});},650);}
 
 var menuOpen=false;
 function toggleMenu(){
@@ -719,14 +731,22 @@ function rtcActMob(i){
   rtcActiveMob=rtcActiveMob===i?-1:i;
 }
 
+function normalizeUSPhoneMob(raw){var d=(raw||'').replace(/\D/g,'');if(d.length===10)return '+1'+d;if(d.length===11&&d[0]==='1')return '+'+d;return null;}
 async function submitEmailMob(){
-  var input=document.getElementById('email-input-mob');var msg=document.getElementById('email-msg-mob');var btn=document.getElementById('email-submit-mob');var email=input.value.trim();
+  var firstEl=document.getElementById('first-name-mob');var lastEl=document.getElementById('last-name-mob');var input=document.getElementById('email-input-mob');var phoneEl=document.getElementById('phone-input-mob');var consentEl=document.getElementById('sms-consent-mob');var msg=document.getElementById('email-msg-mob');var btn=document.getElementById('email-submit-mob');
+  var firstName=firstEl.value.trim();var lastName=lastEl.value.trim();var email=input.value.trim();var phoneRaw=phoneEl.value.trim();var smsConsent=consentEl.checked;
   msg.style.display='block';
   if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.style.color='#8B3A2A';msg.textContent='Please enter a valid email address.';return;}
+  if(phoneRaw){
+    if(!smsConsent){msg.style.color='#8B3A2A';msg.textContent='Please check the SMS consent box to register your phone, or clear the phone field.';return;}
+    if(!normalizeUSPhoneMob(phoneRaw)){msg.style.color='#8B3A2A';msg.textContent='Please enter a valid US phone number.';return;}
+  }
   btn.disabled=true;btn.textContent='...';msg.style.color='var(--cream3)';msg.textContent='Adding you to The Barrel Inventory...';
   try{
-    var res=await fetch('https://tib-site-one.vercel.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})});
-    if(res.ok){msg.style.color='var(--gold)';msg.textContent="You’re on The Barrel Inventory. We’ll be in touch.";input.value='';}
+    var payload={email:email,firstName:firstName,lastName:lastName};
+    if(phoneRaw){payload.phone=phoneRaw;payload.smsConsent=true;}
+    var res=await fetch('https://tib-site-one.vercel.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(res.ok){msg.style.color='var(--gold)';msg.textContent="You’re on The Barrel Inventory. We’ll be in touch.";firstEl.value='';lastEl.value='';input.value='';phoneEl.value='';consentEl.checked=false;}
     else throw new Error('failed');
   }catch(e){msg.style.color='#8B3A2A';msg.textContent='Something went wrong. Please try again.';}
   finally{btn.disabled=false;btn.textContent='Register';}

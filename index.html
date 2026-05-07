@@ -512,24 +512,28 @@ a{color:inherit;text-decoration:none;}
 .inventory-copy{}
 
 .email-form{margin-top:32px;}
-.email-row{display:flex;gap:0;max-width:480px;}
+.email-row{display:flex;flex-direction:column;gap:0;max-width:480px;margin:0 auto;text-align:left;}
 .email-input{
- flex:1;min-width:0;
- background:var(--charcoal2);border:1px solid var(--charcoal4);border-right:none;
+ flex:1;min-width:0;width:100%;box-sizing:border-box;
+ background:var(--charcoal2);border:1px solid var(--charcoal4);border-bottom:none;
  color:var(--cream);font-family:var(--f);font-size:13px;
  padding:14px 16px;outline:none;border-radius:0;
  transition:border-color .2s;
 }
+.email-input:last-of-type{border-bottom:1px solid var(--charcoal4);}
 .email-input::placeholder{color:var(--charcoal4);}
-.email-input:focus{border-color:var(--gold);}
+.email-input:focus{border-color:var(--gold);position:relative;z-index:1;}
 .email-submit{
  flex-shrink:0;background:var(--gold);color:var(--charcoal);
  border:none;font-family:var(--f);font-size:12px;font-weight:600;
  letter-spacing:.18em;text-transform:uppercase;
- padding:0 24px;cursor:pointer;transition:background .15s;
+ padding:14px 24px;cursor:pointer;transition:background .15s;width:100%;max-width:480px;margin:12px auto 0;display:block;
 }
 .email-submit:hover{background:var(--gold-lt);}
 .email-note{font-size:11px;color:var(--charcoal4);letter-spacing:.08em;margin-top:10px;}
+.sms-consent{display:flex;align-items:flex-start;gap:8px;max-width:480px;margin:12px auto 0;text-align:left;}
+.sms-consent input[type=checkbox]{flex-shrink:0;margin-top:2px;accent-color:var(--gold);width:16px;height:16px;cursor:pointer;}
+.sms-consent label{font-size:11px;color:var(--charcoal4);letter-spacing:.04em;line-height:1.5;cursor:pointer;}
 
 .inventory-features{display:flex;flex-direction:column;gap:2px;}
 .inventory-feature{background:var(--charcoal2);padding:20px 24px;display:flex;align-items:flex-start;gap:16px;}
@@ -598,9 +602,6 @@ a{color:inherit;text-decoration:none;}
  .bottle-detail-stats{grid-template-columns:1fr 1fr;}
  .story-photos{grid-template-columns:1fr;}
  .footer-top{grid-template-columns:1fr;}
- .email-row{flex-direction:column;}
- .email-input{border-right:1px solid var(--charcoal4);border-bottom:none;}
- .email-submit{padding:14px;text-align:center;}
 }
 
 /* ── WHISKEY INTRO BOTTLES INTERACTIVE ── */
@@ -879,7 +880,7 @@ sup.tm, .tm {
  <span class="nav-link" onclick="navTo('vintage')">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
  <a class="nav-link" href="https://blog.throttledinbond.com/blog" style="color:var(--cream3);text-decoration:none;">Blog</a>
  </div>
- <button class="nav-cta" onclick="navTo('inventory')">Never Miss A Release</button>
+ <button class="nav-cta" onclick="focusInventory()">Never Miss A Release</button>
  <div class="nav-hamburger" onclick="toggleMenu()" id="hamburger">
  <span></span><span></span><span></span>
  </div>
@@ -891,7 +892,7 @@ sup.tm, .tm {
  <span class="mobile-link" onclick="navTo('whiskey');toggleMenu()">Whiskey</span>
  <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
  <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
- <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
+ <button class="mobile-cta" onclick="focusInventory();toggleMenu()">Never Miss A Release</button>
 </div>
 
 <!-- ══════════════════════════════════════
@@ -1290,10 +1291,17 @@ sup.tm, .tm {
  <div class="gold-line" style="margin:16px auto;"></div>
  <p class="body-copy" style="margin:0 auto 28px;text-align:center;">Join The Barrel Inventory. Be the first to know what's in the rickhouse, what's ready to be bottled, and when the next release drops.</p>
  <div class="email-form">
- <div class="email-row" style="max-width:480px;margin:0 auto;">
- <input type="email" class="email-input" id="email-input" placeholder="Your email address" onkeydown="if(event.key==='Enter')submitEmail()">
- <button class="email-submit" id="email-submit-btn" onclick="submitEmail()">Register</button>
+ <div class="email-row">
+ <input type="text" class="email-input" id="first-name" placeholder="First name" autocomplete="given-name">
+ <input type="text" class="email-input" id="last-name" placeholder="Last name" autocomplete="family-name">
+ <input type="email" class="email-input" id="email-input" placeholder="Email address" autocomplete="email" onkeydown="if(event.key==='Enter')submitEmail()">
+ <input type="tel" class="email-input" id="phone-input" placeholder="Phone (optional, US only)" autocomplete="tel" inputmode="tel" onkeydown="if(event.key==='Enter')submitEmail()">
  </div>
+ <div class="sms-consent">
+ <input type="checkbox" id="sms-consent">
+ <label for="sms-consent">By providing your phone number, you agree to receive occasional marketing SMS from Throttled In Bond. Msg &amp; data rates may apply. Reply STOP to unsubscribe, HELP for help.</label>
+ </div>
+ <button class="email-submit" id="email-submit-btn" onclick="submitEmail()">Register</button>
  <div class="email-note" style="text-align:center;margin-top:10px;">No spam. Release alerts and brand updates only.</div>
  <div id="email-msg" style="font-size:12px;margin-top:8px;display:none;text-align:center;"></div>
  </div>
@@ -1555,6 +1563,10 @@ function navTo(id) {
  const offset = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64;
  const top = el.getBoundingClientRect().top + window.scrollY - offset;
  window.scrollTo({ top, behavior: 'smooth' });
+}
+function focusInventory() {
+ navTo('inventory');
+ setTimeout(function(){ const f = document.getElementById('first-name'); if (f) f.focus({preventScroll:true}); }, 650);
 }
 
 // ── NAV HIGHLIGHT ──
@@ -1865,28 +1877,57 @@ function rtcAct(i) {
 }
 
 // ── EMAIL FORM ──
+function normalizeUSPhone(raw) {
+ const d = (raw || '').replace(/\D/g, '');
+ if (d.length === 10) return '+1' + d;
+ if (d.length === 11 && d[0] === '1') return '+' + d;
+ return null;
+}
 async function submitEmail() {
+ const firstEl = document.getElementById('first-name');
+ const lastEl = document.getElementById('last-name');
  const input = document.getElementById('email-input');
+ const phoneEl = document.getElementById('phone-input');
+ const consentEl = document.getElementById('sms-consent');
  const msg = document.getElementById('email-msg');
  const btn = document.getElementById('email-submit-btn');
+ const firstName = firstEl.value.trim();
+ const lastName = lastEl.value.trim();
  const email = input.value.trim();
+ const phoneRaw = phoneEl.value.trim();
+ const smsConsent = consentEl.checked;
  msg.style.display = 'block';
  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
    msg.style.color = '#8B3A2A';
    msg.textContent = 'Please enter a valid email address.';
    return;
  }
+ if (phoneRaw) {
+   if (!smsConsent) {
+     msg.style.color = '#8B3A2A';
+     msg.textContent = 'Please check the SMS consent box to register your phone, or clear the phone field.';
+     return;
+   }
+   if (!normalizeUSPhone(phoneRaw)) {
+     msg.style.color = '#8B3A2A';
+     msg.textContent = 'Please enter a valid US phone number.';
+     return;
+   }
+ }
  btn.disabled = true; btn.textContent = '...';
  msg.style.color = 'var(--cream3)';
  msg.textContent = 'Adding you to The Barrel Inventory...';
  try {
+   const payload = {email: email, firstName: firstName, lastName: lastName};
+   if (phoneRaw) { payload.phone = phoneRaw; payload.smsConsent = true; }
    const res = await fetch('https://tib-site-one.vercel.app/api/subscribe', {
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
-     body: JSON.stringify({email: email})
+     body: JSON.stringify(payload)
    });
    if (res.ok) {
-     msg.style.color = 'var(--gold)'; msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch."; input.value = '';
+     msg.style.color = 'var(--gold)'; msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch.";
+     firstEl.value = ''; lastEl.value = ''; input.value = ''; phoneEl.value = ''; consentEl.checked = false;
    } else throw new Error('failed');
  } catch(e) {
    msg.style.color = '#8B3A2A'; msg.textContent = 'Something went wrong. Please try again.';
