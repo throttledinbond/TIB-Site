@@ -722,14 +722,13 @@ function rtcActMob(i){
 async function submitEmailMob(){
   var input=document.getElementById('email-input-mob');var msg=document.getElementById('email-msg-mob');var btn=document.getElementById('email-submit-mob');var email=input.value.trim();
   msg.style.display='block';
-  if(!email||!email.includes('@')){msg.style.color='#8B3A2A';msg.textContent='Please enter a valid email address.';return;}
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.style.color='#8B3A2A';msg.textContent='Please enter a valid email address.';return;}
   btn.disabled=true;btn.textContent='...';msg.style.color='var(--cream3)';msg.textContent='Adding you to The Barrel Inventory...';
   try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:'Add email '+email+' to Wix contacts site 7a63fd18-b14a-4731-8624-cf488c10e84b label custom.the-barrel-inventory'}]})});
-    var data=await res.json();var text=data.content&&data.content[0]?data.content[0].text:'';
-    if(text.toLowerCase().includes('success')||text.toLowerCase().includes('created')){msg.style.color='var(--gold)';msg.textContent="You’re on The Barrel Inventory. We’ll be in touch.";input.value='';}
+    var res=await fetch('https://YOUR-VERCEL-PROJECT.vercel.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})});
+    if(res.ok){msg.style.color='var(--gold)';msg.textContent="You’re on The Barrel Inventory. We’ll be in touch.";input.value='';}
     else throw new Error('failed');
-  }catch(e){msg.style.color='var(--gold)';msg.textContent='Redirecting to complete registration...';setTimeout(function(){window.open('https://www.throttledinbond.com','_blank');},800);}
+  }catch(e){msg.style.color='#8B3A2A';msg.textContent='Something went wrong. Please try again.';}
   finally{btn.disabled=false;btn.textContent='Register';}
 }
 
