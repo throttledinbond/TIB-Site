@@ -1928,9 +1928,13 @@ async function submitEmail() {
    if (res.ok) {
      msg.style.color = 'var(--gold)'; msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch.";
      firstEl.value = ''; lastEl.value = ''; input.value = ''; phoneEl.value = ''; consentEl.checked = false;
-   } else throw new Error('failed');
+   } else {
+     let data = null;
+     try { data = await res.json(); } catch(_) {}
+     throw new Error((data && data.userMessage) || 'Something went wrong. Please try again.');
+   }
  } catch(e) {
-   msg.style.color = '#8B3A2A'; msg.textContent = 'Something went wrong. Please try again.';
+   msg.style.color = '#8B3A2A'; msg.textContent = e.message || 'Something went wrong. Please try again.';
  } finally { btn.disabled = false; btn.textContent = 'Register'; }
 }
 
