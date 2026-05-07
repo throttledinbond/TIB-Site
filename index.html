@@ -1879,7 +1879,7 @@ async function submitEmail() {
  msg.style.color = 'var(--cream3)';
  msg.textContent = 'Adding you to The Barrel Inventory...';
  try {
-   const res = await fetch('https://YOUR-VERCEL-PROJECT.vercel.app/api/subscribe', {
+   const res = await fetch('https://tib-site-one.vercel.app/api/subscribe', {
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
      body: JSON.stringify({email: email})

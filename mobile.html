@@ -725,7 +725,7 @@ async function submitEmailMob(){
   if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.style.color='#8B3A2A';msg.textContent='Please enter a valid email address.';return;}
   btn.disabled=true;btn.textContent='...';msg.style.color='var(--cream3)';msg.textContent='Adding you to The Barrel Inventory...';
   try{
-    var res=await fetch('https://YOUR-VERCEL-PROJECT.vercel.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})});
+    var res=await fetch('https://tib-site-one.vercel.app/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email})});
     if(res.ok){msg.style.color='var(--gold)';msg.textContent="You’re on The Barrel Inventory. We’ll be in touch.";input.value='';}
     else throw new Error('failed');
   }catch(e){msg.style.color='#8B3A2A';msg.textContent='Something went wrong. Please try again.';}
