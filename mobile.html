@@ -842,6 +842,27 @@ function ageGateFail() {
 })();
 
 triggerReveals();
+
+// ── URL PATH ROUTING ──
+(function(){
+  var ROUTES = {
+    decoder:   { path: '/decoder',   action: function(){ navTo('vintage'); } },
+    whiskey:   { path: '/whiskey',   action: function(){ navTo('whiskey'); } },
+    story:     { path: '/story',     action: function(){ navTo('story'); } },
+    inventory: { path: '/inventory', action: function(){ navTo('inventory'); } },
+    map:       { path: '/map',       action: function(){ openMapMob(); } }
+  };
+  function dispatchRoute(){
+    var params = new URLSearchParams(window.location.search);
+    var name = params.get('route');
+    if (!name || !ROUTES[name]) return;
+    var route = ROUTES[name];
+    try { history.replaceState(null, '', route.path); } catch(_) {}
+    setTimeout(route.action, 50);
+  }
+  if (document.readyState === 'complete') dispatchRoute();
+  else window.addEventListener('load', dispatchRoute);
+})();
 </script>
 
 <div class="modal-overlay-mob" id="share-modal-mob">
