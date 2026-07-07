@@ -596,6 +596,8 @@ a{color:inherit;text-decoration:none;}
 .modal-bg{position:absolute;inset:0;background:rgba(26,25,23,.9);cursor:pointer;}
 .modal-box{position:relative;background:var(--charcoal2);max-width:480px;width:90%;padding:clamp(28px,5vw,48px);z-index:1;border-top:2px solid var(--gold);}
 .modal-eyebrow{font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.feedback-label{display:block;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:5px;}
+#feedback-fab:hover{background:var(--rust-dk,#7a2e1e);}
 .modal-title{font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--cream);letter-spacing:-.01em;margin-bottom:14px;line-height:1;}
 .modal-body{font-size:15px;font-weight:400;font-style:italic;color:#C4BAA6;line-height:1.7;margin-bottom:24px;}
 .modal-actions{display:flex;gap:10px;flex-wrap:wrap;}
@@ -1201,6 +1203,62 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 </div>
 
 
+<!-- Feedback (Testers) — Floating Button + Modal -->
+<button id="feedback-fab" onclick="feedbackOpen()" style="display:none;position:fixed;left:24px;bottom:80px;z-index:801;align-items:center;gap:8px;background:var(--rust);color:#fff;border:none;padding:11px 16px;font-family:var(--f);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.4);">
+  <span style="font-size:14px;line-height:1;">&#9873;</span> Feedback
+</button>
+
+<div class="modal-overlay" id="feedback-modal">
+  <div class="modal-bg" onclick="closeModal('feedback-modal')"></div>
+  <div class="modal-box" style="max-width:480px;max-height:92vh;overflow-y:auto;">
+    <button class="modal-close-x" onclick="closeModal('feedback-modal')">&times;</button>
+    <div class="modal-eyebrow">Tester Feedback</div>
+    <div class="modal-title" style="margin-bottom:8px;">Report an Issue</div>
+    <p class="body-copy" style="font-size:13px;margin-bottom:16px;">Found a bug, something confusing, or have an idea? Send it straight to the team.</p>
+    <label class="feedback-label">Type</label>
+    <select id="feedback-category" class="auth-input">
+      <option value="Bug">Bug — something is broken</option>
+      <option value="Confusing">Confusing / hard to use</option>
+      <option value="Idea">Idea / suggestion</option>
+      <option value="Other">Other</option>
+    </select>
+    <label class="feedback-label">Severity</label>
+    <select id="feedback-severity" class="auth-input">
+      <option value="Blocker">Blocker — can't continue</option>
+      <option value="Major">Major — big problem</option>
+      <option value="Minor" selected>Minor — small problem</option>
+      <option value="Cosmetic">Cosmetic — visual only</option>
+    </select>
+    <label class="feedback-label">What happened?</label>
+    <textarea id="feedback-message" class="auth-input" rows="5" style="resize:vertical;" placeholder="Describe what you saw, what you expected, and steps to reproduce it."></textarea>
+    <div id="feedback-msg" style="font-size:12px;min-height:16px;margin-bottom:8px;"></div>
+    <button class="btn-primary" style="width:100%;" id="feedback-submit-btn" onclick="feedbackSubmit()">Send Feedback</button>
+  </div>
+</div>
+
+
+<!-- Promote Feedback → Change Request Modal -->
+<div class="modal-overlay" id="cr-review-modal">
+  <div class="modal-bg" onclick="closeModal('cr-review-modal')"></div>
+  <div class="modal-box" style="max-width:480px;max-height:92vh;overflow-y:auto;">
+    <button class="modal-close-x" onclick="closeModal('cr-review-modal')">&times;</button>
+    <div class="modal-eyebrow">From Tester Feedback</div>
+    <div class="modal-title" style="margin-bottom:8px;">Add to Change Queue</div>
+    <p class="body-copy" style="font-size:13px;margin-bottom:14px;">Edit the request if needed, set a priority, then add it to your queue for Claude.</p>
+    <label class="feedback-label">Request</label>
+    <textarea id="cr-review-message" class="auth-input" rows="6" style="resize:vertical;"></textarea>
+    <label class="feedback-label">Priority</label>
+    <select id="cr-review-priority" class="auth-input">
+      <option value="High">High priority</option>
+      <option value="Medium">Medium priority</option>
+      <option value="Low">Low priority</option>
+    </select>
+    <div id="cr-review-msg" style="font-size:12px;min-height:16px;margin-bottom:8px;"></div>
+    <button class="btn-primary" style="width:100%;" id="cr-review-btn" onclick="crReviewSubmit()">Add to Queue</button>
+  </div>
+</div>
+
+
 <!-- Notification Modal -->
 <div class="modal-overlay" id="notif-modal">
   <div class="modal-bg" onclick="closeModal('notif-modal')"></div>
@@ -1761,6 +1819,24 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div class="admin-stat"><span class="admin-stat-val" id="admin-stat-admins">—</span><span class="admin-stat-lbl">Admins</span></div>
       </div>
 
+      <!-- Requests for Claude -->
+      <div class="admin-section">
+        <div class="admin-section-title">Requests for Claude — Change Queue</div>
+        <p style="font-size:12px;color:var(--cream3);margin-bottom:12px;">Jot down site changes here anytime. They're saved to your queue; at the start of a Cowork session, ask Claude to "pull my change requests" and they'll be picked up and implemented.</p>
+        <label class="feedback-label">New request</label>
+        <textarea id="cr-message" class="auth-input" rows="3" style="resize:vertical;" placeholder="e.g. On the Whiskey page, make the proof text larger and add a link to the blog."></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px;">
+          <select id="cr-priority" class="auth-input" style="width:auto;margin-bottom:0;">
+            <option value="High">High priority</option>
+            <option value="Medium" selected>Medium priority</option>
+            <option value="Low">Low priority</option>
+          </select>
+          <button class="btn-primary" style="width:auto;" id="cr-submit-btn" onclick="adminSubmitRequest()">Add to Queue</button>
+          <span id="cr-msg" style="font-size:12px;"></span>
+        </div>
+        <div id="admin-requests-list" style="margin-top:14px;"><p style="color:var(--charcoal4);font-size:12px;">Loading...</p></div>
+      </div>
+
       <!-- Bottle Content Management -->
       <div class="admin-section">
         <div class="admin-section-title">Bottle Content — Update Proof &amp; Mash Bill</div>
@@ -1778,10 +1854,16 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div class="admin-section-title">Registered Users</div>
         <table class="admin-table">
           <thead><tr>
-            <th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Change Role</th><th>Password</th>
+            <th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Change Role</th><th>Tester</th>
           </tr></thead>
           <tbody id="admin-users-tbody"><tr><td colspan="5" style="color:var(--charcoal4);">Loading...</td></tr></tbody>
         </table>
+      </div>
+
+      <!-- Site Feedback -->
+      <div class="admin-section">
+        <div class="admin-section-title">Site Feedback — Tester Reports</div>
+        <div id="admin-feedback-list"><p style="color:var(--charcoal4);font-size:12px;">Loading...</p></div>
       </div>
 
       <!-- Retailers -->
@@ -2546,24 +2628,11 @@ async function submitEmail() {
  msg.style.color = 'var(--cream3)';
  msg.textContent = 'Adding you to The Barrel Inventory...';
  try {
-   const res = await fetch('https://api.brevo.com/v3/contacts', {
-     method: 'POST',
-     headers: {
-       'Content-Type': 'application/json',
-       'api-key': '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'
-     },
-     body: JSON.stringify({
-       email: email,
-       listIds: [2],
-       updateEnabled: true,
-       attributes: { SOURCE: 'The Barrel Inventory - TIB Website' }
-     })
-   });
-   if (res.status === 201 || res.status === 204) {
-     msg.style.color = 'var(--gold)';
-     msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch.";
-     input.value = '';
-   } else throw new Error('failed');
+   // Secret-free: the Brevo API key lives in the brevo-proxy Edge Function, not the client.
+   await _supabase.functions.invoke('brevo-proxy', { body: { action: 'add_contact', email: email } });
+   msg.style.color = 'var(--gold)';
+   msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch.";
+   input.value = '';
  } catch(e) {
    msg.style.color = 'var(--gold)';
    msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch.";
@@ -2885,6 +2954,7 @@ _supabase.auth.getSession().then(function({ data }) {
     authUpdateNav(true);
     garageLoad();
     engageInit();
+    feedbackAccessRefresh();
   }
 });
 
@@ -2909,6 +2979,7 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     var gc = document.getElementById('garage-content');
     if (gc) gc.style.display = '';
     engageInit();
+    feedbackAccessRefresh();
   } else {
     document.getElementById('garage').style.display = '';
     if (header) header.style.display = 'none';
@@ -2919,10 +2990,16 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     if (gc) gc.style.display = 'none';
     var ad = document.getElementById('admin-dashboard');
     if (ad) ad.style.display = 'none';
+    var atab = document.getElementById('tab-admin');
+    if (atab) atab.style.display = 'none';
+    _isAdmin = false;
     var em = document.getElementById('garage-user-email');
     if (em) em.textContent = '';
     var gf = document.getElementById('garage-filters');
     if (gf) gf.style.display = 'none';
+    var fab = document.getElementById('feedback-fab');
+    if (fab) fab.style.display = 'none';
+    _isTester = false;
     engageSetVisible(false);
   }
 });
@@ -3166,12 +3243,12 @@ function garageRender(items) {
     html += '<div class="garage-card" id="gc-'+item.id+'">' +
       '<div class="garage-card-header">' +
         '<div class="garage-card-header-left">' +
-          (item.img_url ? '<img class="garage-card-img" src="'+item.img_url+'" alt="'+item.whiskey_name+'" crossorigin="anonymous" onclick="openLightbox(this.src)" style="cursor:zoom-in;">' : '') +
+          (item.img_url ? '<img class="garage-card-img" src="'+encodeURI(item.img_url)+'" alt="'+fbEscape(item.whiskey_name)+'" crossorigin="anonymous" onclick="openLightbox(this.src)" style="cursor:zoom-in;">' : '') +
           '<div class="garage-card-header-info">' +
-            '<div class="garage-card-tag">VIN-TAGe&#8482; &nbsp;'+item.vin_code+'</div>' +
-            '<div class="garage-card-name">'+item.whiskey_name+'</div>' +
-            '<div class="garage-card-code">'+item.age+' &nbsp;&middot;&nbsp; '+item.origin+' &nbsp;&middot;&nbsp; '+(_bottleProofBySeries[item.series] || item.proof)+'</div>' +
-            (item.vintage_img_url ? '<img src="'+item.vintage_img_url+'" alt="VIN-TAGe Label" crossorigin="anonymous" style="width:100%;max-width:260px;height:auto;margin-top:12px;border:1px solid var(--charcoal4);display:block;cursor:zoom-in;" onclick="openLightbox(this.src)">' : '') +
+            '<div class="garage-card-tag">VIN-TAGe&#8482; &nbsp;'+fbEscape(item.vin_code)+'</div>' +
+            '<div class="garage-card-name">'+fbEscape(item.whiskey_name)+'</div>' +
+            '<div class="garage-card-code">'+fbEscape(item.age)+' &nbsp;&middot;&nbsp; '+fbEscape(item.origin)+' &nbsp;&middot;&nbsp; '+fbEscape(String(_bottleProofBySeries[item.series] || item.proof))+'</div>' +
+            (item.vintage_img_url ? '<img src="'+encodeURI(item.vintage_img_url)+'" alt="VIN-TAGe Label" crossorigin="anonymous" style="width:100%;max-width:260px;height:auto;margin-top:12px;border:1px solid var(--charcoal4);display:block;cursor:zoom-in;" onclick="openLightbox(this.src)">' : '') +
           '</div>' +
         '</div>' +
         '<button class="garage-card-delete" onclick="garageDelete(\''+item.id+'\',event)" title="Remove">&#10005;</button>' +
@@ -3199,12 +3276,12 @@ function garageRender(items) {
       // Tasting notes
       '<div class="garage-notes-field">' +
         '<span class="garage-notes-label">Tasting Notes</span>' +
-        '<textarea class="garage-notes-input" id="tnotes-'+item.id+'" placeholder="Describe the nose, palate, finish...">'+(item.tasting_notes||'')+'</textarea>' +
+        '<textarea class="garage-notes-input" id="tnotes-'+item.id+'" placeholder="Describe the nose, palate, finish...">'+fbEscape(item.tasting_notes||'')+'</textarea>' +
       '</div>' +
       // Personal notes
       '<div class="garage-notes-field">' +
         '<span class="garage-notes-label">Personal Notes</span>' +
-        '<textarea class="garage-notes-input" id="pnotes-'+item.id+'" placeholder="Who you drank it with, where, occasion...">'+(item.personal_notes||'')+'</textarea>' +
+        '<textarea class="garage-notes-input" id="pnotes-'+item.id+'" placeholder="Who you drank it with, where, occasion...">'+fbEscape(item.personal_notes||'')+'</textarea>' +
       '</div>' +
       '<div class="garage-divider"></div>' +
       '<div class="proof-upload-row">' +
@@ -3323,10 +3400,17 @@ async function adminLoad() {
     if (emailEl) emailEl.textContent = _currentUser.email;
   }
   var isAdmin = await adminCheck();
-  if (!isAdmin) return;
   var adminTab = document.getElementById('tab-admin');
+  var adminDash = document.getElementById('admin-dashboard');
+  if (!isAdmin) {
+    // Not an admin — actively hide all admin UI (guards against stale state after account switch)
+    if (adminTab) adminTab.style.display = 'none';
+    if (adminDash) adminDash.style.display = 'none';
+    _isAdmin = false;
+    return;
+  }
   if (adminTab) adminTab.style.display = '';
-  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers()]);
+  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests()]);
 }
 
 async function adminLoadStats() {
@@ -3351,7 +3435,7 @@ async function adminLoadStats() {
 }
 
 async function adminLoadUsers() {
-  var { data: profiles } = await _supabase.from('profiles').select('id, role, full_name, email, created_at');
+  var { data: profiles } = await _supabase.from('profiles').select('id, role, full_name, email, created_at, is_tester');
   var { data: authUsers } = await _supabase.auth.admin ? _supabase.auth.admin.listUsers() : { data: null };
 
   var el = document.getElementById('admin-users-tbody');
@@ -3361,13 +3445,17 @@ async function adminLoadUsers() {
   profiles.forEach(function(p) {
     var date = new Date(p.created_at).toLocaleDateString();
     html += '<tr>' +
-      '<td>'+(p.full_name||'—')+'</td>' +
-      '<td style="font-size:11px;">'+(p.email||'—')+'</td>' +
-      '<td><span class="admin-badge '+(p.role==='admin'?'':'member')+'">'+p.role+'</span></td>' +
+      '<td>'+fbEscape(p.full_name||'—')+'</td>' +
+      '<td style="font-size:11px;">'+fbEscape(p.email||'—')+'</td>' +
+      '<td><span class="admin-badge '+(p.role==='admin'?'':'member')+'">'+fbEscape(p.role)+'</span></td>' +
       '<td>'+date+'</td>' +
       '<td><select class="admin-role-select" onchange="adminUpdateRole(\''+p.id+'\',this.value)">' +
         '<option value="member"'+(p.role==='member'?' selected':'')+'>member</option>' +
         '<option value="admin"'+(p.role==='admin'?' selected':'')+'>admin</option>' +
+      '</select></td>' +
+      '<td><select class="admin-role-select" onchange="adminUpdateTester(\''+p.id+'\',this.value)">' +
+        '<option value="false"'+(p.is_tester?'':' selected')+'>No</option>' +
+        '<option value="true"'+(p.is_tester?' selected':'')+'>Tester</option>' +
       '</select></td>' +
     '</tr>';
   });
@@ -3381,6 +3469,163 @@ async function adminUpdateRole(userId, role) {
   await adminLoadUsers();
 }
 
+async function adminUpdateTester(userId, val) {
+  var { error } = await _supabase.from('profiles').update({ is_tester: (val === 'true') }).eq('id', userId);
+  if (error) { showNotif('Admin', 'Error', 'Could not update tester status. Please try again.', 'OK'); return; }
+  await adminLoadUsers();
+}
+
+function fbEscape(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+// Only allow http(s) URLs into href/src; blocks javascript: and other schemes. Returns escaped URL or '#'.
+function safeUrl(u) {
+  var s = String(u == null ? '' : u).trim();
+  return /^https?:\/\//i.test(s) ? fbEscape(s) : '#';
+}
+
+var _adminFeedbackById = {};
+function feedbackToQueue(id) {
+  var f = _adminFeedbackById[id];
+  if (!f) return;
+  var sev = f.severity || '';
+  var pri = (sev === 'Blocker' || sev === 'Major') ? 'High' : (sev === 'Cosmetic' ? 'Low' : 'Medium');
+  var header = '[Tester feedback — ' + (f.category||'Issue') + (sev?(' / '+sev):'') + (f.page?(' on ' + f.page):'') + (f.device?(' — '+f.device):'') + ']';
+  document.getElementById('cr-review-message').value = header + '\n\n' + (f.message || '');
+  document.getElementById('cr-review-priority').value = pri;
+  var m = document.getElementById('cr-review-msg'); if (m) { m.textContent = ''; m.style.color = ''; }
+  openModal('cr-review-modal');
+}
+async function crReviewSubmit() {
+  var msgEl = document.getElementById('cr-review-msg');
+  var text = (document.getElementById('cr-review-message').value || '').trim();
+  if (!text) { if (msgEl) { msgEl.style.color = 'var(--rust)'; msgEl.textContent = 'Request cannot be empty.'; } return; }
+  var btn = document.getElementById('cr-review-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Adding…'; }
+  var { error } = await _supabase.from('change_requests').insert({
+    created_by: _currentUser ? _currentUser.id : null,
+    message: text,
+    priority: document.getElementById('cr-review-priority').value
+  });
+  if (btn) { btn.disabled = false; btn.textContent = 'Add to Queue'; }
+  if (error) { if (msgEl) { msgEl.style.color = 'var(--rust)'; msgEl.textContent = 'Could not add. Try again.'; } return; }
+  closeModal('cr-review-modal');
+  showNotif('Change Queue', 'Added', 'The request was added to your change queue.', 'OK');
+  await adminLoadRequests();
+}
+
+async function adminLoadFeedback() {
+  var el = document.getElementById('admin-feedback-list');
+  if (!el) return;
+  var { data, error } = await _supabase.from('feedback').select('*').order('created_at', { ascending: false });
+  if (error) { el.innerHTML = '<p style="color:var(--charcoal4);font-size:12px;">Could not load feedback.</p>'; return; }
+  if (!data || !data.length) { el.innerHTML = '<p style="color:var(--charcoal4);font-size:12px;">No feedback submitted yet.</p>'; return; }
+
+  var sevColor = { Blocker:'var(--rust)', Major:'#c77d2e', Minor:'var(--gold-dk)', Cosmetic:'var(--charcoal4)' };
+  var statuses = ['new','triaged','in_progress','resolved'];
+  _adminFeedbackById = {};
+  var html = '';
+  data.forEach(function(f) {
+    _adminFeedbackById[f.id] = f;
+    var when = new Date(f.created_at).toLocaleString();
+    var sc = sevColor[f.severity] || 'var(--charcoal4)';
+    var opts = statuses.map(function(s){
+      return '<option value="'+s+'"'+(f.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>';
+    }).join('');
+    html += '<div style="border:1px solid var(--charcoal4);border-left:3px solid '+sc+';padding:14px 16px;margin-bottom:12px;background:var(--charcoal2);">' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">' +
+        '<span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);">'+fbEscape(f.category||'—')+'</span>' +
+        '<span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+sc+';border:1px solid '+sc+';padding:1px 6px;">'+fbEscape(f.severity||'—')+'</span>' +
+        '<span style="font-size:10px;color:var(--charcoal4);">'+fbEscape(f.page||'')+'</span>' +
+        (f.device ? '<span style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cream3);border:1px solid var(--charcoal4);padding:1px 6px;">'+fbEscape(f.device)+'</span>' : '') +
+        '<span style="font-size:10px;color:var(--charcoal4);margin-left:auto;">'+when+'</span>' +
+      '</div>' +
+      '<div style="font-size:13px;color:var(--cream3);line-height:1.5;white-space:pre-wrap;margin-bottom:8px;">'+fbEscape(f.message)+'</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">' +
+        '<span style="font-size:11px;color:var(--charcoal4);">'+fbEscape(f.email||'anonymous')+'</span>' +
+        '<button class="admin-role-select" style="margin-left:auto;cursor:pointer;color:var(--gold);border-color:var(--gold-dk);" onclick="feedbackToQueue(\''+f.id+'\')">&#43; Add to Queue</button>' +
+        '<select class="admin-role-select" onchange="adminUpdateFeedbackStatus(\''+f.id+'\',this.value)">'+opts+'</select>' +
+        '<button class="admin-role-select" style="cursor:pointer;" onclick="adminDeleteFeedback(\''+f.id+'\')">Delete</button>' +
+      '</div>' +
+    '</div>';
+  });
+  el.innerHTML = html;
+}
+
+async function adminUpdateFeedbackStatus(id, status) {
+  var { error } = await _supabase.from('feedback').update({ status: status }).eq('id', id);
+  if (error) showNotif('Admin', 'Error', 'Could not update status. Please try again.', 'OK');
+}
+
+async function adminDeleteFeedback(id) {
+  var { error } = await _supabase.from('feedback').delete().eq('id', id);
+  if (error) { showNotif('Admin', 'Error', 'Could not delete. Please try again.', 'OK'); return; }
+  await adminLoadFeedback();
+}
+
+// ── REQUESTS FOR CLAUDE (change queue) ──
+async function adminSubmitRequest() {
+  var msgEl = document.getElementById('cr-msg');
+  var text = (document.getElementById('cr-message').value || '').trim();
+  if (!text) { if (msgEl) { msgEl.style.color = 'var(--rust)'; msgEl.textContent = 'Type a request first.'; } return; }
+  var btn = document.getElementById('cr-submit-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+  var { error } = await _supabase.from('change_requests').insert({
+    created_by: _currentUser ? _currentUser.id : null,
+    message: text,
+    priority: document.getElementById('cr-priority').value
+  });
+  if (btn) { btn.disabled = false; btn.textContent = 'Add to Queue'; }
+  if (error) { if (msgEl) { msgEl.style.color = 'var(--rust)'; msgEl.textContent = 'Could not save. Try again.'; } return; }
+  document.getElementById('cr-message').value = '';
+  if (msgEl) { msgEl.style.color = 'var(--gold)'; msgEl.textContent = 'Added to queue.'; setTimeout(function(){ msgEl.textContent = ''; }, 2000); }
+  await adminLoadRequests();
+}
+
+async function adminLoadRequests() {
+  var el = document.getElementById('admin-requests-list');
+  if (!el) return;
+  var { data, error } = await _supabase.from('change_requests').select('*').order('created_at', { ascending: false });
+  if (error) { el.innerHTML = '<p style="color:var(--charcoal4);font-size:12px;">Could not load requests.</p>'; return; }
+  if (!data || !data.length) { el.innerHTML = '<p style="color:var(--charcoal4);font-size:12px;">No requests queued.</p>'; return; }
+
+  var priColor = { High:'var(--rust)', Medium:'var(--gold-dk)', Low:'var(--charcoal4)' };
+  var statuses = ['new','in_progress','done'];
+  var html = '';
+  data.forEach(function(r) {
+    var when = new Date(r.created_at).toLocaleString();
+    var pc = priColor[r.priority] || 'var(--charcoal4)';
+    var done = r.status === 'done';
+    var opts = statuses.map(function(s){ return '<option value="'+s+'"'+(r.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>'; }).join('');
+    html += '<div style="border:1px solid var(--charcoal4);border-left:3px solid '+pc+';padding:12px 14px;margin-bottom:10px;background:var(--charcoal2);'+(done?'opacity:.55;':'')+'">' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:6px;">' +
+        '<span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+pc+';border:1px solid '+pc+';padding:1px 6px;">'+fbEscape(r.priority)+'</span>' +
+        '<span style="font-size:10px;color:var(--charcoal4);margin-left:auto;">'+when+'</span>' +
+      '</div>' +
+      '<div style="font-size:13px;color:var(--cream3);line-height:1.5;white-space:pre-wrap;margin-bottom:8px;'+(done?'text-decoration:line-through;':'')+'">'+fbEscape(r.message)+'</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">' +
+        '<select class="admin-role-select" onchange="adminUpdateRequestStatus(\''+r.id+'\',this.value)">'+opts+'</select>' +
+        '<button class="admin-role-select" style="cursor:pointer;margin-left:auto;" onclick="adminDeleteRequest(\''+r.id+'\')">Delete</button>' +
+      '</div>' +
+    '</div>';
+  });
+  el.innerHTML = html;
+}
+
+async function adminUpdateRequestStatus(id, status) {
+  var { error } = await _supabase.from('change_requests').update({ status: status }).eq('id', id);
+  if (error) { showNotif('Admin', 'Error', 'Could not update. Please try again.', 'OK'); return; }
+  await adminLoadRequests();
+}
+
+async function adminDeleteRequest(id) {
+  var { error } = await _supabase.from('change_requests').delete().eq('id', id);
+  if (error) { showNotif('Admin', 'Error', 'Could not delete. Please try again.', 'OK'); return; }
+  await adminLoadRequests();
+}
+
 async function adminLoadGarageActivity() {
   var { data } = await _supabase.from('garage').select('vin_code, whiskey_name, series, saved_at, user_id');
   var el = document.getElementById('admin-garage-tbody');
@@ -3389,10 +3634,10 @@ async function adminLoadGarageActivity() {
   data.forEach(function(g) {
     var date = new Date(g.saved_at).toLocaleDateString();
     html += '<tr>' +
-      '<td>'+g.vin_code+'</td>' +
-      '<td>'+g.whiskey_name+'</td>' +
-      '<td>'+g.series+'</td>' +
-      '<td>'+g.user_id.substring(0,8)+'...</td>' +
+      '<td>'+fbEscape(g.vin_code)+'</td>' +
+      '<td>'+fbEscape(g.whiskey_name)+'</td>' +
+      '<td>'+fbEscape(g.series)+'</td>' +
+      '<td>'+fbEscape(g.user_id.substring(0,8))+'...</td>' +
       '<td>'+date+'</td>' +
     '</tr>';
   });
@@ -3508,8 +3753,20 @@ function garageShowTab(tab) {
     var el = document.getElementById('garage-content'); if (el) el.style.display = '';
     if (gfilters && typeof _garageAllItems !== 'undefined' && _garageAllItems.length > 0) gfilters.style.display = '';
   } else if (tab === 'admin') {
-    var el = document.getElementById('admin-dashboard'); if (el) el.style.display = '';
-    adminLoad();
+    // Defense in depth: only render the admin panel after re-confirming admin status.
+    // (The real protection is server-side RLS; this keeps the UI honest too.)
+    adminCheck().then(function(isAdmin){
+      var el = document.getElementById('admin-dashboard');
+      var atab = document.getElementById('tab-admin');
+      if (isAdmin) {
+        if (el) el.style.display = '';
+        adminLoad();
+      } else {
+        if (el) el.style.display = 'none';
+        if (atab) atab.style.display = 'none';
+        garageShowTab('my-garage');
+      }
+    });
   } else if (tab === 'profile') {
     var el = document.getElementById('garage-profile'); if (el) el.style.display = '';
     profileLoad();
@@ -3748,6 +4005,58 @@ function inviteShare(method) {
   else if (method === 'native' && navigator.share) { navigator.share({ title: 'Throttled In Bond', text: msg, url: _inviteLink }); }
 }
 
+// ── TESTER FEEDBACK ──
+var _isTester = false;
+async function feedbackAccessRefresh() {
+  var btn = document.getElementById('feedback-fab');
+  if (!_currentUser) { _isTester = false; if (btn) btn.style.display = 'none'; return; }
+  try {
+    var { data } = await _supabase.from('profiles').select('is_tester, role').eq('id', _currentUser.id).single();
+    _isTester = !!(data && (data.is_tester || data.role === 'admin'));
+  } catch(e) { _isTester = false; }
+  if (btn) btn.style.display = _isTester ? 'inline-flex' : 'none';
+}
+function feedbackCurrentPage() {
+  var h = (window.location.hash || '').replace('#', '');
+  return h ? h : (window.location.pathname || '/');
+}
+function feedbackDevice() {
+  var ua = navigator.userAgent || '';
+  var kind = 'Desktop';
+  if (/iPad|Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua))) kind = 'Tablet';
+  else if (/Mobi|iPhone|iPod|Android.*Mobile|Windows Phone/i.test(ua)) kind = 'Mobile';
+  var w = window.innerWidth || (screen && screen.width) || 0;
+  return kind + ' · ' + w + 'px';
+}
+function feedbackOpen() {
+  if (!_currentUser) { authSwitchTab('signin'); openModal('auth-modal'); return; }
+  var m = document.getElementById('feedback-msg'); if (m) { m.textContent = ''; m.style.color = ''; }
+  var t = document.getElementById('feedback-message'); if (t) t.value = '';
+  openModal('feedback-modal');
+}
+async function feedbackSubmit() {
+  var msgEl = document.getElementById('feedback-msg');
+  var text = (document.getElementById('feedback-message').value || '').trim();
+  if (!text) { if (msgEl) { msgEl.style.color = 'var(--rust)'; msgEl.textContent = 'Please describe the issue before sending.'; } return; }
+  var btn = document.getElementById('feedback-submit-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  var row = {
+    user_id: _currentUser.id,
+    email: _currentUser.email || null,
+    category: document.getElementById('feedback-category').value,
+    severity: document.getElementById('feedback-severity').value,
+    page: feedbackCurrentPage(),
+    message: text,
+    device: feedbackDevice(),
+    user_agent: (navigator.userAgent || '').slice(0, 400)
+  };
+  var { error } = await _supabase.from('feedback').insert(row);
+  if (btn) { btn.disabled = false; btn.textContent = 'Send Feedback'; }
+  if (error) { if (msgEl) { msgEl.style.color = 'var(--rust)'; msgEl.textContent = 'Could not send. Please try again.'; } return; }
+  closeModal('feedback-modal');
+  showNotif('Feedback', 'Thank You', 'Your feedback was sent to the team. We appreciate you helping us test.', 'OK');
+}
+
 
 async function adminResetPassword(userId) {
   // Look up email from profiles (we'll store it) or prompt admin to enter it
@@ -3863,30 +4172,13 @@ async function garageUploadProof(garageId, event) {
   }
 }
 
-// Admins to notify when a proof photo is submitted (add more emails as needed)
-var ADMIN_NOTIFY_EMAILS = ['david@throttledinbond.com'];
 async function notifyAdminPendingVerification(garageId) {
   try {
     var { data: row } = await _supabase.from('garage').select('vin_code,whiskey_name').eq('id', garageId).single();
     var name = (row && row.whiskey_name) || 'A bottle';
     var vin = (row && row.vin_code) || '';
-    await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'api-key': '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'},
-      body: JSON.stringify({
-        sender: {name: 'Throttled In Bond', email: 'info@throttledinbond.com'},
-        to: ADMIN_NOTIFY_EMAILS.map(function(e){ return {email: e}; }),
-        subject: 'Verification Pending — ' + name,
-        htmlContent: '<div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#1A1917;color:#F2EDE3;padding:32px;">' +
-          '<img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" style="height:16px;margin-bottom:24px;">' +
-          '<h2 style="color:#C8952A;margin-bottom:8px;">New Verification Pending</h2>' +
-          '<p style="color:#D6CCBA;">A member submitted a proof photo for <strong>' + name + '</strong>' + (vin ? ' (' + vin + ')' : '') + '.</p>' +
-          '<p style="color:#D6CCBA;">Open the Admin dashboard in My Garage to review and approve it.</p>' +
-          '<a href="https://www.throttledinbond.com" style="display:inline-block;background:#C8952A;color:#1A1917;text-decoration:none;padding:12px 24px;font-weight:600;margin-top:16px;">Review Now</a>' +
-          '<p style="font-size:11px;color:#3E3B35;margin-top:24px;">Throttled In Bond &mdash; The Spirit of American Muscle</p>' +
-        '</div>'
-      })
-    });
+    // Secret-free: recipients are fixed to admins inside the brevo-proxy Edge Function.
+    await _supabase.functions.invoke('brevo-proxy', { body: { action: 'notify_admin_pending', name: name, vin: vin } });
   } catch (e) { /* non-blocking: submission already saved */ }
 }
 
@@ -3910,13 +4202,13 @@ async function leaderboardLoad() {
   var html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Collector</th><th>Series</th><th style="text-align:right;">Verified Bottles</th></tr></thead><tbody>';
   ranked.forEach(function(p, i) {
     var rank = i + 1;
-    var name = p.display_name || 'Collector';
+    var name = fbEscape(p.display_name || 'Collector');
     var avatarHtml = p.avatar_url
-      ? '<img class="leaderboard-avatar" src="' + p.avatar_url + '" crossorigin="anonymous">'
+      ? '<img class="leaderboard-avatar" src="' + encodeURI(p.avatar_url) + '" crossorigin="anonymous">'
       : '<div class="leaderboard-avatar-placeholder">&#128100;</div>';
     var sc = p.series_counts || {};
     var seriesHtml = Object.keys(sc).map(function(s) {
-      return '<span class="leaderboard-series-badge">' + s + ' x' + sc[s] + '</span>';
+      return '<span class="leaderboard-series-badge">' + fbEscape(s) + ' x' + fbEscape(String(sc[s])) + '</span>';
     }).join('');
     var medal = rank === 1 ? '&#127947;' : rank === 2 ? '&#129352;' : rank === 3 ? '&#129353;' : rank;
     html += '<tr>' +
@@ -3958,11 +4250,11 @@ async function adminLoadPendingVerifications() {
   var html = '';
   data.forEach(function(item) {
     html += '<div style="display:flex;align-items:center;gap:16px;padding:12px;background:var(--charcoal2);margin-bottom:2px;">' +
-      '<img src="' + item.proof_photo_url + '" onclick="openLightbox(\'' + item.proof_photo_url + '\')" title="Click to enlarge" style="width:80px;height:80px;object-fit:cover;border:1px solid var(--charcoal4);cursor:zoom-in;" crossorigin="anonymous">' +
+      '<img src="' + encodeURI(item.proof_photo_url) + '" onclick="openLightbox(\'' + encodeURI(item.proof_photo_url) + '\')" title="Click to enlarge" style="width:80px;height:80px;object-fit:cover;border:1px solid var(--charcoal4);cursor:zoom-in;" crossorigin="anonymous">' +
       '<div style="flex:1;">' +
-        '<div style="font-size:11px;color:var(--gold-dk);letter-spacing:.1em;">' + item.vin_code + '</div>' +
-        '<div style="font-size:14px;font-weight:600;color:var(--cream);">' + item.whiskey_name + '</div>' +
-        '<div style="font-size:10px;color:var(--charcoal4);">User: ' + item.user_id.substring(0,8) + '...</div>' +
+        '<div style="font-size:11px;color:var(--gold-dk);letter-spacing:.1em;">' + fbEscape(item.vin_code) + '</div>' +
+        '<div style="font-size:14px;font-weight:600;color:var(--cream);">' + fbEscape(item.whiskey_name) + '</div>' +
+        '<div style="font-size:10px;color:var(--charcoal4);">User: ' + fbEscape(item.user_id.substring(0,8)) + '...</div>' +
       '</div>' +
       '<div style="display:flex;gap:6px;">' +
         '<button class="admin-save-btn" style="background:var(--gold);" onclick="adminVerify(\'' + item.id + '\',true)">Approve</button>' +
@@ -4077,9 +4369,9 @@ async function garageLoadRetailers(series, containerId) {
   var html = '<div class="where-to-buy-title">Where to Buy</div>';
   data.forEach(function(r) {
     html += '<div class="retailer-item">' +
-      '<div><div class="retailer-name">' + r.name + '</div>' +
+      '<div><div class="retailer-name">' + fbEscape(r.name) + '</div>' +
       '<div class="retailer-type">' + (r.city ? r.city + ', ' : '') + r.state + ' &middot; ' + (r.type||'').replace('_',' ') + '</div></div>' +
-      (r.url ? '<a class="retailer-link" href="' + r.url + '" target="_blank">Buy &#8594;</a>' : '') +
+      (r.url ? '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy &#8594;</a>' : '') +
     '</div>';
   });
   el.innerHTML = html;
@@ -4164,7 +4456,7 @@ async function adminLoadRetailers() {
     html += '<table class="admin-table"><thead><tr><th>Name</th><th>Location</th><th>Type</th><th>Bottles</th><th>Actions</th></tr></thead><tbody>';
     _retailers.forEach(function(r) {
       html += '<tr>' +
-        '<td>' + r.name + '</td>' +
+        '<td>' + fbEscape(r.name) + '</td>' +
         '<td>' + (r.city||'') + (r.city && r.state ? ', ' : '') + (r.state||'') + '</td>' +
         '<td style="font-size:10px;">' + (r.type||'').replace('_',' ') + '</td>' +
         '<td>' + (r.bottles||[]).join(', ') + '</td>' +
@@ -4212,46 +4504,14 @@ async function adminMarkAvailable(bottleId, available) {
   if (error) { showNotif('Admin', 'Error', 'Could not update availability.', 'OK'); return; }
   
   if (available) {
-    // Get all users who have this series on their wish list
+    // Wish-list lookup + email sending happen server-side in the brevo-proxy Edge Function
+    // (admin-only, recipients resolved on the server). No secret or recipient list in the client.
     var series = bottleId.split(' ')[2];
-    var { data: wishers } = await _supabase.from('garage')
-      .select('user_id')
-      .eq('series', series)
-      .eq('status', 'wishlist');
-    
-    if (wishers && wishers.length > 0) {
-      // Get their emails from profiles
-      var userIds = wishers.map(function(w){ return w.user_id; });
-      var { data: profiles } = await _supabase.from('profiles')
-        .select('email, notify_availability')
-        .in('id', userIds)
-        .eq('notify_availability', true);
-      
-      if (profiles && profiles.length > 0) {
-        var bottleName = { 'FS': 'Founders Select', 'CS': 'Collection Series', 'BF': 'Barn Find' }[series] || series;
-        // Send via Brevo
-        for (var p of profiles) {
-          if (!p.email) continue;
-          await fetch('https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json', 'api-key': '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'},
-            body: JSON.stringify({
-              sender: {name: 'Throttled In Bond', email: 'info@throttledinbond.com'},
-              to: [{email: p.email}],
-              subject: bottleName + ' is Now Available — Throttled In Bond',
-              htmlContent: '<div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#1A1917;color:#F2EDE3;padding:32px;">' +
-                '<img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" style="height:16px;margin-bottom:24px;">' +
-                '<h2 style="color:#C8952A;margin-bottom:8px;">' + bottleName + ' is Available</h2>' +
-                '<p style="color:#D6CCBA;">A bottle on your wish list is now available to purchase.</p>' +
-                '<a href="https://www.throttledinbond.com" style="display:inline-block;background:#C8952A;color:#1A1917;text-decoration:none;padding:12px 24px;font-weight:600;margin-top:16px;">Shop Now</a>' +
-                '<p style="font-size:11px;color:#3E3B35;margin-top:24px;">Throttled In Bond &mdash; The Spirit of American Muscle</p>' +
-              '</div>'
-            })
-          });
-        }
-        showNotif('Admin', 'Notifications Sent', profiles.length + ' wish list members have been notified.', 'OK');
-      }
-    }
+    try {
+      var { data: res } = await _supabase.functions.invoke('brevo-proxy', { body: { action: 'notify_availability', series: series } });
+      var sent = (res && res.sent) || 0;
+      if (sent > 0) showNotif('Admin', 'Notifications Sent', sent + ' wish list member' + (sent === 1 ? '' : 's') + ' have been notified.', 'OK');
+    } catch (e) { /* non-blocking: availability already updated */ }
   }
   adminLoadBottleContent();
 }
@@ -4266,9 +4526,9 @@ async function loadRetailersOnMap() {
     '<div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:8px;">Retail Locations</div>';
   data.forEach(function(r) {
     html += '<div class="retailer-item">' +
-      '<div><div class="retailer-name">' + r.name + '</div>' +
+      '<div><div class="retailer-name">' + fbEscape(r.name) + '</div>' +
       '<div class="retailer-type">' + (r.city||'') + (r.city&&r.state?', ':'') + (r.state||'') + '</div></div>' +
-      (r.url ? '<a class="retailer-link" href="' + r.url + '" target="_blank">Buy &#8594;</a>' : '') +
+      (r.url ? '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy &#8594;</a>' : '') +
     '</div>';
   });
   html += '</div>';
