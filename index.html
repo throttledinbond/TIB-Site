@@ -992,6 +992,19 @@ sup.tm, .tm {
 .garage-notes-input{width:100%;background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:12px;padding:8px 10px;resize:vertical;min-height:56px;box-sizing:border-box;line-height:1.5;}
 .garage-notes-input:focus{outline:none;border-color:var(--gold);}
 .garage-notes-input::placeholder{color:var(--charcoal4);}
+/* Collapsible bottle card — desktop shows everything; the toggle only appears on mobile */
+.garage-expand-toggle{display:none;}
+.garage-card-body{display:block;}
+@media(max-width:700px){
+ .garage-card-body{display:none;}
+ .garage-card.expanded .garage-card-body{display:block;}
+ .garage-expand-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;background:none;border:1px solid var(--charcoal4);color:var(--gold);font-family:var(--f);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:10px;cursor:pointer;transition:border-color .2s;}
+ .garage-expand-toggle:hover{border-color:var(--gold);}
+ .garage-expand-label::before{content:'More Details';}
+ .garage-card.expanded .garage-expand-label::before{content:'Hide Details';}
+ .garage-expand-arrow{font-size:11px;transition:transform .2s;}
+ .garage-card.expanded .garage-expand-arrow{transform:rotate(180deg);}
+}
 .garage-save-row{display:flex;justify-content:flex-end;margin-top:8px;}
 .garage-save-entry-btn{font-family:var(--f);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;background:none;border:1px solid var(--gold);color:var(--gold);padding:7px 14px;cursor:pointer;transition:all .2s;}
 .garage-save-entry-btn:hover{background:var(--gold);color:var(--charcoal);}
@@ -3260,6 +3273,9 @@ function garageRender(items) {
         '</div>' +
         '<button class="garage-card-delete" onclick="garageDelete(\''+item.id+'\',event)" title="Remove">&#10005;</button>' +
       '</div>' +
+      // Expand/collapse toggle (mobile only) + collapsible body
+      '<button class="garage-expand-toggle" onclick="garageToggleCard(\''+item.id+'\')"><span class="garage-expand-label"></span><span class="garage-expand-arrow">&#9662;</span></button>' +
+      '<div class="garage-card-body">' +
       '<div class="garage-divider"></div>' +
       // Status buttons
       '<div class="garage-status-row">' +
@@ -3304,6 +3320,7 @@ function garageRender(items) {
         '<button class="garage-save-entry-btn" onclick="garageSaveEntry(\''+item.id+'\')">Save Notes</button>' +
       '</div>' +
       '<div class="where-to-buy" id="wtb-'+item.id+'"><div style="font-size:10px;color:var(--cream3);">Loading availability...</div></div>' +
+      '</div>' + // close .garage-card-body
     '</div>';
   });
   html += '</div>';
@@ -3313,6 +3330,11 @@ function garageRender(items) {
   items.forEach(function(item) {
     garageLoadRetailers(item.series, 'wtb-' + item.id);
   });
+}
+
+function garageToggleCard(id) {
+  var card = document.getElementById('gc-' + id);
+  if (card) card.classList.toggle('expanded');
 }
 
 async function garageSave(vinCode, whiskeyName, age, proof, origin, series) {
