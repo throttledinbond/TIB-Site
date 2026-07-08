@@ -1127,7 +1127,13 @@ sup.tm, .tm {
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6YmZ3emlrY3RweXN6dGh3cHZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTgyMTcsImV4cCI6MjA5ODU5NDIxN30.j4KjQvEhAZPyKXpJHEsCQYTGuQ3p46WNHDgfb8B6Zjg');
+var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6YmZ3emlrY3RweXN6dGh3cHZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTgyMTcsImV4cCI6MjA5ODU5NDIxN30.j4KjQvEhAZPyKXpJHEsCQYTGuQ3p46WNHDgfb8B6Zjg', {
+  global: {
+    // Always fetch fresh from Supabase — never serve a stale cached response.
+    // (Fixes admin edits, e.g. Barrel Provenance, not showing until much later.)
+    fetch: function(input, init) { init = init || {}; init.cache = 'no-store'; return fetch(input, init); }
+  }
+});
 
 // Capture a friend's referral code (?ref=CODE) and remember it through signup
 (function(){ try { var r = new URLSearchParams(window.location.search).get('ref'); if (r) localStorage.setItem('tib_ref', r.trim()); } catch(e){} })();
