@@ -630,7 +630,7 @@ a{color:inherit;text-decoration:none;}
 }
 
 @media(max-width:600px){
- .nav-logo{display:none;} /* hide wide wordmark on phones; keep the square logomark + hamburger */
+ .nav-logo{max-width:50vw;} /* cap wordmark width on phones so it scales down (object-fit:contain keeps it undistorted) and leaves room for the icon + hamburger */
  .hero-ctas{flex-direction:column;align-items:flex-start;}
  .whiskey-intro-stat-grid{grid-template-columns:1fr 1fr;}
  .bottle-detail-stats{grid-template-columns:1fr 1fr;}
