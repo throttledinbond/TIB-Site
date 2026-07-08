@@ -75,7 +75,7 @@ a{color:inherit;text-decoration:none;}
 #nav.hide{transform:translateY(-100%);}
 #nav.show{transform:translateY(0);}
 
-.nav-logo{height:28px;width:auto;opacity:.95;transition:opacity .2s;}
+.nav-logo{height:28px;width:auto;flex-shrink:0;object-fit:contain;opacity:.95;transition:opacity .2s;}
 .nav-logo:hover{opacity:1;}
 
 .nav-links{display:flex;align-items:center;gap:clamp(12px,2vw,24px);}
@@ -167,7 +167,12 @@ a{color:inherit;text-decoration:none;}
 .hero-bottle-img:nth-child(3){transform:rotate(5deg) translateX(-14px);z-index:1;position:relative;}
 
 @media(max-width:700px){
- .hero-bottles{display:none;}
+ .hero-bottle-img{height:clamp(120px,30vw,190px);}
+ .hero-bottles{margin-bottom:clamp(12px,2vh,20px);}
+ /* Stop forcing every section to a full screen — kills the long empty-scroll gaps */
+ .section{min-height:auto;}
+ .section-inner{padding:clamp(44px,6vh,60px) clamp(18px,5vw,40px);}
+ .hero-headline{white-space:normal;}
 }
 
 .hero-overlay{
@@ -620,6 +625,7 @@ a{color:inherit;text-decoration:none;}
  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
  .nav-links{display:none;}
  .nav-cta{display:none;}
+ #nav-auth-wrap{display:none;}
  .nav-hamburger{display:flex;}
 }
 
@@ -627,7 +633,7 @@ a{color:inherit;text-decoration:none;}
  .hero-ctas{flex-direction:column;align-items:flex-start;}
  .whiskey-intro-stat-grid{grid-template-columns:1fr 1fr;}
  .bottle-detail-stats{grid-template-columns:1fr 1fr;}
- .story-photos{grid-template-columns:1fr;}
+ .story-photos{grid-template-columns:1fr 1fr;gap:6px;}
  .footer-top{grid-template-columns:1fr;}
  .email-row{flex-direction:column;}
  .email-input{border-right:1px solid var(--charcoal4);border-bottom:none;}
@@ -1307,8 +1313,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 
 <!-- ══ NAV ══ -->
 <nav id="nav">
- <a onclick="navTo('home')" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
- <img style="height:28px;width:auto;" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" crossorigin="anonymous">
+ <a onclick="navTo('home')" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
+ <img style="height:28px;width:auto;flex-shrink:0;" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" crossorigin="anonymous">
  <img class="nav-logo" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond™" crossorigin="anonymous">
  </a>
  <div class="nav-links">
