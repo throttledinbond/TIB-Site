@@ -2446,8 +2446,10 @@ async function loadBottleProvenance(code, id) {
     '</div>';
     return;
   }
-  var { data } = await _supabase.from('bottle_provenance').select('*').eq('id', code).maybeSingle();
-  function row(label, val) { return val ? '<div class="prov-row"><span class="prov-row-label">' + label + '</span><span class="prov-row-val">' + val + '</span></div>' : ''; }
+  // Bust any HTTP/proxy cache so an admin edit is reflected immediately on re-fetch.
+  var { data } = await _supabase.from('bottle_provenance').select('*').eq('id', code).limit(1);
+  data = (data && data[0]) || null;
+  function row(label, val) { return val ? '<div class="prov-row"><span class="prov-row-label">' + label + '</span><span class="prov-row-val">' + fbEscape(String(val)) + '</span></div>' : ''; }
   var rows = '';
   if (data) {
     rows += row('Original Distiller', data.original_distiller);
@@ -2455,9 +2457,12 @@ async function loadBottleProvenance(code, id) {
     rows += row('Barrel Dump Date', data.dump_date);
     rows += row('Barrel Bottling Date', data.bottling_date);
   }
-  var notes = (data && data.expression_notes) ? '<div class="prov-notes">' + data.expression_notes + '</div>' : '';
+  var notes = (data && data.expression_notes) ? '<div class="prov-notes">' + fbEscape(String(data.expression_notes)) + '</div>' : '';
   el.innerHTML = '<div class="prov-unlocked">' +
-    '<div class="prov-eyebrow">Founder&#8217;s Circle &#183; Barrel Provenance</div>' +
+    '<div class="prov-eyebrow" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">' +
+      '<span>Founder&#8217;s Circle &#183; Barrel Provenance</span>' +
+      '<span onclick="loadBottleProvenance(\'' + code + '\',\'' + id + '\')" title="Refresh provenance" style="cursor:pointer;color:var(--gold);font-size:13px;line-height:1;">&#8635;</span>' +
+    '</div>' +
     ((rows || notes) ? (rows + notes) : '<p class="prov-lock-desc">Full provenance for this barrel is coming soon.</p>') +
   '</div>';
 }
