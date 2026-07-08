@@ -630,6 +630,7 @@ a{color:inherit;text-decoration:none;}
 }
 
 @media(max-width:600px){
+ .nav-logo{display:none;} /* hide wide wordmark on phones; keep the square logomark + hamburger */
  .hero-ctas{flex-direction:column;align-items:flex-start;}
  .whiskey-intro-stat-grid{grid-template-columns:1fr 1fr;}
  .bottle-detail-stats{grid-template-columns:1fr 1fr;}
@@ -981,10 +982,10 @@ sup.tm, .tm {
 .garage-status-btn.active{background:var(--gold) !important;color:var(--charcoal) !important;border-color:var(--gold) !important;}
 .garage-status-btn.active-tasted{background:none;color:var(--charcoal4);border-color:var(--charcoal4);}
 .garage-status-btn.wishlist{background:none;color:var(--charcoal4);border-color:var(--charcoal4);}
-.garage-date-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-.garage-date-field{display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px;}
+.garage-date-row{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;}
+.garage-date-field{display:flex;flex-direction:column;gap:4px;}
 .garage-date-label{font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);}
-.garage-date-input{background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:12px;padding:7px 10px;width:100%;box-sizing:border-box;cursor:pointer;}
+.garage-date-input{background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:12px;padding:7px 10px;width:auto;max-width:100%;box-sizing:border-box;cursor:pointer;}
 .garage-date-input:focus{outline:none;border-color:var(--gold);}
 .garage-notes-field{margin-bottom:8px;}
 .garage-notes-label{font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);display:block;margin-bottom:4px;}
