@@ -620,9 +620,9 @@ a{color:inherit;text-decoration:none;}
  .bottle-detail-inner{grid-template-columns:1fr;}
  .bottle-detail-img-col{min-height:200px;}
  .story-grid{grid-template-columns:1fr;gap:40px;}
- .vintage-cols{grid-template-columns:1fr;}
- .vintage-decoder-col{position:static;}
- .vintage-ref-col{order:-1;}
+ .vintage-cols{grid-template-columns:minmax(0,1fr);}
+ .vintage-decoder-col{position:static;min-width:0;order:-1;}
+ .vintage-ref-col{min-width:0;}
  .inventory-inner{grid-template-columns:1fr;gap:40px;}
  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
  .nav-links{display:none;}
