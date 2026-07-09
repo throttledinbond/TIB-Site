@@ -1342,6 +1342,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="nav-link" onclick="navTo('whiskey')">Whiskey</span>
  <span class="nav-link" onclick="navTo('story')">The Story</span>
  <span class="nav-link" onclick="navTo('vintage')">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
+ <span class="nav-link" onclick="navTo('shop')">Shop</span>
  <a class="nav-link" href="https://blog.throttledinbond.com/blog" target="_blank" style="color:var(--cream3);text-decoration:none;">Blog</a>
  </div>
  <div class="nav-auth-wrap" id="nav-auth-wrap">
@@ -1366,6 +1367,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="mobile-link" onclick="navTo('whiskey');toggleMenu()">Whiskey</span>
  <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
  <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
+ <span class="mobile-link" onclick="navTo('shop');toggleMenu()">Shop</span>
  <a class="mobile-link" href="https://blog.throttledinbond.com/blog" target="_blank" onclick="toggleMenu()" style="text-decoration:none;">Blog</a>
  <span class="mobile-link" onclick="authNavClick();toggleMenu()">The Garage</span>
  <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
@@ -1578,13 +1580,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <section id="story" class="section" style="min-height:auto;background:var(--charcoal);">
   <div class="section-inner">
 
-    <!-- Section header -->
-    <div class="eyebrow reveal">The Origin &nbsp;·&nbsp; The Founders</div>
-    <h2 class="display-sm reveal reveal-delay-1" style="margin-bottom:clamp(40px,6vh,64px);">The Story</h2>
-
-    <!-- Part 1: Born From The Garage + Video -->
+    <!-- Part 1: Section header + Born From The Garage (left) + Video (right) -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start;margin-bottom:clamp(32px,5vh,56px);" class="garage-grid">
       <div class="reveal">
+        <div class="eyebrow">The Origin &nbsp;·&nbsp; The Founders</div>
+        <h2 class="display-sm" style="margin-top:6px;margin-bottom:clamp(24px,3.5vh,36px);">The Story</h2>
         <h3 class="display-sm" style="margin-bottom:16px;white-space:nowrap;font-size:clamp(22px,3.5vw,42px);">Born From The Garage</h3>
         <div class="gold-line" style="margin-bottom:24px;"></div>
         <p class="body-copy" style="margin-bottom:16px;">It began with a '68 Mustang GT, and a dream rooted in American muscle car culture. What followed is a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
@@ -2046,6 +2046,35 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
   </div>
 </section>
 
+<!-- ══════════════════════════════════════
+ SECTION: SHOP / MERCH
+══════════════════════════════════════ -->
+<section id="shop" class="section" style="min-height:auto;background:var(--charcoal2);">
+  <div class="section-inner">
+    <div class="eyebrow reveal">The Garage Collection &nbsp;·&nbsp; Merch</div>
+    <h2 class="display-sm reveal reveal-delay-1" style="margin-bottom:16px;">Shop</h2>
+    <div class="gold-line reveal reveal-delay-1" style="margin-bottom:24px;"></div>
+    <p class="body-copy reveal reveal-delay-2" style="max-width:620px;margin-bottom:clamp(28px,4vh,44px);">Wear the Spirit of American Muscle<span class="tm">&#8482;</span>. Every piece is made to order and ships directly to you.</p>
+
+    <div id="shop-embed" class="reveal reveal-delay-2">
+      <!-- Public sees this until launch -->
+      <div id="shop-placeholder">
+        <div style="border:1px solid var(--charcoal4);background:var(--charcoal);padding:clamp(32px,6vw,56px);text-align:center;">
+          <div style="font-size:30px;color:var(--gold);margin-bottom:12px;">&#9878;</div>
+          <div class="eyebrow" style="color:var(--gold);margin-bottom:10px;">Coming Soon</div>
+          <p class="body-copy" style="max-width:460px;margin:0 auto 20px;">Our merch is on its way. Join The Barrel Inventory and you&#8217;ll be first to know the moment it drops.</p>
+          <button class="btn-ghost" onclick="navTo('inventory')">Never Miss A Release</button>
+        </div>
+      </div>
+      <!-- Admins only (you) see the live store until we launch publicly -->
+      <div id="shop-store" style="display:none;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:16px;">Admin preview &middot; visible only to you until launch</div>
+        <div id="collection-component-1783597422579"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer id="footer">
  <div class="footer-inner">
  <div class="footer-top">
@@ -2059,6 +2088,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="footer-link" onclick="navTo('whiskey')">Whiskey</span>
  <span class="footer-link" onclick="navTo('story')">The Story</span>
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
+ <span class="footer-link" onclick="navTo('shop')">Shop</span>
  <a class="footer-link" href="https://blog.throttledinbond.com/blog" target="_blank" style="text-decoration:none;">Blog</a>
  <span class="footer-link" onclick="authNavClick()">The Garage</span>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
@@ -2292,7 +2322,7 @@ function navTo(id) {
 
 // ── NAV HIGHLIGHT ──
 function highlightNav() {
- const sections = ['home','whiskey','story','vintage','inventory','garage','leaderboard'];
+ const sections = ['home','whiskey','story','vintage','shop','inventory','garage','leaderboard'];
  const offset = 100;
  let current = 'home';
  sections.forEach(id => {
@@ -2986,6 +3016,7 @@ _supabase.auth.getSession().then(function({ data }) {
     garageLoad();
     engageInit();
     feedbackAccessRefresh();
+    shopAdminGate();
   }
 });
 
@@ -3011,6 +3042,7 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     if (gc) gc.style.display = '';
     engageInit();
     feedbackAccessRefresh();
+    shopAdminGate();
   } else {
     document.getElementById('garage').style.display = '';
     if (header) header.style.display = 'none';
@@ -3031,6 +3063,7 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     var fab = document.getElementById('feedback-fab');
     if (fab) fab.style.display = 'none';
     _isTester = false;
+    shopAdminGate();
     engageSetVisible(false);
   }
 });
@@ -4055,6 +4088,80 @@ async function feedbackAccessRefresh() {
     _isTester = !!(data && (data.is_tester || data.role === 'admin'));
   } catch(e) { _isTester = false; }
   if (btn) btn.style.display = _isTester ? 'inline-flex' : 'none';
+}
+
+// ── SHOP (Shopify Buy Button, admin-gated until launch) ──
+var _shopInited = false;
+function shopInitStore() {
+  if (_shopInited) return; _shopInited = true;
+  var GOLD = '#C8952A', GOLD_LT = '#B58A3C', CHARCOAL = '#1A1917', CREAM = '#F2EDE3', CREAM3 = '#A79C8A';
+  var btnStyle = {
+    'font-family': "'Helvetica Neue', Arial, sans-serif", 'font-weight': '600', 'font-size': '12px',
+    'letter-spacing': '0.1em', 'text-transform': 'uppercase', 'border-radius': '0px',
+    'background-color': GOLD, 'color': CHARCOAL,
+    ':hover': { 'background-color': GOLD_LT }, ':focus': { 'background-color': GOLD_LT }
+  };
+  function build() {
+    var client = ShopifyBuy.buildClient({
+      domain: 'cehtfv-np.myshopify.com',
+      storefrontAccessToken: 'c2f813ef6e6542879f7b93e8d5ae7d4e'
+    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('collection', {
+        id: '313171771478',
+        node: document.getElementById('collection-component-1783597422579'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: {
+          product: {
+            styles: {
+              product: {
+                '@media (min-width: 601px)': { 'max-width': 'calc(33.33% - 20px)', 'margin-left': '20px', 'margin-bottom': '40px', 'width': 'calc(33.33% - 20px)' },
+                'img': { 'height': 'calc(100% - 15px)', 'position': 'absolute', 'left': '0', 'right': '0', 'top': '0' },
+                'imgWrapper': { 'padding-top': 'calc(75% + 15px)', 'position': 'relative', 'height': '0' }
+              },
+              title: { 'color': CREAM, 'font-weight': '600' },
+              price: { 'color': CREAM },
+              compareAt: { 'color': CREAM3 },
+              button: btnStyle
+            },
+            text: { button: 'Add to cart' }
+          },
+          productSet: { styles: { products: { '@media (min-width: 601px)': { 'margin-left': '-20px' } } } },
+          modalProduct: {
+            contents: { img: false, imgWithCarousel: true, button: false, buttonWithQuantity: true },
+            styles: { product: { '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0px', 'margin-bottom': '0px' } }, button: btnStyle },
+            text: { button: 'Add to cart' }
+          },
+          option: {},
+          cart: { styles: { button: btnStyle }, text: { total: 'Subtotal', button: 'Checkout' } },
+          toggle: { styles: { toggle: { 'background-color': GOLD, ':hover': { 'background-color': GOLD_LT } }, count: { 'color': CHARCOAL }, iconPath: { 'fill': CHARCOAL } } }
+        }
+      });
+    });
+  }
+  if (window.ShopifyBuy && window.ShopifyBuy.UI) { build(); }
+  else {
+    var s = document.createElement('script');
+    s.async = true; s.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+    s.onload = build;
+    (document.head || document.body).appendChild(s);
+  }
+}
+
+async function shopAdminGate() {
+  var placeholder = document.getElementById('shop-placeholder');
+  var store = document.getElementById('shop-store');
+  if (!store) return;
+  var isAdmin = false;
+  try { if (_currentUser) { isAdmin = await adminCheck(); } } catch (e) { isAdmin = false; }
+  if (isAdmin) {
+    if (placeholder) placeholder.style.display = 'none';
+    store.style.display = '';
+    shopInitStore();
+  } else {
+    if (placeholder) placeholder.style.display = '';
+    store.style.display = 'none';
+  }
 }
 function feedbackCurrentPage() {
   var h = (window.location.hash || '').replace('#', '');
