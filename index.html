@@ -1587,9 +1587,12 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <h2 class="display-sm" style="margin-top:6px;margin-bottom:clamp(24px,3.5vh,36px);">The Story</h2>
         <h3 class="display-sm" style="margin-bottom:16px;white-space:nowrap;font-size:clamp(22px,3.5vw,42px);">Born From The Garage</h3>
         <div class="gold-line" style="margin-bottom:24px;"></div>
-        <p class="body-copy" style="margin-bottom:16px;">It began with a '68 Mustang GT, and a dream rooted in American muscle car culture. What followed is a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
+        <p class="body-copy" style="margin-bottom:16px;">It began with a '68 Mustang, and a dream rooted in American muscle car culture. What followed is a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
+        <p class="body-copy" style="margin-bottom:16px;">The sight of American muscle on modern streets is a reminder that the right vintage has no equal. Character, heritage, and provenance are a rare combination, yet you will find them all in Throttled In Bond<span class="tm">&#8482;</span>.</p>
+        <p class="body-copy" style="margin-bottom:16px;">In every sip is a memory, and in every bottle is a story. From the barrel selection, to the age, to the expression, THROTTLED IN BOND<span class="tm">&#8482;</span> celebrates the vision, passion, and influence of American Muscle.</p>
+        <p class="body-copy" style="margin-bottom:16px;">THROTTLED IN BOND<span class="tm">&#8482;</span> is our expression of nostalgia and passion for American Muscle car culture. We're passionate about hunting for the most exciting barn finds, whether that be a rare muscle car, ready for revival, or a unique whiskey barrel, aged to perfection. Join us as we celebrate The Spirit of American Muscle<span class="tm">&#8482;</span>.</p>
       </div>
-      <div class="reveal reveal-delay-1" style="display:flex;align-items:flex-start;justify-content:center;">
+      <div class="reveal reveal-delay-1" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
                 <div
           onclick="openVideoModal()"
           style="position:relative;width:100%;max-width:360px;aspect-ratio:9/16;background:var(--charcoal2);overflow:hidden;cursor:pointer;group:;"
@@ -1614,6 +1617,14 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <div style="position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--cream3);">Watch the Story</div>
         </div>
 
+        <!-- Founder photos, one small row beneath the video -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;max-width:360px;">
+          <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/IMG_6423.jpeg" alt="David and Amy on the Mustang" loading="lazy" crossorigin="anonymous" style="width:100%;aspect-ratio:1/1;object-fit:cover;filter:grayscale(15%);display:block;">
+          <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/733DD8B1-23E9-4D6A-B6BF-B4B2027DCB62_1_105_c.jpeg" alt="The Story" loading="lazy" crossorigin="anonymous" style="width:100%;aspect-ratio:1/1;object-fit:cover;filter:grayscale(15%);display:block;">
+          <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/B2FABA6B-E79C-45CD-B546-39DFE346FDF0_1_105_c.jpeg" alt="The Build" loading="lazy" crossorigin="anonymous" style="width:100%;aspect-ratio:1/1;object-fit:cover;filter:grayscale(15%);display:block;">
+          <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/42148ADB-4B18-4D9E-9745-E2B691F6BE6B_1_105_c.jpeg" alt="The Journey" loading="lazy" crossorigin="anonymous" style="width:100%;aspect-ratio:1/1;object-fit:cover;filter:grayscale(15%);display:block;">
+        </div>
+
         <!-- Video Modal -->
         <div id="video-modal" style="display:none;position:fixed;inset:0;z-index:950;align-items:center;justify-content:center;">
           <div onclick="closeVideoModal()" style="position:absolute;inset:0;background:rgba(26,25,23,.92);"></div>
@@ -1633,27 +1644,6 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       </div>
     </div>
 
-    <!-- Divider -->
-    <div class="gold-line" style="margin-bottom:clamp(32px,5vh,48px);margin-top:0;"></div>
-
-    <!-- Part 2: Founder Story + Photos -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:start;" class="story-grid-inner">
-      <div class="story-copy reveal">
-        <p>We've spent the beginning years under the hood and on the road, sourcing parts, solving problems, and staying stubborn about the details. Nothing compares to the feeling of driving a piece of American history.</p>
-        <p>This whiskey comes from that same mindset. Putting in the time following every lead, and trusting the process until we get it right.</p>
-        <p>Throttled In Bond<span class="tm">™</span> is a whiskey with some horsepower, but it drinks as smooth as a perfectly tuned V8. Every choice from the barrel, to the age, to the expression, was made with the same care we'd give to any build.</p>
-        <p>A whiskey with character and vintage, celebrating the vision, passion, and influence of American Muscle. It took real work to get here, but that's what we live for.</p>
-        <div class="story-signature" style="border-top:1px solid var(--charcoal4);padding-top:20px;margin-top:24px;text-align:right;">
-          <div class="story-signature-name">David &amp; Amy</div>
-        </div>
-      </div>
-      <div class="story-photos reveal reveal-delay-1">
-        <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/IMG_6423.jpeg" alt="David and Amy on the Mustang" loading="lazy" crossorigin="anonymous">
-        <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/733DD8B1-23E9-4D6A-B6BF-B4B2027DCB62_1_105_c.jpeg" alt="The Story" loading="lazy" crossorigin="anonymous">
-        <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/B2FABA6B-E79C-45CD-B546-39DFE346FDF0_1_105_c.jpeg" alt="The Build" loading="lazy" crossorigin="anonymous">
-        <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/42148ADB-4B18-4D9E-9745-E2B691F6BE6B_1_105_c.jpeg" alt="The Journey" loading="lazy" crossorigin="anonymous">
-      </div>
-    </div>
 
   </div>
 </section>
