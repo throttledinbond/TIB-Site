@@ -3116,7 +3116,7 @@ async function authSignUp() {
     options: { data: { full_name: name, email: email, city: city, state: state, ref: (function(){ try { return localStorage.getItem('tib_ref') || ''; } catch(e){ return ''; } })() } }
   });
   if (error) { msg.style.color = '#8B3A2A'; msg.textContent = error.message; }
-  else { msg.style.color = 'var(--gold)'; msg.textContent = 'Check your email to confirm your account.'; }
+  else { msg.style.color = 'var(--gold)'; msg.innerHTML = 'Check your email to confirm your account.<br><span style="color:var(--cream3);font-size:12px;">Don\'t see it? Check your spam or junk folder — and mark it &ldquo;Not spam&rdquo; so future emails reach your inbox.</span>'; }
 }
 
 async function authSignOut() {
@@ -4104,7 +4104,7 @@ function shopInitStore() {
     });
     ShopifyBuy.UI.onReady(client).then(function (ui) {
       ui.createComponent('collection', {
-        id: '313171771478',
+        id: '313251528790',
         node: document.getElementById('collection-component-1783597422579'),
         moneyFormat: '%24%7B%7Bamount%7D%7D',
         options: {
