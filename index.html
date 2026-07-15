@@ -2045,6 +2045,12 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <!-- ══════════════════════════════════════
  SECTION: SHOP / MERCH
 ══════════════════════════════════════ -->
+<style>
+.shop-filters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px;}
+.shop-filter{background:transparent;border:1px solid var(--charcoal4);color:var(--cream3);font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:9px 18px;cursor:pointer;transition:background .15s,border-color .15s,color .15s;border-radius:0;}
+.shop-filter:hover{border-color:var(--gold);color:var(--cream);}
+.shop-filter.active{background:var(--gold);border-color:var(--gold);color:var(--charcoal);}
+</style>
 <section id="shop" class="section" style="min-height:auto;background:var(--charcoal2);">
   <div class="section-inner">
     <div class="eyebrow reveal">The Garage Collection &nbsp;·&nbsp; Merch</div>
@@ -2066,6 +2072,14 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <!-- Admins only (you) see the live store until we launch publicly -->
       <div id="shop-store" style="display:none;">
         <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:16px;">Admin preview &middot; visible only to you until launch</div>
+        <div id="shop-filters" class="shop-filters">
+          <button type="button" class="shop-filter active" data-col="313251528790" onclick="shopFilter(this)">All</button>
+          <button type="button" class="shop-filter" data-col="313454592086" onclick="shopFilter(this)">Apparel</button>
+          <button type="button" class="shop-filter" data-col="313454624854" onclick="shopFilter(this)">Hats</button>
+          <button type="button" class="shop-filter" data-col="313454657622" onclick="shopFilter(this)">Home</button>
+          <button type="button" class="shop-filter" data-col="313454886998" onclick="shopFilter(this)">Garage</button>
+          <button type="button" class="shop-filter" data-col="313454690390" onclick="shopFilter(this)">Drinkware</button>
+        </div>
         <div id="collection-component-1783597422579"></div>
       </div>
     </div>
@@ -4089,8 +4103,9 @@ async function feedbackAccessRefresh() {
 
 // ── SHOP (Shopify Buy Button, admin-gated until launch) ──
 var _shopInited = false;
-function shopInitStore() {
-  if (_shopInited) return; _shopInited = true;
+var _shopUI = null;
+function shopRender(colId) {
+  if (!_shopUI) return;
   var GOLD = '#C8952A', GOLD_LT = '#B58A3C', CHARCOAL = '#1A1917', CREAM = '#F2EDE3', CREAM3 = '#A79C8A';
   var btnStyle = {
     'font-family': "'Helvetica Neue', Arial, sans-serif", 'font-weight': '600', 'font-size': '12px',
@@ -4098,43 +4113,53 @@ function shopInitStore() {
     'background-color': GOLD, 'color': CHARCOAL,
     ':hover': { 'background-color': GOLD_LT }, ':focus': { 'background-color': GOLD_LT }
   };
+  var node = document.getElementById('collection-component-1783597422579');
+  if (node) node.innerHTML = '';
+  _shopUI.createComponent('collection', {
+    id: colId,
+    node: node,
+    moneyFormat: '%24%7B%7Bamount%7D%7D',
+    options: {
+      product: {
+        styles: {
+          product: {
+            '@media (min-width: 601px)': { 'max-width': 'calc(33.33% - 20px)', 'margin-left': '20px', 'margin-bottom': '40px', 'width': 'calc(33.33% - 20px)' },
+            'img': { 'height': 'calc(100% - 15px)', 'position': 'absolute', 'left': '0', 'right': '0', 'top': '0' },
+            'imgWrapper': { 'padding-top': 'calc(75% + 15px)', 'position': 'relative', 'height': '0' }
+          },
+          title: { 'color': CREAM, 'font-weight': '600', 'height': '3.4em', 'line-height': '1.35', 'overflow': 'hidden' },
+          price: { 'color': CREAM },
+          compareAt: { 'color': CREAM3 },
+          button: btnStyle
+        },
+        text: { button: 'Add to cart' }
+      },
+      productSet: { styles: { products: { '@media (min-width: 601px)': { 'margin-left': '-20px' } } } },
+      modalProduct: {
+        contents: { img: false, imgWithCarousel: true, button: false, buttonWithQuantity: true },
+        styles: { product: { '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0px', 'margin-bottom': '0px' } }, button: btnStyle },
+        text: { button: 'Add to cart' }
+      },
+      option: {},
+      cart: { styles: { button: btnStyle }, text: { total: 'Subtotal', button: 'Checkout' } },
+      toggle: { styles: { toggle: { 'background-color': GOLD, ':hover': { 'background-color': GOLD_LT } }, count: { 'color': CHARCOAL }, iconPath: { 'fill': CHARCOAL } } }
+    }
+  });
+}
+function shopFilter(btn) {
+  var tabs = document.querySelectorAll('.shop-filter');
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+  btn.classList.add('active');
+  shopRender(btn.getAttribute('data-col'));
+}
+function shopInitStore() {
+  if (_shopInited) return; _shopInited = true;
   function build() {
     var client = ShopifyBuy.buildClient({
       domain: 'cehtfv-np.myshopify.com',
       storefrontAccessToken: 'c2f813ef6e6542879f7b93e8d5ae7d4e'
     });
-    ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('collection', {
-        id: '313251528790',
-        node: document.getElementById('collection-component-1783597422579'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          product: {
-            styles: {
-              product: {
-                '@media (min-width: 601px)': { 'max-width': 'calc(33.33% - 20px)', 'margin-left': '20px', 'margin-bottom': '40px', 'width': 'calc(33.33% - 20px)' },
-                'img': { 'height': 'calc(100% - 15px)', 'position': 'absolute', 'left': '0', 'right': '0', 'top': '0' },
-                'imgWrapper': { 'padding-top': 'calc(75% + 15px)', 'position': 'relative', 'height': '0' }
-              },
-              title: { 'color': CREAM, 'font-weight': '600', 'height': '3.4em', 'line-height': '1.35', 'overflow': 'hidden' },
-              price: { 'color': CREAM },
-              compareAt: { 'color': CREAM3 },
-              button: btnStyle
-            },
-            text: { button: 'Add to cart' }
-          },
-          productSet: { styles: { products: { '@media (min-width: 601px)': { 'margin-left': '-20px' } } } },
-          modalProduct: {
-            contents: { img: false, imgWithCarousel: true, button: false, buttonWithQuantity: true },
-            styles: { product: { '@media (min-width: 601px)': { 'max-width': '100%', 'margin-left': '0px', 'margin-bottom': '0px' } }, button: btnStyle },
-            text: { button: 'Add to cart' }
-          },
-          option: {},
-          cart: { styles: { button: btnStyle }, text: { total: 'Subtotal', button: 'Checkout' } },
-          toggle: { styles: { toggle: { 'background-color': GOLD, ':hover': { 'background-color': GOLD_LT } }, count: { 'color': CHARCOAL }, iconPath: { 'fill': CHARCOAL } } }
-        }
-      });
-    });
+    ShopifyBuy.UI.onReady(client).then(function (ui) { _shopUI = ui; shopRender('313251528790'); });
   }
   if (window.ShopifyBuy && window.ShopifyBuy.UI) { build(); }
   else {
