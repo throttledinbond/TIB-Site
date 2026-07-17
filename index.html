@@ -1593,7 +1593,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <p class="body-copy" style="margin-bottom:16px;">It began with a '68 Mustang, and a dream rooted in American muscle car culture. What followed is a whiskey built with the same precision and appeal as the most iconic cars of an era.</p>
         <p class="body-copy" style="margin-bottom:16px;">The sight of American muscle on modern streets is a reminder that the right vintage has no equal. Character, heritage, and provenance are a rare combination, yet you will find them all in Throttled In Bond<span class="tm">&#8482;</span>.</p>
         <p class="body-copy" style="margin-bottom:16px;">In every sip is a memory, and in every bottle is a story. From the barrel selection, to the age, to the expression, THROTTLED IN BOND<span class="tm">&#8482;</span> celebrates the vision, passion, and influence of American Muscle.</p>
-        <p class="body-copy" style="margin-bottom:16px;">THROTTLED IN BOND<span class="tm">&#8482;</span> is our expression of nostalgia and passion for American Muscle car culture. We're passionate about hunting for the most exciting barn finds, whether that be a rare muscle car, ready for revival, or a unique whiskey barrel, aged to perfection. Join us as we celebrate The Spirit of American Muscle<span class="tm">&#8482;</span>.</p>
+        <p class="body-copy" style="margin-bottom:16px;">THROTTLED IN BOND<span class="tm">&#8482;</span> is our expression of nostalgia and reverence for American Muscle car culture. We're passionate about hunting for the most exciting barn finds, whether that be a rare muscle car, ready for revival, or a unique whiskey barrel, aged to perfection. Join us as we celebrate The Spirit of American Muscle<span class="tm">&#8482;</span>.</p>
         <div class="story-signature">
           <div class="story-signature-name">David &amp; Amy</div>
         </div>
@@ -4121,6 +4121,8 @@ function shopRender(colId) {
     moneyFormat: '%24%7B%7Bamount%7D%7D',
     options: {
       product: {
+        buttonDestination: 'modal',
+        contents: { options: false },
         styles: {
           product: {
             '@media (min-width: 601px)': { 'max-width': 'calc(33.33% - 20px)', 'margin-left': '20px', 'margin-bottom': '40px', 'width': 'calc(33.33% - 20px)' },
@@ -4132,7 +4134,7 @@ function shopRender(colId) {
           compareAt: { 'color': CREAM3 },
           button: btnStyle
         },
-        text: { button: 'Add to cart' }
+        text: { button: 'View Details' }
       },
       productSet: { styles: { products: { '@media (min-width: 601px)': { 'margin-left': '-20px' } } } },
       modalProduct: {
