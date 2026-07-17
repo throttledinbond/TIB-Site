@@ -1780,6 +1780,56 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <!-- ══ FOOTER ══ -->
 
 <!-- ══ SECTION: MY GARAGE ══ -->
+<style>
+.archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+.archive-card{background:var(--charcoal3);border:1px solid var(--charcoal4);cursor:pointer;transition:border-color .15s;overflow:hidden;}
+.archive-card:hover{border-color:var(--gold);}
+.archive-card-img{aspect-ratio:4/3;background:#2E2C28;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.archive-card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.archive-noimg{font-size:20px;letter-spacing:3px;color:#5A554C;font-weight:600;}
+.archive-card-body{padding:14px 16px;}
+.archive-card-series{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.archive-card-title{font-size:15px;color:var(--cream);line-height:1.3;font-weight:600;}
+.archive-card-code{font-size:11px;letter-spacing:1px;color:#A69C8C;margin-top:6px;}
+.archive-draft{display:inline-block;margin-left:8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#1A1917;background:#A69C8C;padding:1px 6px;vertical-align:middle;}
+.archive-back{background:none;border:none;color:var(--gold);font-family:var(--f);font-size:12px;letter-spacing:.06em;cursor:pointer;padding:0;margin-bottom:24px;}
+.archive-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.archive-title{font-size:clamp(22px,3vw,30px);font-weight:700;color:var(--cream);line-height:1.15;}
+.archive-code{font-size:12px;letter-spacing:2px;color:#A69C8C;margin-top:8px;}
+.archive-rule{width:52px;border-top:1px solid var(--gold);margin:18px 0;}
+.archive-intro{font-size:15px;line-height:1.7;color:var(--cream3);max-width:680px;margin:0;}
+.archive-sec{margin-top:30px;}
+.archive-sec-h{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.archive-body{font-size:14px;line-height:1.7;color:var(--cream3);max-width:680px;margin:14px 0 0;}
+.bs-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;}
+.bs-fact{background:var(--charcoal2);padding:14px 16px;}
+.bs-fact-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#A69C8C;margin-bottom:5px;}
+.bs-fact-val{font-size:14px;color:var(--cream);}
+.archive-timeline{border-left:1px solid var(--charcoal4);padding-left:18px;display:flex;flex-direction:column;gap:16px;}
+.archive-tl-item{position:relative;}
+.archive-tl-item:before{content:'';position:absolute;left:-23px;top:5px;width:8px;height:8px;background:var(--gold);border-radius:50%;}
+.archive-tl-year{font-size:12px;color:var(--gold);letter-spacing:.04em;}
+.archive-tl-note{font-size:14px;color:var(--cream3);margin-top:3px;line-height:1.6;}
+.archive-finish{margin-top:30px;background:var(--charcoal2);border-left:2px solid var(--gold);padding:18px 20px;}
+.archive-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.archive-fig{margin:0;}
+.archive-fig img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#2E2C28;}
+.archive-fig figcaption{font-size:11px;color:#A69C8C;margin-top:6px;letter-spacing:.04em;}
+.archive-sig{text-align:center;margin-top:40px;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:22px;color:var(--gold);}
+.bs-form .bs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
+.bs-subhead{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin:18px 0 8px;border-top:1px solid var(--charcoal4);padding-top:14px;}
+.bs-hint{font-size:10px;color:#A69C8C;letter-spacing:.04em;text-transform:none;margin-left:6px;}
+.bs-checks{display:flex;flex-wrap:wrap;gap:16px;margin:8px 0;}
+.bs-checks label{font-size:12px;color:var(--cream3);display:flex;align-items:center;gap:6px;cursor:pointer;}
+.bs-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--charcoal2);padding:10px 14px;margin-bottom:6px;flex-wrap:wrap;}
+.bs-row-title{font-size:14px;color:var(--cream);}
+.bs-row-badge{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#A69C8C;border:1px solid var(--charcoal4);padding:1px 6px;margin-left:8px;}
+.bs-row-badge.pub{color:var(--gold);border-color:var(--gold);}
+.bs-row-meta{font-size:11px;color:#A69C8C;margin-top:3px;}
+.bs-row-actions{display:flex;gap:6px;}
+.bs-row-actions button{background:none;border:1px solid var(--charcoal4);color:var(--cream3);font-family:var(--f);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;cursor:pointer;}
+.bs-row-actions button:hover{border-color:var(--gold);color:var(--gold);}
+</style>
 <section id="garage" class="section" style="min-height:auto;display:none;background:var(--charcoal2);border-top:1px solid var(--charcoal4);">
   <div class="section-inner">
     <div id="garage-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
@@ -1791,6 +1841,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div style="display:flex;gap:2px;">
           <button class="garage-tab active" id="tab-my-garage" onclick="garageShowTab('my-garage')">My Bottles</button>
           <button class="garage-tab" id="tab-profile" onclick="garageShowTab('profile')">Profile</button>
+          <button class="garage-tab" id="tab-archive" onclick="garageShowTab('archive')">Barrel Archive</button>
           <button class="garage-tab" id="tab-admin" onclick="garageShowTab('admin')" style="display:none;">Admin</button>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
@@ -1857,6 +1908,72 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <span id="cr-msg" style="font-size:12px;"></span>
         </div>
         <div id="admin-requests-list" style="margin-top:14px;"><p style="color:var(--charcoal4);font-size:12px;">Loading...</p></div>
+      </div>
+
+      <!-- Barrel Archive Stories -->
+      <div class="admin-section">
+        <div class="admin-section-title">Barrel Archive &mdash; Stories</div>
+        <p style="font-size:12px;color:var(--cream3);margin-bottom:12px;">Create the members-only history for each barrel. Save as Draft while you work; set Published when ready for registered users.</p>
+        <div id="admin-stories-list" style="margin-bottom:20px;"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
+        <div class="bs-form">
+          <input type="hidden" id="bs-id">
+          <div class="bs-grid">
+            <div><label class="feedback-label">Series</label><select id="bs-series" class="auth-input"><option value="">&mdash;</option><option value="FS">FS &middot; Founders Select</option><option value="CS">CS &middot; Collection Series</option><option value="BF">BF &middot; Barn Find</option></select></div>
+            <div><label class="feedback-label">Generation</label><input id="bs-generation" class="auth-input" placeholder="G1"></div>
+            <div><label class="feedback-label">Barrel No.</label><input id="bs-barrel_no" class="auth-input" placeholder="00001"></div>
+            <div><label class="feedback-label">VIN-TAGe code</label><input id="bs-vintage_code" class="auth-input" placeholder="TIB 26 FS G1 00001"></div>
+          </div>
+          <label class="feedback-label">Headline / title</label>
+          <input id="bs-title" class="auth-input" placeholder="Barrel No. 00001 — The Barn Find That Started It All">
+          <label class="feedback-label">Intro</label>
+          <textarea id="bs-intro" class="auth-input" rows="2" style="resize:vertical;"></textarea>
+          <div class="bs-subhead">Discovery &amp; first taste</div>
+          <div class="bs-grid">
+            <div><label class="feedback-label">Discovered (date)</label><input id="bs-discovered_date" class="auth-input" placeholder="March 12, 2024"></div>
+            <div><label class="feedback-label">Location</label><input id="bs-location" class="auth-input" placeholder="Bardstown, KY · Rickhouse D"></div>
+          </div>
+          <div class="bs-checks">
+            <label><input type="checkbox" id="bs-drilled"> Drilled the barrel for a taste</label>
+            <label><input type="checkbox" id="bs-mash_bill_known"> Knew mash bill before tasting</label>
+            <label><input type="checkbox" id="bs-blind"> Blind taste test</label>
+          </div>
+          <label class="feedback-label">Discovery narrative</label>
+          <textarea id="bs-discovery_narrative" class="auth-input" rows="3" style="resize:vertical;"></textarea>
+          <div class="bs-subhead">Provenance timeline <span class="bs-hint">one per line &mdash; year | label | note</span></div>
+          <textarea id="bs-provenance" class="auth-input" rows="3" style="resize:vertical;" placeholder="2016 | Distilled | Filled at a Kentucky distillery&#10;2024 | Acquired by TIB | Hand-selected by David & Amy"></textarea>
+          <div class="bs-subhead">The barrel</div>
+          <div class="bs-grid">
+            <div><label class="feedback-label">Mash bill</label><input id="bs-mash_bill" class="auth-input" placeholder="74% corn · 18% rye · 8% malt"></div>
+            <div><label class="feedback-label">Age</label><input id="bs-age" class="auth-input" placeholder="8 years"></div>
+            <div><label class="feedback-label">Proof</label><input id="bs-proof" class="auth-input" placeholder="116.4"></div>
+            <div><label class="feedback-label">Char</label><input id="bs-char_level" class="auth-input" placeholder="#4 · alligator"></div>
+            <div><label class="feedback-label">Warehouse</label><input id="bs-warehouse" class="auth-input" placeholder="Rick 14 (optional)"></div>
+            <div><label class="feedback-label">Cooperage</label><input id="bs-cooperage" class="auth-input" placeholder="(optional)"></div>
+          </div>
+          <div class="bs-subhead"><label style="cursor:pointer;"><input type="checkbox" id="bs-finished"> Secondary finishing</label></div>
+          <div class="bs-grid">
+            <div><label class="feedback-label">Technique</label><input id="bs-finish_technique" class="auth-input" placeholder="Cask finish"></div>
+            <div><label class="feedback-label">Cask</label><input id="bs-finish_cask" class="auth-input" placeholder="1st-fill Oloroso"></div>
+            <div><label class="feedback-label">Duration</label><input id="bs-finish_duration" class="auth-input" placeholder="4 months"></div>
+          </div>
+          <label class="feedback-label">Finishing narrative</label>
+          <textarea id="bs-finish_narrative" class="auth-input" rows="2" style="resize:vertical;"></textarea>
+          <div class="bs-subhead">On-site gallery <span class="bs-hint">one per line &mdash; image URL | caption</span></div>
+          <textarea id="bs-gallery" class="auth-input" rows="3" style="resize:vertical;" placeholder="https://.../photo1.jpg | Rickhouse D&#10;https://.../photo2.jpg | The thief pull"></textarea>
+          <div class="bs-subhead">Tasting notes</div>
+          <div class="bs-grid">
+            <div><label class="feedback-label">Nose</label><input id="bs-nose" class="auth-input"></div>
+            <div><label class="feedback-label">Palate</label><input id="bs-palate" class="auth-input"></div>
+            <div><label class="feedback-label">Finish</label><input id="bs-finish" class="auth-input"></div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px;">
+            <select id="bs-status" class="auth-input" style="width:auto;margin-bottom:0;"><option value="draft">Draft</option><option value="published">Published</option></select>
+            <input id="bs-sort_order" class="auth-input" style="width:90px;margin-bottom:0;" placeholder="Order" type="number">
+            <button class="btn-primary" style="width:auto;" onclick="adminSaveStory()">Save story</button>
+            <button class="btn-ghost" style="width:auto;" onclick="adminNewStory()">Clear / new</button>
+            <span id="bs-msg" style="font-size:12px;"></span>
+          </div>
+        </div>
       </div>
 
       <!-- Bottle Content Management -->
@@ -1980,6 +2097,14 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Barrel Archive (members) -->
+    <div id="garage-archive" style="display:none;margin-bottom:40px;">
+      <div class="admin-section-title" style="color:var(--gold);">The Barrel Archive</div>
+      <p style="font-size:13px;color:var(--cream3);margin-bottom:24px;max-width:660px;line-height:1.7;">The full history behind each release &mdash; how we found the barrel, the day we first tasted it, and the journey it took to your glass.</p>
+      <div id="archive-list"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
+      <div id="archive-detail" style="display:none;"></div>
     </div>
 
     <!-- In-app notification -->
@@ -3494,7 +3619,7 @@ async function adminLoad() {
     return;
   }
   if (adminTab) adminTab.style.display = '';
-  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests()]);
+  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories()]);
 }
 
 async function adminLoadStats() {
@@ -3825,7 +3950,7 @@ function garageShowTab(tab) {
   document.querySelectorAll('.garage-tab').forEach(function(t){ t.classList.remove('active'); });
   var activeTab = document.getElementById('tab-' + tab);
   if (activeTab) activeTab.classList.add('active');
-  var panels = ['garage-content','admin-dashboard','garage-profile'];
+  var panels = ['garage-content','admin-dashboard','garage-profile','garage-archive'];
   panels.forEach(function(id){
     var el = document.getElementById(id);
     if (el) el.style.display = 'none';
@@ -3854,9 +3979,165 @@ function garageShowTab(tab) {
   } else if (tab === 'profile') {
     var el = document.getElementById('garage-profile'); if (el) el.style.display = '';
     profileLoad();
+  } else if (tab === 'archive') {
+    var el = document.getElementById('garage-archive'); if (el) el.style.display = '';
+    archiveLoad();
   }
 }
 
+
+
+// ── BARREL ARCHIVE (members) ──────────────────────────────
+var _archiveStories = [];
+function bsEscMulti(s){ return fbEscape(s).replace(/\n/g,'<br>'); }
+function bsFact(lbl,val,gold){ if(!val) return ''; return '<div class="bs-fact"><div class="bs-fact-lbl">'+fbEscape(lbl)+'</div><div class="bs-fact-val"'+(gold?' style="color:var(--gold);"':'')+'>'+fbEscape(val)+'</div></div>'; }
+async function archiveLoad(){
+  var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+  if(d){ d.style.display='none'; d.innerHTML=''; }
+  if(!listEl) return;
+  listEl.style.display=''; listEl.innerHTML='<p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p>';
+  var res=await _supabase.from('barrel_stories').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+  if(res.error){ listEl.innerHTML='<p style="color:#8B3A2A;font-size:12px;">Could not load the archive.</p>'; return; }
+  _archiveStories=res.data||[];
+  if(!_archiveStories.length){ listEl.innerHTML='<p style="color:var(--cream3);font-size:13px;">No barrel stories yet. Check back soon.</p>'; return; }
+  var html='<div class="archive-grid">';
+  _archiveStories.forEach(function(s){
+    var cover=(Array.isArray(s.gallery)&&s.gallery.length&&s.gallery[0]&&s.gallery[0].url)?s.gallery[0].url:'';
+    var draft=s.status!=='published'?'<span class="archive-draft">Draft</span>':'';
+    var meta=[s.series,s.generation,s.barrel_no?('No. '+s.barrel_no):''].filter(Boolean).join(' · ');
+    html+='<div class="archive-card" onclick="archiveOpen(\''+s.id+'\')">'
+      +'<div class="archive-card-img">'+(cover?('<img src="'+safeUrl(cover)+'" alt="" loading="lazy">'):'<span class="archive-noimg">TIB</span>')+'</div>'
+      +'<div class="archive-card-body"><div class="archive-card-series">'+fbEscape(meta)+draft+'</div>'
+      +'<div class="archive-card-title">'+fbEscape(s.title||'Untitled')+'</div>'
+      +(s.vintage_code?('<div class="archive-card-code">'+fbEscape(s.vintage_code)+'</div>'):'')
+      +'</div></div>';
+  });
+  html+='</div>';
+  listEl.innerHTML=html;
+}
+function archiveOpen(id){
+  var s=null; for(var i=0;i<_archiveStories.length;i++){ if(_archiveStories[i].id===id){ s=_archiveStories[i]; break; } }
+  if(!s) return;
+  var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+  if(listEl) listEl.style.display='none';
+  d.innerHTML=archiveRenderStory(s); d.style.display='';
+  try{ document.getElementById('garage').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+}
+function archiveBack(){
+  var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+  if(d){ d.style.display='none'; d.innerHTML=''; }
+  if(listEl) listEl.style.display='';
+}
+function archiveRenderStory(s){
+  var meta=[s.series,s.generation,s.barrel_no?('No. '+s.barrel_no):''].filter(Boolean).join(' · ');
+  var h='<button class="archive-back" onclick="archiveBack()">&larr; Back to the archive</button>';
+  h+='<div class="archive-hero">';
+  if(meta) h+='<div class="archive-eyebrow">'+fbEscape(meta)+'</div>';
+  h+='<div class="archive-title">'+fbEscape(s.title||'')+'</div>';
+  if(s.vintage_code) h+='<div class="archive-code">'+fbEscape(s.vintage_code)+'</div>';
+  h+='<div class="archive-rule"></div>';
+  if(s.intro) h+='<p class="archive-intro">'+bsEscMulti(s.intro)+'</p>';
+  h+='</div>';
+  var facts=bsFact('Discovered',s.discovered_date)+bsFact('Location',s.location)
+    +bsFact('Drilled for a taste', s.drilled?'Yes — thief pull, on site':'', true)
+    +bsFact('Mash bill known first',(s.mash_bill_known?'Yes':(s.blind?'No — tasted blind':'')),true);
+  if(facts||s.discovery_narrative){
+    h+='<div class="archive-sec"><div class="archive-sec-h">The discovery &amp; first taste</div>';
+    if(facts) h+='<div class="bs-facts">'+facts+'</div>';
+    if(s.discovery_narrative) h+='<p class="archive-body">'+bsEscMulti(s.discovery_narrative)+'</p>';
+    h+='</div>';
+  }
+  if(Array.isArray(s.provenance)&&s.provenance.length){
+    h+='<div class="archive-sec"><div class="archive-sec-h">Provenance — chain of custody</div><div class="archive-timeline">';
+    s.provenance.forEach(function(p){
+      if(!p||(!p.year&&!p.label&&!p.note)) return;
+      h+='<div class="archive-tl-item"><div class="archive-tl-year">'+fbEscape(p.year||'')+(p.label?(' · '+fbEscape(p.label)):'')+'</div>'+(p.note?('<div class="archive-tl-note">'+fbEscape(p.note)+'</div>'):'')+'</div>';
+    });
+    h+='</div></div>';
+  }
+  var specs=bsFact('Mash bill',s.mash_bill)+bsFact('Age',s.age)+bsFact('Proof',s.proof)+bsFact('Char',s.char_level)+bsFact('Warehouse',s.warehouse)+bsFact('Cooperage',s.cooperage);
+  if(specs) h+='<div class="archive-sec"><div class="archive-sec-h">The barrel</div><div class="bs-facts">'+specs+'</div></div>';
+  if(s.finished){
+    h+='<div class="archive-finish"><div class="archive-sec-h" style="color:var(--gold);margin-bottom:8px;">Secondary finishing</div>';
+    if(s.finish_narrative) h+='<p class="archive-body" style="margin-top:0;">'+bsEscMulti(s.finish_narrative)+'</p>';
+    h+='<div class="bs-facts" style="margin-top:12px;">'+bsFact('Technique',s.finish_technique)+bsFact('Cask',s.finish_cask)+bsFact('Duration',s.finish_duration)+'</div></div>';
+  }
+  if(Array.isArray(s.gallery)&&s.gallery.length){
+    h+='<div class="archive-sec"><div class="archive-sec-h">On-site — the day we tasted</div><div class="archive-gallery">';
+    s.gallery.forEach(function(g){ if(!g||!g.url) return; h+='<figure class="archive-fig"><img src="'+safeUrl(g.url)+'" alt="'+fbEscape(g.caption||'')+'" loading="lazy">'+(g.caption?('<figcaption>'+fbEscape(g.caption)+'</figcaption>'):'')+'</figure>'; });
+    h+='</div></div>';
+  }
+  var tn=bsFact('Nose',s.nose)+bsFact('Palate',s.palate)+bsFact('Finish',s.finish);
+  if(tn) h+='<div class="archive-sec"><div class="archive-sec-h">Tasting notes</div><div class="bs-facts">'+tn+'</div></div>';
+  h+='<div class="archive-sig">David &amp; Amy</div>';
+  return h;
+}
+
+// ── ADMIN: barrel stories ──
+var _bsAll=[];
+function bsParseLines(txt,keys){ var out=[]; (txt||'').split('\n').forEach(function(line){ line=line.trim(); if(!line) return; var parts=line.split('|').map(function(x){return x.trim();}); var o={}; keys.forEach(function(k,i){ o[k]=parts[i]||''; }); out.push(o); }); return out; }
+function bsStringifyLines(arr,keys){ if(!Array.isArray(arr)) return ''; return arr.map(function(o){ return keys.map(function(k){return o[k]||'';}).join(' | '); }).join('\n'); }
+function bsSet(id,v){ var e=document.getElementById(id); if(!e) return; if(e.type==='checkbox'){ e.checked=!!v; } else { e.value=(v==null?'':v); } }
+function bsGet(id){ var e=document.getElementById(id); if(!e) return ''; return e.type==='checkbox'?e.checked:e.value.trim(); }
+async function adminLoadStories(){
+  var el=document.getElementById('admin-stories-list'); if(!el) return;
+  var res=await _supabase.from('barrel_stories').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
+  if(res.error){ el.innerHTML='<p style="color:#8B3A2A;font-size:12px;">Could not load stories.</p>'; return; }
+  _bsAll=res.data||[];
+  if(!_bsAll.length){ el.innerHTML='<p style="color:var(--cream3);font-size:12px;">No stories yet. Create one below.</p>'; return; }
+  var html='';
+  _bsAll.forEach(function(s){
+    html+='<div class="bs-row"><div><span class="bs-row-title">'+fbEscape(s.title||'Untitled')+'</span><span class="bs-row-badge '+(s.status==='published'?'pub':'')+'">'+fbEscape(s.status)+'</span><div class="bs-row-meta">'+fbEscape([s.series,s.generation,s.vintage_code].filter(Boolean).join(' · '))+'</div></div>'
+      +'<div class="bs-row-actions"><button onclick="adminEditStory(\''+s.id+'\')">Edit</button><button onclick="adminDeleteStory(\''+s.id+'\')">Delete</button></div></div>';
+  });
+  el.innerHTML=html;
+}
+function adminNewStory(){
+  ['bs-id','bs-generation','bs-barrel_no','bs-vintage_code','bs-title','bs-intro','bs-discovered_date','bs-location','bs-discovery_narrative','bs-provenance','bs-mash_bill','bs-age','bs-proof','bs-char_level','bs-warehouse','bs-cooperage','bs-finish_technique','bs-finish_cask','bs-finish_duration','bs-finish_narrative','bs-gallery','bs-nose','bs-palate','bs-finish','bs-sort_order'].forEach(function(id){ bsSet(id,''); });
+  bsSet('bs-series',''); bsSet('bs-status','draft'); bsSet('bs-drilled',false); bsSet('bs-mash_bill_known',false); bsSet('bs-blind',false); bsSet('bs-finished',false);
+  var m=document.getElementById('bs-msg'); if(m) m.textContent='';
+}
+function adminEditStory(id){
+  var s=null; for(var i=0;i<_bsAll.length;i++){ if(_bsAll[i].id===id){ s=_bsAll[i]; break; } } if(!s) return;
+  bsSet('bs-id',s.id); bsSet('bs-series',s.series); bsSet('bs-generation',s.generation); bsSet('bs-barrel_no',s.barrel_no); bsSet('bs-vintage_code',s.vintage_code);
+  bsSet('bs-title',s.title); bsSet('bs-intro',s.intro); bsSet('bs-discovered_date',s.discovered_date); bsSet('bs-location',s.location);
+  bsSet('bs-drilled',s.drilled); bsSet('bs-mash_bill_known',s.mash_bill_known); bsSet('bs-blind',s.blind); bsSet('bs-discovery_narrative',s.discovery_narrative);
+  bsSet('bs-provenance',bsStringifyLines(s.provenance,['year','label','note']));
+  bsSet('bs-mash_bill',s.mash_bill); bsSet('bs-age',s.age); bsSet('bs-proof',s.proof); bsSet('bs-char_level',s.char_level); bsSet('bs-warehouse',s.warehouse); bsSet('bs-cooperage',s.cooperage);
+  bsSet('bs-finished',s.finished); bsSet('bs-finish_technique',s.finish_technique); bsSet('bs-finish_cask',s.finish_cask); bsSet('bs-finish_duration',s.finish_duration); bsSet('bs-finish_narrative',s.finish_narrative);
+  bsSet('bs-gallery',bsStringifyLines(s.gallery,['url','caption']));
+  bsSet('bs-nose',s.nose); bsSet('bs-palate',s.palate); bsSet('bs-finish',s.finish);
+  bsSet('bs-status',s.status); bsSet('bs-sort_order',s.sort_order);
+  try{ document.getElementById('bs-title').scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){}
+}
+async function adminSaveStory(){
+  var msg=document.getElementById('bs-msg');
+  var title=bsGet('bs-title'); if(!title){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='A headline is required.'; } return; }
+  var rec={
+    series:bsGet('bs-series')||null, generation:bsGet('bs-generation')||null, barrel_no:bsGet('bs-barrel_no')||null, vintage_code:bsGet('bs-vintage_code')||null,
+    title:title, intro:bsGet('bs-intro')||null, discovered_date:bsGet('bs-discovered_date')||null, location:bsGet('bs-location')||null,
+    drilled:bsGet('bs-drilled'), mash_bill_known:bsGet('bs-mash_bill_known'), blind:bsGet('bs-blind'), discovery_narrative:bsGet('bs-discovery_narrative')||null,
+    provenance:bsParseLines(bsGet('bs-provenance'),['year','label','note']),
+    mash_bill:bsGet('bs-mash_bill')||null, age:bsGet('bs-age')||null, proof:bsGet('bs-proof')||null, char_level:bsGet('bs-char_level')||null, warehouse:bsGet('bs-warehouse')||null, cooperage:bsGet('bs-cooperage')||null,
+    finished:bsGet('bs-finished'), finish_technique:bsGet('bs-finish_technique')||null, finish_cask:bsGet('bs-finish_cask')||null, finish_duration:bsGet('bs-finish_duration')||null, finish_narrative:bsGet('bs-finish_narrative')||null,
+    gallery:bsParseLines(bsGet('bs-gallery'),['url','caption']),
+    nose:bsGet('bs-nose')||null, palate:bsGet('bs-palate')||null, finish:bsGet('bs-finish')||null,
+    status:bsGet('bs-status')||'draft', sort_order:parseInt(bsGet('bs-sort_order'),10)||0, updated_at:new Date().toISOString()
+  };
+  if(msg){ msg.style.color='var(--cream3)'; msg.textContent='Saving…'; }
+  var id=bsGet('bs-id'), res;
+  if(id){ res=await _supabase.from('barrel_stories').update(rec).eq('id',id); }
+  else { res=await _supabase.from('barrel_stories').insert(rec); }
+  if(res.error){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Save failed: '+res.error.message; } return; }
+  if(msg){ msg.style.color='var(--gold)'; msg.textContent='Saved.'; }
+  adminNewStory(); await adminLoadStories();
+}
+async function adminDeleteStory(id){
+  if(!window.confirm('Delete this barrel story? This cannot be undone.')) return;
+  var res=await _supabase.from('barrel_stories').delete().eq('id',id);
+  if(res.error){ showNotif('Barrel Archive','Error','Could not delete. Try again.','OK'); return; }
+  await adminLoadStories();
+}
 
 // ── FOCUS TRAP for auth modal ──
 document.addEventListener('keydown', function(e) {
