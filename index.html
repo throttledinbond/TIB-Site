@@ -1911,6 +1911,12 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div id="admin-requests-list" style="margin-top:14px;"><p style="color:var(--charcoal4);font-size:12px;">Loading...</p></div>
       </div>
 
+      <!-- Trade Inquiries -->
+      <div class="admin-section">
+        <div class="admin-section-title">Trade &amp; Partner Inquiries</div>
+        <div id="admin-trade-list"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
+      </div>
+
       <!-- Barrel Archive Stories -->
       <div class="admin-section">
         <div class="admin-section-title">Barrel Archive &mdash; Stories</div>
@@ -2212,6 +2218,83 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
   </div>
 </section>
 
+<style>
+#partners{background:var(--charcoal);border-top:1px solid var(--charcoal4);}
+.pt-wrap{max-width:760px;margin:0 auto;}
+.pt-sec{padding:34px 4px;border-top:1px solid var(--charcoal3);}
+.pt-eyb{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.pt-lead{font-size:15px;line-height:1.8;color:var(--cream3);margin:0;}
+.pt-textblock{max-width:640px;margin:0 auto;}
+.pt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;}
+.pt-card{background:var(--charcoal2);padding:20px;}
+.pt-card h4{font-size:14px;color:var(--cream);font-weight:600;margin:0 0 8px;}
+.pt-card p{font-size:13px;line-height:1.7;color:#A69C8C;margin:0;}
+.pt-row{background:var(--charcoal2);padding:16px 20px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;}
+.pt-row .n{font-size:15px;color:var(--cream);font-weight:600;}
+.pt-row .s{font-size:12px;color:#A69C8C;margin-top:3px;}
+.pt-price{font-size:15px;color:var(--gold);font-weight:bold;white-space:nowrap;}
+.pt-tag{font-size:10px;color:var(--gold);letter-spacing:1px;text-transform:uppercase;border:1px solid var(--charcoal4);padding:1px 6px;margin-left:6px;}
+.pt-form{max-width:520px;margin:24px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;}
+.pt-form input,.pt-form select,.pt-form textarea{background:var(--charcoal2);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;padding:11px 13px;border-radius:0;outline:none;}
+.pt-form textarea{grid-column:1/-1;resize:vertical;}
+.pt-form input:focus,.pt-form select:focus,.pt-form textarea:focus{border-color:var(--gold);}
+.pt-form input::placeholder,.pt-form textarea::placeholder{color:#8A8178;}
+</style>
+<section id="partners" class="section" style="display:none;min-height:auto;">
+  <div class="section-inner pt-wrap">
+    <div style="text-align:center;padding:10px 0 6px;">
+      <div class="eyebrow" style="margin-bottom:14px;">Trade &middot; Partners</div>
+      <h2 class="display-sm" style="margin-bottom:14px;">Partner With Throttled In Bond<span class="tm">&#8482;</span></h2>
+      <p class="pt-lead" style="max-width:560px;margin:0 auto 26px;">A small, premium single-barrel whiskey brand built for accounts that value scarcity, story, and provenance.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a class="btn-primary" href="mailto:info@throttledinbond.com?subject=Line Sheet Request - Throttled In Bond" style="text-decoration:none;">Request Our Line Sheet</a>
+        <button class="btn-ghost" onclick="navTo('vintage')">Try the VIN-TAGe<span class="tm">&#8482;</span> Decoder</button>
+      </div>
+    </div>
+    <div class="pt-sec"><div class="pt-eyb">Who We Are</div><p class="pt-lead pt-textblock">Throttled In Bond is a small, premium whiskey brand specializing in single-barrel, cask-strength, non-chill-filtered releases. Every bottle carries our proprietary VIN-TAGe&#8482; provenance system, a unique code that lets a customer decode the barrel, proof, age, and origin of what they are drinking. Automotive-inspired and intentionally allocated, we craft limited releases for enthusiasts who value authenticity and the story behind every barrel.</p></div>
+    <div class="pt-sec"><div class="pt-eyb" style="text-align:center;">Why Partner With Us</div>
+      <div class="pt-grid">
+        <div class="pt-card"><h4>Elevates your shelf</h4><p>An allocated, low-count brand that gives your shelf a scarce, story-driven item enthusiasts seek out. It builds a destination reputation and repeat traffic, rather than chasing volume.</p></div>
+        <div class="pt-card"><h4>Turnkey and compliance-ready</h4><p>Federally licensed (TTB Wholesaler and Importer Basic Permits) and state-registered in our active markets, with approved labels and barcodes in place. Easy to onboard and buttoned-up on the details.</p></div>
+        <div class="pt-card"><h4>Premium and price-defensible</h4><p>Cask-strength, age-stated single barrels support a healthy retail margin without discounting.</p></div>
+        <div class="pt-card"><h4>Built for store picks</h4><p>Single-barrel selections are at the heart of what we do. We love partnering with standout accounts on exclusive barrel picks that reward their customers and build loyalty.</p></div>
+        <div class="pt-card"><h4>Independent, here for the long haul</h4><p>Founder-owned and deliberately grown, we are personally invested in every barrel and in the accounts that carry us.</p></div>
+      </div>
+    </div>
+    <div class="pt-sec"><div class="pt-eyb" style="text-align:center;">The Portfolio</div>
+      <p style="font-size:12px;color:#A69C8C;text-align:center;margin:0 0 18px;">Suggested retail shown. FOB case pricing and configurations available on request.</p>
+      <div style="display:flex;flex-direction:column;gap:2px;">
+        <div class="pt-row"><div><div class="n">Founders Select</div><div class="s">6 Year Kentucky Straight Bourbon Whiskey</div></div><div class="pt-price">$69.99</div></div>
+        <div class="pt-row"><div><div class="n">Collection Series</div><div class="s">6 Year High Rye Bourbon, Rum Cask Finish</div></div><div class="pt-price">$84.99</div></div>
+        <div class="pt-row"><div><div class="n">Barn Find <span class="pt-tag">Coming this fall</span></div><div class="s">11 Year Kentucky Straight Bourbon Whiskey</div></div><div class="pt-price">$149.99</div></div>
+      </div>
+      <p style="font-size:12px;color:#A69C8C;text-align:center;margin:18px auto 0;max-width:560px;line-height:1.6;">All expressions are cask strength, non-chill filtered, and packed in 6-bottle cases. Barrels are limited, typically around 25 cases per release.</p>
+    </div>
+    <div class="pt-sec" style="text-align:center;"><div class="pt-eyb">Every Bottle Tells Its Story</div>
+      <p class="pt-lead pt-textblock" style="margin-bottom:22px;">Our VIN-TAGe&#8482; system prints a unique code and data plate on every bottle, tracing it to its exact barrel, proof, age, origin, and mash bill. It gives your customers a tangible way to confirm authenticity and provenance, and it turns the automotive backstory into a reason to come back for the next release.</p>
+      <button class="btn-ghost" onclick="navTo('vintage')">Decode a Bottle</button>
+    </div>
+    <div class="pt-sec"><div class="pt-eyb">How We Work</div>
+      <div class="pt-textblock">
+        <p class="pt-lead" style="margin-bottom:12px;">Throttled In Bond sells through the three-tier system. Retailers and on-premise accounts order through our distributor partners, and we are actively building distribution in new markets. Whether you are a buyer or bar manager interested in carrying the brand, or a distributor evaluating our portfolio, we would love to connect.</p>
+        <p class="pt-lead">Reach out for our line sheet, current availability, and samples, and to discuss single-barrel store picks.</p>
+      </div>
+    </div>
+    <div class="pt-sec" style="text-align:center;"><div class="pt-eyb">Start a Conversation</div>
+      <a class="btn-primary" href="mailto:info@throttledinbond.com?subject=Trade Inquiry - Throttled In Bond" style="text-decoration:none;">Email Our Trade Team</a>
+      <div style="font-size:13px;color:var(--gold);margin-top:14px;">info@throttledinbond.com</div>
+      <div class="pt-form">
+        <input id="pt-name" placeholder="Name">
+        <input id="pt-company" placeholder="Company">
+        <select id="pt-role"><option value="">Role &middot; select&hellip;</option><option>Retailer</option><option>On-Premise</option><option>Distributor</option></select>
+        <input id="pt-state" placeholder="State">
+        <textarea id="pt-message" rows="3" placeholder="Message"></textarea>
+      </div>
+      <div style="margin-top:14px;"><button class="btn-ghost" id="pt-submit" onclick="partnersSubmit()">Send Inquiry</button> <span id="pt-msg" style="font-size:12px;margin-left:8px;"></span></div>
+    </div>
+  </div>
+</section>
+
 <footer id="footer">
  <div class="footer-inner">
  <div class="footer-top">
@@ -2233,6 +2316,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="footer-link" onclick="openMapModal()">Availability Map</span>
  <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
  <span class="footer-link" onclick="openModal('bring-it-modal')">Liquor Store &amp; Bar Managers</span>
+ <span class="footer-link" onclick="openPartners()">Trade &amp; Partners</span>
  </div>
  </div>
  <div>
@@ -3137,6 +3221,8 @@ function ageGateFail() {
     '/decoder':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
     '/vintage':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
     '/vin-tage':  function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
+    '/partners':  function(){ setTimeout(openPartners, 400); },
+    '/partner':   function(){ setTimeout(openPartners, 400); },
     '/whiskey':   function(){ setTimeout(function(){ navTo('whiskey'); }, 400); },
     '/story':     function(){ setTimeout(function(){ navTo('story'); }, 400); },
     '/inventory': function(){ setTimeout(function(){ navTo('inventory'); }, 400); },
@@ -3633,7 +3719,7 @@ async function adminLoad() {
     return;
   }
   if (adminTab) adminTab.style.display = '';
-  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories()]);
+  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories(), adminLoadTradeInquiries()]);
 }
 
 async function adminLoadStats() {
@@ -4151,6 +4237,44 @@ async function adminDeleteStory(id){
   var res=await _supabase.from('barrel_stories').delete().eq('id',id);
   if(res.error){ showNotif('Barrel Archive','Error','Could not delete. Try again.','OK'); return; }
   await adminLoadStories();
+}
+
+
+// ── PARTNERS / TRADE ──────────────────────────────
+function openPartners(){
+  var el=document.getElementById('partners'); if(!el) return;
+  el.style.display=''; document.body.style.overflow='';
+  var mm=document.getElementById('mobile-menu'); if(mm) mm.classList.remove('open');
+  setTimeout(function(){ navTo('partners'); }, 30);
+}
+function ptVal(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
+async function partnersSubmit(){
+  var msg=document.getElementById('pt-msg');
+  var name=ptVal('pt-name'),company=ptVal('pt-company'),role=ptVal('pt-role'),state=ptVal('pt-state'),message=ptVal('pt-message');
+  if(!name && !company && !message){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Add your name or a short message so we can reach you.'; } return; }
+  var btn=document.getElementById('pt-submit'); if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
+  try{ await _supabase.functions.invoke('brevo-proxy',{ body:{ action:'trade_inquiry', name:name, company:company, role:role, state:state, message:message } }); }catch(e){}
+  if(btn){ btn.disabled=false; btn.textContent='Send Inquiry'; }
+  if(msg){ msg.style.color='var(--gold)'; msg.textContent='Thank you. We will be in touch shortly.'; }
+  ['pt-name','pt-company','pt-state','pt-message'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+  var r=document.getElementById('pt-role'); if(r) r.value='';
+}
+async function adminLoadTradeInquiries(){
+  var el=document.getElementById('admin-trade-list'); if(!el) return;
+  var res=await _supabase.from('trade_inquiries').select('*').order('created_at',{ascending:false});
+  if(res.error){ el.innerHTML='<p style="color:#8B3A2A;font-size:12px;">Could not load inquiries.</p>'; return; }
+  var data=res.data||[];
+  if(!data.length){ el.innerHTML='<p style="color:var(--cream3);font-size:12px;">No trade inquiries yet.</p>'; return; }
+  var html='';
+  data.forEach(function(t){
+    var when=new Date(t.created_at).toLocaleDateString();
+    html+='<div style="background:var(--charcoal2);padding:12px 14px;margin-bottom:6px;">'
+      +'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><span style="font-size:13px;color:var(--cream);">'+fbEscape(t.name||'—')+(t.company?(' &middot; '+fbEscape(t.company)):'')+'</span><span style="font-size:11px;color:var(--cream3);">'+when+'</span></div>'
+      +'<div style="font-size:11px;color:#A69C8C;margin-top:3px;">'+fbEscape([t.role,t.state].filter(Boolean).join(' · '))+'</div>'
+      +(t.message?('<div style="font-size:12px;color:var(--cream3);margin-top:6px;line-height:1.6;">'+fbEscape(t.message)+'</div>'):'')
+      +'</div>';
+  });
+  el.innerHTML=html;
 }
 
 // ── FOCUS TRAP for auth modal ──
