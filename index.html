@@ -2315,7 +2315,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="footer-link" onclick="navTo('leaderboard')">Leaderboard</span>
  <span class="footer-link" onclick="openMapModal()">Availability Map</span>
  <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
- <span class="footer-link" onclick="openModal('bring-it-modal')">Liquor Store &amp; Bar Managers</span>
+ <span class="footer-link" onclick="openPartners()">Liquor Store &amp; Bar Managers</span>
  <span class="footer-link" onclick="openPartners()">Trade &amp; Partners</span>
  </div>
  </div>
@@ -2391,7 +2391,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <span onclick="closeMapModal();setTimeout(()=>openModal('trade-info-modal'),200);" style="cursor:pointer;color:var(--gold);border-bottom:1px solid var(--gold-dk);padding-bottom:1px;">Help us bring THROTTLED IN BOND<span class="tm">&#x2122;</span> to your favorite liquor store, restaurant, or bar.</span>
       </div>
       <div style="padding-top:12px;border-top:1px solid var(--charcoal4);">
-        <span onclick="closeMapModal();setTimeout(()=>openModal('bring-it-modal'),200);" style="cursor:pointer;color:var(--gold);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;">Liquor Store &amp; Bar Managers &nbsp;&#x2014;&nbsp; Bring It To Your Bar &#x2192;</span>
+        <span onclick="closeMapModal();setTimeout(openPartners,200);" style="cursor:pointer;color:var(--gold);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;">Liquor Store &amp; Bar Managers &nbsp;&#x2014;&nbsp; Bring It To Your Bar &#x2192;</span>
       </div>
     </div>
 
