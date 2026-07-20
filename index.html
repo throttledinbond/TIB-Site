@@ -3126,6 +3126,12 @@ function ageGateFail() {
 // ── URL PATH ROUTING ──
 (function() {
   var path = window.location.pathname.replace(/\/+$/, '').toLowerCase();
+  // Also support a ?route= param (used by the 404.html deep-link redirect) and #hash.
+  try {
+    var _rt = new URLSearchParams(window.location.search).get('route');
+    if (!_rt && window.location.hash) _rt = window.location.hash.replace(/^#/, '');
+    if (_rt) path = '/' + _rt.replace(/^\/+|\/+$/g, '').toLowerCase();
+  } catch(e){}
   var routes = {
     '/decoder':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
     '/vintage':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
