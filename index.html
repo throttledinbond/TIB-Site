@@ -356,7 +356,7 @@ a{color:inherit;text-decoration:none;}
 .detail-stat-lbl{font-size:8px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dk);}
 
 .bottle-detail-desc{font-size:13px;font-weight:400;font-style:italic;color:#777;line-height:1.7;}
-/* Founder's Circle — barrel provenance (members only) */
+/* Barrel provenance (members only) */
 .bottle-prov{margin-top:16px;}
 .prov-locked,.prov-unlocked{background:var(--charcoal);padding:16px 18px;border-top:2px solid var(--gold);}
 .prov-eyebrow{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
@@ -936,6 +936,8 @@ sup.tm, .tm {
 .garage-card-tag{font-size:8px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
 .garage-card-name{font-size:16px;font-weight:700;color:var(--cream);margin-bottom:4px;}
 .garage-card-code{font-size:11px;color:var(--cream3);letter-spacing:.1em;margin-bottom:12px;}
+.garage-story-link{display:inline-block;margin-top:10px;background:none;border:none;color:var(--gold);font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;padding:0 0 1px;border-bottom:1px solid var(--gold-dk);}
+.garage-story-link:hover{color:var(--gold-lt);border-color:var(--gold);}
 .garage-card-stats{display:flex;gap:12px;}
 .garage-card-stat{font-size:11px;color:var(--cream3);}
 .garage-card-delete{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--charcoal4);cursor:pointer;font-size:16px;padding:4px;transition:color .2s;}
@@ -1989,9 +1991,9 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div id="admin-bottle-cards">Loading...</div>
       </div>
 
-      <!-- Barrel Provenance (Founder's Circle) -->
+      <!-- Barrel Provenance -->
       <div class="admin-section">
-        <div class="admin-section-title">Barrel Provenance — Founder&#8217;s Circle</div>
+        <div class="admin-section-title">Barrel Provenance</div>
         <div id="admin-provenance-cards">Loading...</div>
       </div>
 
@@ -2428,7 +2430,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <p style="font-size:14px;color:var(--cream3);line-height:1.7;margin-bottom:20px;">If you are a buyer, bar manager, or distributor interested in carrying our whiskey, reach out directly and we will get you connected.</p>
           <a href="mailto:info@throttledinbond.com?subject=Trade Inquiry — Throttled In Bond&body=Hi, I am interested in carrying Throttled In Bond. Please send me information about availability and terms." class="btn-primary" style="display:inline-block;text-decoration:none;margin-bottom:10px;">Email Our Trade Team</a>
           <div style="margin-top:10px;">
-            <button onclick="openModal('share-modal')" class="btn-ghost" style="font-size:11px;padding:10px 20px;">Share This Page</button>
+            <button onclick="shareModalOpen(location.origin + '/partners')" class="btn-ghost" style="font-size:11px;padding:10px 20px;">Share This Page</button>
           </div>
         </div>
         <!-- Right: Trade card -->
@@ -2480,7 +2482,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     </div>
     <div class="modal-actions">
       <a href="mailto:info@throttledinbond.com?subject=Trade Inquiry — Throttled In Bond&body=Hi, I am a buyer interested in carrying Throttled In Bond. Please send me information about availability and terms." class="btn-primary" style="display:inline-block;text-decoration:none;">Email Our Trade Team</a>
-      <button class="btn-ghost" onclick="openModal('share-modal')">Share This Page</button>
+      <button class="btn-ghost" onclick="shareModalOpen(location.origin + '/partners')">Share This Page</button>
       <button class="btn-ghost" onclick="closeModal('trade-info-modal')">Close</button>
     </div>
   </div>
@@ -2493,6 +2495,10 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <button class="modal-close-x" onclick="closeModal('share-modal')">&times;</button>
     <div class="modal-eyebrow">Share</div>
     <div class="modal-title">Share This Page</div>
+    <div style="text-align:center;margin:8px 0 16px;">
+      <div id="share-qr" style="display:inline-block;background:var(--cream);padding:10px;line-height:0;border-radius:2px;"></div>
+      <div style="font-size:11px;color:var(--cream3);margin-top:9px;letter-spacing:.04em;">Scan to open, or screenshot to share.</div>
+    </div>
     <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
       <button onclick="shareVia('sms')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;">&#128172; Text Message</button>
       <button onclick="shareVia('email')" style="background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.06em;padding:14px 18px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .2s;">&#9993; Email</button>
@@ -2689,13 +2695,13 @@ function closeBottle() {
  document.getElementById('bottle-detail').classList.remove('open');
 }
 
-// Members-only barrel provenance (Founder's Circle) on the bottle detail
+// Members-only barrel provenance on the bottle detail
 async function loadBottleProvenance(code, id) {
   var el = document.getElementById('bottle-prov-' + id);
   if (!el) return;
   if (!_currentUser) {
     el.innerHTML = '<div class="prov-locked">' +
-      '<div class="prov-eyebrow">Founder&#8217;s Circle &#128274;</div>' +
+      '<div class="prov-eyebrow">Members Only &#128274;</div>' +
       '<div class="prov-lock-title">Unlock Full Barrel Provenance</div>' +
       '<p class="prov-lock-desc">Members get the full story behind this barrel &mdash; original distiller, lot number, dump &amp; bottling dates, and expression notes.</p>' +
       '<button class="btn-primary" onclick="authSwitchTab(\'signup\');openModal(\'auth-modal\')">Join Free to Unlock</button>' +
@@ -2717,7 +2723,7 @@ async function loadBottleProvenance(code, id) {
   var notes = (data && data.expression_notes) ? '<div class="prov-notes">' + fbEscape(String(data.expression_notes)) + '</div>' : '';
   el.innerHTML = '<div class="prov-unlocked">' +
     '<div class="prov-eyebrow" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">' +
-      '<span>Founder&#8217;s Circle &#183; Barrel Provenance</span>' +
+      '<span>Barrel Provenance</span>' +
       '<span onclick="loadBottleProvenance(\'' + code + '\',\'' + id + '\')" title="Refresh provenance" style="cursor:pointer;color:var(--gold);font-size:13px;line-height:1;">&#8635;</span>' +
     '</div>' +
     ((rows || notes) ? (rows + notes) : '<p class="prov-lock-desc">Full provenance for this barrel is coming soon.</p>') +
@@ -3172,7 +3178,7 @@ async function shareTradeCard() {
 
 
 function shareVia(method) {
-  var url = window.location.href;
+  var url = _shareUrl || window.location.href;
   var text = 'Check out Throttled In Bond - Single barrel, barrel strength whiskey. The Spirit of American Muscle.';
   if (method === 'sms') { window.location.href = 'sms:?body=' + encodeURIComponent(text + ' ' + url); }
   else if (method === 'email') { window.location.href = 'mailto:?subject=Throttled In Bond&body=' + encodeURIComponent(text + '\n\n' + url); }
@@ -3185,6 +3191,18 @@ function shareVia(method) {
   closeModal('share-modal');
 }
 
+var _shareUrl = null;
+function shareModalOpen(url){
+  _shareUrl = url || window.location.href;
+  openModal('share-modal');
+  shareRenderQR();
+}
+function shareRenderQR(){
+  var box = document.getElementById('share-qr'); if(!box) return;
+  function draw(){ box.innerHTML=''; try{ new QRCode(box, { text:_shareUrl, width:150, height:150, colorDark:'#1A1917', colorLight:'#F2EDE3', correctLevel: QRCode.CorrectLevel.M }); }catch(e){} }
+  if(window.QRCode){ draw(); }
+  else { var s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload=draw; document.head.appendChild(s); }
+}
 setTimeout(function() {
   document.querySelectorAll('.hero-bottle-img').forEach(function(el) { el.classList.add('invite'); });
 }, 1800);
@@ -3518,6 +3536,9 @@ async function garageLoad() {
     console.log('garageLoad: no data returned for user', _currentUser.id);
   }
   _garageAllItems = data || [];
+  // Barrel stories the user can see, keyed by VIN-TAGe code, so saved bottles can link to their story.
+  window._storyByCode = {};
+  try { var _stRes = await _supabase.from('barrel_stories').select('id, vintage_code'); (_stRes.data||[]).forEach(function(s){ if(s.vintage_code) window._storyByCode[String(s.vintage_code).trim()] = s.id; }); } catch(e){}
   // Live proof from bottle_content so cards reflect admin updates, not the save-time snapshot
   var bcRes = await _supabase.from('bottle_content').select('id, proof');
   _bottleProofBySeries = {};
@@ -3540,6 +3561,7 @@ function garageRender(items) {
   }
   var html = '<div class="garage-grid">';
   items.forEach(function(item) {
+    var storyId = window._storyByCode ? window._storyByCode[String(item.vin_code||'').trim()] : null;
     html += '<div class="garage-card" id="gc-'+item.id+'">' +
       '<div class="garage-card-header">' +
         '<div class="garage-card-header-left">' +
@@ -3548,6 +3570,7 @@ function garageRender(items) {
             '<div class="garage-card-tag">VIN-TAGe&#8482; &nbsp;'+fbEscape(item.vin_code)+'</div>' +
             '<div class="garage-card-name">'+fbEscape(item.whiskey_name)+'</div>' +
             '<div class="garage-card-code">'+fbEscape(item.age)+' &nbsp;&middot;&nbsp; '+fbEscape(item.origin)+' &nbsp;&middot;&nbsp; '+fbEscape(String(_bottleProofBySeries[item.series] || item.proof))+'</div>' +
+            (storyId ? '<button class="garage-story-link" onclick="garageOpenStory(\''+storyId+'\',event)">Read the Barrel Story &#8594;</button>' : '') +
             (item.vintage_img_url ? '<img src="'+encodeURI(item.vintage_img_url)+'" alt="VIN-TAGe Label" crossorigin="anonymous" style="width:100%;max-width:260px;height:auto;margin-top:12px;border:1px solid var(--charcoal4);display:block;cursor:zoom-in;" onclick="openLightbox(this.src)">' : '') +
           '</div>' +
         '</div>' +
@@ -3999,7 +4022,7 @@ async function adminSaveBottle(id) {
   setTimeout(function(){ btn.textContent = 'Save Changes'; btn.style.background = ''; }, 2000);
 }
 
-// ── ADMIN: BARREL PROVENANCE (Founder's Circle) ──
+// ── ADMIN: BARREL PROVENANCE ──
 async function adminLoadProvenance() {
   var { data } = await _supabase.from('bottle_provenance').select('*').order('id');
   var el = document.getElementById('admin-provenance-cards');
@@ -4169,7 +4192,6 @@ function archiveRenderStory(s){
   }
   var tn=bsFact('Nose',s.nose)+bsFact('Palate',s.palate)+bsFact('Finish',s.finish);
   if(tn) h+='<div class="archive-sec"><div class="archive-sec-h">Tasting notes</div><div class="bs-facts">'+tn+'</div></div>';
-  h+='<div class="archive-sig">David &amp; Amy</div>';
   return h;
 }
 
@@ -4275,6 +4297,17 @@ async function adminLoadTradeInquiries(){
       +'</div>';
   });
   el.innerHTML=html;
+}
+
+async function garageOpenStory(storyId, ev){
+  if (ev && ev.stopPropagation) ev.stopPropagation();
+  document.querySelectorAll('.garage-tab').forEach(function(t){ t.classList.remove('active'); });
+  var at = document.getElementById('tab-archive'); if (at) at.classList.add('active');
+  ['garage-content','admin-dashboard','garage-profile'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
+  var gf = document.getElementById('garage-filters'); if (gf) gf.style.display='none';
+  var ga = document.getElementById('garage-archive'); if (ga) ga.style.display='';
+  await archiveLoad();
+  archiveOpen(storyId);
 }
 
 // ── FOCUS TRAP for auth modal ──
@@ -5164,7 +5197,7 @@ function closeVideoModal() {
 </div>
 
 
-<div id="float-share" onclick="openModal('share-modal')"><span id="float-share-icon">&#8679;</span><span id="float-share-text">Share This</span></div>
+<div id="float-share" onclick="shareModalOpen(location.href)"><span id="float-share-icon">&#8679;</span><span id="float-share-text">Share This</span></div>
 
 <!-- Get-To-Know-You Engagement Widget (logged-in members only) -->
 <div id="engage-widget" style="display:none;">
