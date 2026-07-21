@@ -1341,7 +1341,9 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <style>
 .nav-bell{position:relative;background:none;border:none;color:var(--cream3);cursor:pointer;padding:6px;display:flex;align-items:center;line-height:0;transition:color .2s;flex-shrink:0;}
 .nav-bell:hover{color:var(--cream);}
-.nav-bell-dot{position:absolute;top:3px;right:3px;width:8px;height:8px;background:#D24A32;border:1.5px solid #1A1917;border-radius:50%;}
+.nav-bell-dot{position:absolute;top:1px;right:1px;width:11px;height:11px;background:#EF4326;border:2px solid #1A1917;border-radius:50%;box-shadow:0 0 6px rgba(239,67,38,.6);animation:bellpulse 1.8s ease-out infinite;}
+@keyframes bellpulse{0%{box-shadow:0 0 0 0 rgba(239,67,38,.55),0 0 6px rgba(239,67,38,.6);}70%{box-shadow:0 0 0 7px rgba(239,67,38,0),0 0 6px rgba(239,67,38,.6);}100%{box-shadow:0 0 0 0 rgba(239,67,38,0),0 0 6px rgba(239,67,38,.6);}}
+@media (prefers-reduced-motion: reduce){.nav-bell-dot{animation:none;}}
 .alert-item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;background:var(--charcoal2);padding:14px 16px;margin-bottom:8px;}
 .alert-item-body{flex:1;min-width:0;}
 .alert-msg{font-size:14px;color:var(--cream);line-height:1.55;}
