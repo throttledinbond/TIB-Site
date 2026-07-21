@@ -2442,9 +2442,9 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="modal-box">
  <button class="modal-close-x" onclick="closeModal('find-bottle-modal')">✕</button>
  <div class="modal-eyebrow">Purchase</div>
- <div class="modal-title">Available Summer 2026</div>
- <div class="modal-body">Our whiskey will be listed on Bourbon Outfitter when bottles are available. Join The Barrel Inventory to be first in line when bottles drop.</div>
- <div class="modal-actions">
+ <div class="modal-title" id="fb-title">Available Summer 2026</div>
+ <div class="modal-body" id="fb-body">Our whiskey will be listed on Bourbon Outfitter when bottles are available. Join The Barrel Inventory to be first in line when bottles drop.</div>
+ <div class="modal-actions" id="fb-actions">
  <button class="btn-primary" onclick="navTo('inventory');closeModal('find-bottle-modal')">Join The Barrel Inventory</button>
  <button class="btn-ghost" onclick="closeModal('find-bottle-modal')">Close</button>
  </div>
@@ -2984,7 +2984,35 @@ function closeModal(id) {
   var anyOpen = document.querySelectorAll('.modal-overlay.open').length > 0;
   if (!anyOpen) document.body.style.overflow = '';
 }
-function openFindBottle() { openModal('find-bottle-modal'); }
+// ── RETAIL / PURCHASE CONFIG ──
+// Flip RETAIL.live to true when Bourbon Outfitter is live. Fill bottleUrls with
+// each expression's product-page URL to link buy buttons straight to that bottle;
+// if a bottle's URL is blank, it falls back to the collection page.
+var RETAIL = {
+  live: false,
+  collectionUrl: 'https://bourbonoutfitter.com/collections/throttled-in-bond',
+  bottleUrls: { FS: '', CS: '', BF: '' }
+};
+function retailUrl(series) {
+  return (series && RETAIL.bottleUrls[series]) ? RETAIL.bottleUrls[series] : RETAIL.collectionUrl;
+}
+function openFindBottle(series) {
+  var t = document.getElementById('fb-title');
+  var b = document.getElementById('fb-body');
+  var a = document.getElementById('fb-actions');
+  if (RETAIL.live) {
+    if (t) t.textContent = 'Buy Throttled In Bond';
+    if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our retail partner. Ships to 42 states.';
+    if (a) a.innerHTML = '<a class="btn-primary" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
+      '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
+  } else {
+    if (t) t.textContent = 'Available Summer 2026';
+    if (b) b.textContent = 'Our whiskey will be listed on Bourbon Outfitter when bottles are available. Join The Barrel Inventory to be first in line when bottles drop.';
+    if (a) a.innerHTML = '<button class="btn-primary" onclick="navTo(\'inventory\');closeModal(\'find-bottle-modal\')">Join The Barrel Inventory</button>' +
+      '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
+  }
+  openModal('find-bottle-modal');
+}
 
 // ── INTRO BOTTLE INTERACTION ──
 function selectBottle(id) {
