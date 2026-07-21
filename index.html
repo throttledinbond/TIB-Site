@@ -1832,21 +1832,32 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 .bs-row-actions{display:flex;gap:6px;}
 .bs-row-actions button{background:none;border:1px solid var(--charcoal4);color:var(--cream3);font-family:var(--f);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;cursor:pointer;}
 .bs-row-actions button:hover{border-color:var(--gold);color:var(--gold);}
+.garage-cabinets{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.cabinet.active{background:#302d28;border-color:var(--gold);}
+.cabinet.active .cabinet-open{color:var(--gold-lt);}
+@media(max-width:600px){.cabinet{padding:16px 14px;} .cabinet-title{font-size:16px;} .cabinet-desc{font-size:12px;}}
+.cabinet{background:var(--charcoal2);border:1px solid var(--charcoal4);border-top:2px solid var(--gold);padding:26px 24px;cursor:pointer;transition:background .2s,border-color .2s;}
+.cabinet:hover{background:var(--charcoal3);border-color:var(--gold);border-top-color:var(--gold);}
+.cabinet-title{font-size:19px;font-weight:700;color:var(--cream);margin:0 0 8px;}
+.cabinet-desc{font-size:13px;line-height:1.7;color:var(--cream3);margin:0 0 18px;}
+.cabinet-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--charcoal4);padding-top:14px;}
+.cabinet-stat{font-size:13px;color:var(--cream3);}
+.cabinet-stat b{font-size:20px;color:var(--cream);font-weight:700;margin-right:4px;}
+.cabinet-open{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);}
+.garage-lobby-links{display:flex;gap:22px;margin-top:24px;padding-top:18px;border-top:1px solid var(--charcoal3);flex-wrap:wrap;}
+.garage-lobby-links span{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cream3);cursor:pointer;}
+.garage-lobby-links span:hover{color:var(--gold);}
+.garage-back-link{font-size:12px;letter-spacing:.08em;color:var(--gold);cursor:pointer;}
+.garage-back-link:hover{color:var(--gold-lt);}
 </style>
 <section id="garage" class="section" style="min-height:auto;display:none;background:var(--charcoal2);border-top:1px solid var(--charcoal4);">
   <div class="section-inner">
     <div id="garage-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
       <div>
-        <div class="eyebrow" style="margin-bottom:8px;">My Garage</div>
-        <h2 class="display-sm" style="margin-bottom:0;">Your Collection</h2>
+        <div class="eyebrow" style="margin-bottom:8px;">The Garage</div>
+        <h2 class="display-sm" style="margin-bottom:0;">Welcome Back</h2>
       </div>
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <div style="display:flex;gap:2px;">
-          <button class="garage-tab active" id="tab-my-garage" onclick="garageShowTab('my-garage')">My Bottles</button>
-          <button class="garage-tab" id="tab-profile" onclick="garageShowTab('profile')">Profile</button>
-          <button class="garage-tab" id="tab-archive" onclick="garageShowTab('archive')">Barrel Archive</button>
-          <button class="garage-tab" id="tab-admin" onclick="garageShowTab('admin')" style="display:none;">Admin</button>
-        </div>
         <div style="display:flex;align-items:center;gap:10px;">
           <span id="garage-user-email" style="font-size:11px;color:var(--cream3);letter-spacing:.06em;"></span>
           <button onclick="authSignOut()" style="background:none;border:1px solid var(--cream3);font-family:var(--f);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream3);cursor:pointer;padding:7px 12px;">Sign Out</button>
@@ -1854,6 +1865,27 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       </div>
     </div>
     <div class="gold-line" id="garage-header-line" style="margin-bottom:32px;"></div>
+
+    <!-- Garage lobby: two equal cabinets -->
+    <div id="garage-lobby" style="display:none;">
+      <div class="garage-cabinets">
+        <div class="cabinet" id="cab-collection" onclick="garageView('collection')">
+          <div class="cabinet-title">Your Collection</div>
+          <p class="cabinet-desc">The bottles you&rsquo;ve saved and experienced &mdash; your <strong style="color:#D6CCBA;font-weight:600;">wish list</strong>, tastings, notes, and verified bottles.</p>
+          <div class="cabinet-foot"><span class="cabinet-stat"><b id="cab-collection-count">0</b> bottles saved</span><span class="cabinet-open">Open &#8594;</span></div>
+        </div>
+        <div class="cabinet" id="cab-archive" onclick="garageView('archive')">
+          <div class="cabinet-title">The Barrel Archive</div>
+          <p class="cabinet-desc">Every barrel we&rsquo;ve ever bottled. The full history, provenance, and story behind each release.</p>
+          <div class="cabinet-foot"><span class="cabinet-stat"><b id="cab-archive-count">0</b> barrels archived</span><span class="cabinet-open">Open &#8594;</span></div>
+        </div>
+      </div>
+      <div class="garage-lobby-links">
+        <span onclick="garageView('profile')">Profile</span>
+        <span id="lobby-admin-link" onclick="garageView('admin')" style="display:none;">Admin Dashboard</span>
+      </div>
+    </div>
+
 
     <!-- Admin Dashboard -->
 
@@ -2122,6 +2154,10 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <button class="garage-notif-close" onclick="document.getElementById('garage-notification').classList.remove('show')">&times;</button>
     </div>
     <!-- Filters -->
+    <div id="garage-collection-head" style="display:none;margin-bottom:20px;">
+      <div class="eyebrow" style="margin-bottom:6px;">Your Cabinet</div>
+      <h3 class="display-sm" style="margin:0;">Your Collection</h3>
+    </div>
     <div class="garage-filters" id="garage-filters" style="display:none;">
       <button class="garage-filter-btn active" onclick="garageFilter('all')">All</button>
       <button class="garage-filter-btn" onclick="garageFilter('wishlist')">&#9733; Wish List</button>
@@ -3292,8 +3328,7 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     if (headerLine) headerLine.style.display = '';
     var prev = document.getElementById('garage-preview-section');
     if (prev) prev.style.display = 'none';
-    var gc = document.getElementById('garage-content');
-    if (gc) gc.style.display = '';
+    garageView('collection');
     engageInit();
     feedbackAccessRefresh();
     shopAdminGate();
@@ -3305,6 +3340,7 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     if (prev) prev.style.display = '';
     var gc = document.getElementById('garage-content');
     if (gc) gc.style.display = 'none';
+    ['garage-lobby','garage-back','garage-collection-head','garage-archive','garage-profile'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
     var ad = document.getElementById('admin-dashboard');
     if (ad) ad.style.display = 'none';
     var atab = document.getElementById('tab-admin');
@@ -3544,13 +3580,15 @@ async function garageLoad() {
   _bottleProofBySeries = {};
   (bcRes.data || []).forEach(function(b){ var s = (b.id||'').split(' ')[2]; if (s) _bottleProofBySeries[s] = b.proof; });
   var filters = document.getElementById('garage-filters');
-  if (filters) filters.style.display = _garageAllItems.length > 0 ? '' : 'none';
+  var _collActive = document.getElementById('garage-content') && document.getElementById('garage-content').style.display !== 'none';
+  if (filters) filters.style.display = (_collActive && _garageAllItems.length > 0) ? '' : 'none';
   var items = _garageAllItems;
   if (_garageFilter === 'wishlist') items = items.filter(function(i){ return i.is_wishlist; });
   else if (_garageFilter === 'tasted') items = items.filter(function(i){ return i.is_tasted; });
   else if (_garageFilter === 'purchased') items = items.filter(function(i){ return i.is_purchased; });
   garageRender(items);
   garageCheckNotifications();
+  if (typeof garageLobbyRefresh === 'function') garageLobbyRefresh();
 }
 
 function garageRender(items) {
@@ -4070,42 +4108,45 @@ async function adminSaveProvenance(id) {
 
 
 function garageShowTab(tab) {
-  document.querySelectorAll('.garage-tab').forEach(function(t){ t.classList.remove('active'); });
-  var activeTab = document.getElementById('tab-' + tab);
-  if (activeTab) activeTab.classList.add('active');
-  var panels = ['garage-content','admin-dashboard','garage-profile','garage-archive'];
-  panels.forEach(function(id){
-    var el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  // The bottle-list filters belong only to the My Bottles tab.
-  var gfilters = document.getElementById('garage-filters');
-  if (gfilters) gfilters.style.display = 'none';
-  if (tab === 'my-garage') {
-    var el = document.getElementById('garage-content'); if (el) el.style.display = '';
-    if (gfilters && typeof _garageAllItems !== 'undefined' && _garageAllItems.length > 0) gfilters.style.display = '';
-  } else if (tab === 'admin') {
-    // Defense in depth: only render the admin panel after re-confirming admin status.
-    // (The real protection is server-side RLS; this keeps the UI honest too.)
-    adminCheck().then(function(isAdmin){
-      var el = document.getElementById('admin-dashboard');
-      var atab = document.getElementById('tab-admin');
-      if (isAdmin) {
-        if (el) el.style.display = '';
-        adminLoad();
-      } else {
-        if (el) el.style.display = 'none';
-        if (atab) atab.style.display = 'none';
-        garageShowTab('my-garage');
-      }
-    });
-  } else if (tab === 'profile') {
-    var el = document.getElementById('garage-profile'); if (el) el.style.display = '';
-    profileLoad();
-  } else if (tab === 'archive') {
-    var el = document.getElementById('garage-archive'); if (el) el.style.display = '';
+  var map = { 'my-garage':'collection', 'collection':'collection', 'profile':'profile', 'admin':'admin', 'archive':'archive' };
+  garageView(map[tab] || 'lobby');
+}
+function setCab(el, on){
+  if(!el) return;
+  el.classList.toggle('active', on);
+  var cta = el.querySelector('.cabinet-open');
+  if(cta) cta.textContent = on ? 'Viewing \u25be' : 'Open \u2192';
+}
+function garageView(name) {
+  var lob = document.getElementById('garage-lobby'); if (lob) lob.style.display='';
+  setCab(document.getElementById('cab-collection'), name==='collection');
+  setCab(document.getElementById('cab-archive'), name==='archive');
+  ['garage-collection-head','garage-filters','garage-content','garage-archive','garage-profile','admin-dashboard'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
+  if (name === 'collection') {
+    var gc = document.getElementById('garage-content'); if (gc) gc.style.display='';
+    var gf = document.getElementById('garage-filters');
+    if (gf && typeof _garageAllItems !== 'undefined' && _garageAllItems.length > 0) gf.style.display='';
+    garageLoad();
+  } else if (name === 'archive') {
+    var a = document.getElementById('garage-archive'); if (a) a.style.display='';
     archiveLoad();
+  } else if (name === 'profile') {
+    var pr = document.getElementById('garage-profile'); if (pr) pr.style.display='';
+    profileLoad();
+  } else if (name === 'admin') {
+    adminCheck().then(function(isAdmin){
+      if (isAdmin) { var ad=document.getElementById('admin-dashboard'); if (ad) ad.style.display=''; adminLoad(); }
+      else { garageView('collection'); }
+    });
   }
+  garageLobbyRefresh();
+}
+async function garageLobbyRefresh() {
+  var cc = document.getElementById('cab-collection-count');
+  if (cc) cc.textContent = (typeof _garageAllItems !== 'undefined' && _garageAllItems) ? _garageAllItems.length : 0;
+  var ac = document.getElementById('cab-archive-count');
+  if (ac) ac.textContent = (window._storyByCode ? Object.keys(window._storyByCode).length : 0);
+  try { var isAdmin = await adminCheck(); var al = document.getElementById('lobby-admin-link'); if (al) al.style.display = isAdmin ? '' : 'none'; } catch(e){}
 }
 
 
@@ -4301,11 +4342,7 @@ async function adminLoadTradeInquiries(){
 
 async function garageOpenStory(storyId, ev){
   if (ev && ev.stopPropagation) ev.stopPropagation();
-  document.querySelectorAll('.garage-tab').forEach(function(t){ t.classList.remove('active'); });
-  var at = document.getElementById('tab-archive'); if (at) at.classList.add('active');
-  ['garage-content','admin-dashboard','garage-profile'].forEach(function(id){ var e=document.getElementById(id); if(e) e.style.display='none'; });
-  var gf = document.getElementById('garage-filters'); if (gf) gf.style.display='none';
-  var ga = document.getElementById('garage-archive'); if (ga) ga.style.display='';
+  garageView('archive');
   await archiveLoad();
   archiveOpen(storyId);
 }
