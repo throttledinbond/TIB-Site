@@ -1338,6 +1338,21 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 
 
 <!-- ══ NAV ══ -->
+<style>
+.nav-bell{position:relative;background:none;border:none;color:var(--cream3);cursor:pointer;padding:6px;display:flex;align-items:center;line-height:0;transition:color .2s;flex-shrink:0;}
+.nav-bell:hover{color:var(--cream);}
+.nav-bell-dot{position:absolute;top:3px;right:3px;width:8px;height:8px;background:#D24A32;border:1.5px solid #1A1917;border-radius:50%;}
+.alert-item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;background:var(--charcoal2);padding:14px 16px;margin-bottom:8px;}
+.alert-item-body{flex:1;min-width:0;}
+.alert-msg{font-size:14px;color:var(--cream);line-height:1.55;}
+.alert-msg.clickable{cursor:pointer;}
+.alert-msg.clickable:hover{color:var(--gold-lt);}
+.alert-link{display:inline-block;margin-top:8px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);}
+.alert-link:hover{color:var(--gold-lt);}
+.alert-x{background:none;border:none;color:var(--cream3);cursor:pointer;font-size:15px;padding:2px 4px;line-height:1;flex-shrink:0;}
+.alert-x:hover{color:var(--cream);}
+.alerts-empty{font-size:13px;color:var(--cream3);text-align:center;padding:18px 0;}
+</style>
 <nav id="nav">
  <a onclick="navTo('home')" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
  <img style="height:28px;width:auto;flex-shrink:0;" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" crossorigin="anonymous">
@@ -1362,6 +1377,10 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
 </div>
  <button class="nav-cta" onclick="navTo('inventory')">Never Miss A Release</button>
+ <button class="nav-bell" id="nav-bell" onclick="alertsOpen()" aria-label="Alerts">
+ <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+ <span class="nav-bell-dot" id="nav-bell-dot" style="display:none;"></span>
+ </button>
  <div class="nav-hamburger" onclick="toggleMenu()" id="hamburger">
  <span></span><span></span><span></span>
  </div>
@@ -1945,6 +1964,32 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div id="admin-requests-list" style="margin-top:14px;"><p style="color:var(--charcoal4);font-size:12px;">Loading...</p></div>
       </div>
 
+      <!-- Site Alerts -->
+      <div class="admin-section">
+        <div class="admin-section-title">Site Alerts</div>
+        <p style="font-size:12px;color:var(--cream3);margin-bottom:12px;">Publish a brief alert shown in the bell at the top of the site for everyone. Choose how long it stays live.</p>
+        <label class="feedback-label">Message</label>
+        <input id="al-message" class="auth-input" placeholder="Sales are live! Click Buy Now to purchase.">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div><label class="feedback-label">Link (optional)</label><input id="al-link" class="auth-input" placeholder="/shop, /decoder, or https://..."></div>
+          <div><label class="feedback-label">Link label</label><input id="al-link-label" class="auth-input" placeholder="Buy Now"></div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2px;">
+          <select id="al-duration" class="auth-input" style="width:auto;margin-bottom:0;">
+            <option value="3600000">1 hour</option>
+            <option value="21600000">6 hours</option>
+            <option value="86400000" selected>1 day</option>
+            <option value="259200000">3 days</option>
+            <option value="604800000">1 week</option>
+            <option value="1209600000">2 weeks</option>
+            <option value="2592000000">30 days</option>
+          </select>
+          <button class="btn-primary" style="width:auto;" onclick="adminPublishAlert()">Publish Alert</button>
+          <span id="al-msg" style="font-size:12px;"></span>
+        </div>
+        <div id="admin-alerts-list" style="margin-top:14px;"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
+      </div>
+
       <!-- Trade Inquiries -->
       <div class="admin-section">
         <div class="admin-section-title">Trade &amp; Partner Inquiries</div>
@@ -2434,6 +2479,17 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     </div>
 
   </div>
+</div>
+
+<!-- Alerts -->
+<div class="modal-overlay" id="alerts-modal">
+ <div class="modal-bg" onclick="closeModal('alerts-modal')"></div>
+ <div class="modal-box">
+ <button class="modal-close-x" onclick="closeModal('alerts-modal')">&#x2715;</button>
+ <div class="modal-eyebrow">Alerts</div>
+ <div class="modal-title">What&rsquo;s New</div>
+ <div id="alerts-list" style="margin-top:8px;"></div>
+ </div>
 </div>
 
 <!-- Find a Bottle -->
@@ -3808,7 +3864,7 @@ async function adminLoad() {
     return;
   }
   if (adminTab) adminTab.style.display = '';
-  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories(), adminLoadTradeInquiries()]);
+  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories(), adminLoadTradeInquiries(), adminLoadAlerts()]);
 }
 
 async function adminLoadStats() {
@@ -4374,6 +4430,100 @@ async function garageOpenStory(storyId, ev){
   await archiveLoad();
   archiveOpen(storyId);
 }
+
+
+// ── SITE ALERTS (bell) ──────────────────────────────
+var _alerts = [];
+function alertsDismissed(){ try { return JSON.parse(localStorage.getItem('tib_alerts_dismissed')||'[]'); } catch(e){ return []; } }
+function alertsSaveDismissed(arr){ try { localStorage.setItem('tib_alerts_dismissed', JSON.stringify(arr)); } catch(e){} }
+async function alertsLoad(){
+  try {
+    var res = await _supabase.from('alerts').select('*').gt('expires_at', new Date().toISOString()).order('created_at', { ascending: false });
+    _alerts = res.data || [];
+  } catch(e){ _alerts = []; }
+  var activeIds = {}; _alerts.forEach(function(a){ activeIds[a.id] = 1; });
+  var pruned = alertsDismissed().filter(function(id){ return activeIds[id]; });
+  alertsSaveDismissed(pruned);
+  alertsUpdateDot();
+}
+function alertsVisible(){
+  var dis = alertsDismissed();
+  return _alerts.filter(function(a){ return dis.indexOf(a.id) === -1; });
+}
+function alertsUpdateDot(){
+  var dot = document.getElementById('nav-bell-dot');
+  if (dot) dot.style.display = alertsVisible().length > 0 ? '' : 'none';
+}
+function alertsRender(){
+  var el = document.getElementById('alerts-list'); if(!el) return;
+  var items = alertsVisible();
+  if(!items.length){ el.innerHTML = '<div class="alerts-empty">You&rsquo;re all caught up.</div>'; return; }
+  var html = '';
+  items.forEach(function(a){
+    var hasLink = !!a.link_url;
+    html += '<div class="alert-item"><div class="alert-item-body">'
+      + '<div class="alert-msg'+(hasLink?' clickable':'')+'"'+(hasLink?(' data-link="'+fbEscape(a.link_url)+'" onclick="alertGo(this.getAttribute(\'data-link\'))"'):'')+'>'+fbEscape(a.message)+'</div>'
+      + (hasLink ? ('<span class="alert-link" data-link="'+fbEscape(a.link_url)+'" onclick="alertGo(this.getAttribute(\'data-link\'))">'+fbEscape(a.link_label||'View')+' &#8594;</span>') : '')
+      + '</div><button class="alert-x" title="Dismiss" onclick="alertDismiss(\''+a.id+'\')">&#10005;</button></div>';
+  });
+  el.innerHTML = html;
+}
+function alertsOpen(){ alertsRender(); openModal('alerts-modal'); }
+function alertDismiss(id){
+  var dis = alertsDismissed(); if(dis.indexOf(id)===-1) dis.push(id); alertsSaveDismissed(dis);
+  alertsRender(); alertsUpdateDot();
+}
+function alertGo(link){
+  if(!link) return;
+  closeModal('alerts-modal');
+  if(/^https?:\/\//i.test(link)){ window.open(link, '_blank', 'noopener'); return; }
+  var v = link.replace(/^#/, ''); if(v.charAt(0)==='/') v = v.slice(1); v = v.toLowerCase();
+  if(v==='partners'){ if(typeof openPartners==='function') openPartners(); return; }
+  var map = { decoder:'vintage', vintage:'vintage', 'vin-tage':'vintage', whiskey:'whiskey', story:'story', inventory:'inventory', shop:'shop', home:'home', leaderboard:'leaderboard' };
+  if(map[v]){ navTo(map[v]); return; }
+  if(link.charAt(0)==='/'){ window.location.href = link; return; }
+  navTo(v);
+}
+
+// ── ADMIN: alerts publisher ──
+async function adminLoadAlerts(){
+  var el = document.getElementById('admin-alerts-list'); if(!el) return;
+  var res = await _supabase.from('alerts').select('*').order('created_at', { ascending: false });
+  if(res.error){ el.innerHTML = '<p style="color:#8B3A2A;font-size:12px;">Could not load alerts.</p>'; return; }
+  var data = res.data || []; var now = Date.now();
+  if(!data.length){ el.innerHTML = '<p style="color:var(--cream3);font-size:12px;">No alerts yet.</p>'; return; }
+  var html = '';
+  data.forEach(function(a){
+    var live = new Date(a.expires_at).getTime() > now;
+    html += '<div style="background:var(--charcoal2);padding:12px 14px;margin-bottom:6px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;">'
+      + '<div style="flex:1;min-width:0;"><div style="font-size:13px;color:var(--cream);">'+fbEscape(a.message)+'</div>'
+      + '<div style="font-size:10px;color:#A69C8C;margin-top:4px;">'+(live?('Live &middot; expires '+new Date(a.expires_at).toLocaleString()):('Expired '+new Date(a.expires_at).toLocaleDateString()))+(a.link_url?(' &middot; links to '+fbEscape(a.link_url)):'')+'</div></div>'
+      + '<button onclick="adminDeleteAlert(\''+a.id+'\')" style="background:none;border:1px solid var(--charcoal4);color:var(--cream3);font-family:var(--f);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;cursor:pointer;">Delete</button></div>';
+  });
+  el.innerHTML = html;
+}
+async function adminPublishAlert(){
+  var msg = document.getElementById('al-msg');
+  var message = (document.getElementById('al-message').value||'').trim();
+  if(!message){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Enter a message.'; } return; }
+  var link = (document.getElementById('al-link').value||'').trim();
+  var label = (document.getElementById('al-link-label').value||'').trim();
+  var dur = parseInt(document.getElementById('al-duration').value,10) || 86400000;
+  var expires = new Date(Date.now()+dur).toISOString();
+  if(msg){ msg.style.color='var(--cream3)'; msg.textContent='Publishing…'; }
+  var res = await _supabase.from('alerts').insert({ message:message, link_url:link||null, link_label:label||null, expires_at:expires });
+  if(res.error){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Failed: '+res.error.message; } return; }
+  if(msg){ msg.style.color='var(--gold)'; msg.textContent='Published.'; }
+  document.getElementById('al-message').value=''; document.getElementById('al-link').value=''; document.getElementById('al-link-label').value='';
+  await adminLoadAlerts(); alertsLoad();
+}
+async function adminDeleteAlert(id){
+  if(!window.confirm('Delete this alert?')) return;
+  var res = await _supabase.from('alerts').delete().eq('id', id);
+  if(res.error){ showNotif('Alerts','Error','Could not delete. Try again.','OK'); return; }
+  await adminLoadAlerts(); alertsLoad();
+}
+window.addEventListener('load', function(){ if(typeof alertsLoad==='function') alertsLoad(); });
 
 // ── FOCUS TRAP for auth modal ──
 document.addEventListener('keydown', function(e) {
