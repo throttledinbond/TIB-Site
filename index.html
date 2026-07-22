@@ -317,6 +317,7 @@ a{color:inherit;text-decoration:none;}
 .bottle-card-series{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
 .bottle-card-name{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--cream);letter-spacing:-.01em;margin-bottom:8px;line-height:1.3;}
 .bottle-card-code{font-size:10px;font-weight:400;letter-spacing:.14em;color:var(--cream3);}
+.limited-pill{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--rust);color:#E7B9AB;background:rgba(139,58,42,.18);margin-bottom:10px;}
 .bottle-card-ribbon{
  position:absolute;top:16px;left:0;
  background:var(--gold);color:var(--charcoal);
@@ -1532,6 +1533,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" loading="lazy" crossorigin="anonymous">
  </div>
  <div class="bottle-card-info">
+ <div class="limited-pill">Limited Single-Barrel Release</div>
  <div class="bottle-card-series">FS · Founders Select</div>
  <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
  <div class="bottle-card-code">TIB 26 FS G1 00001</div>
@@ -1547,6 +1549,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
  </div>
  <div class="bottle-card-info">
+ <div class="limited-pill" id="bf-limited-pill" style="display:none;">Limited Vintage Release</div>
  <div class="bottle-card-series">BF · Barn Find</div>
  <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
  <div class="bottle-card-code">TIB 26 BF G1 00003</div>
@@ -1558,6 +1561,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous">
  </div>
  <div class="bottle-card-info">
+ <div class="limited-pill">Limited Single-Barrel Release</div>
  <div class="bottle-card-series">CS · Collection Series</div>
  <div class="bottle-card-name">High Rye Bourbon, Rum Cask Finish</div>
  <div class="bottle-card-code">TIB 26 CS G1 00002</div>
@@ -1637,6 +1641,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <p class="body-copy" style="margin-bottom:16px;">THROTTLED IN BOND<span class="tm">&#8482;</span> is our expression of nostalgia and reverence for American Muscle car culture. We're passionate about hunting for the most exciting barn finds, whether that be a rare muscle car, ready for revival, or a unique whiskey barrel, aged to perfection. Join us as we celebrate The Spirit of American Muscle<span class="tm">&#8482;</span>.</p>
         <div class="story-signature">
           <div class="story-signature-name">David &amp; Amy</div>
+          <div style="margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">An Independent, Founder-Operated Whiskey Co.</div>
         </div>
       </div>
       <div class="reveal reveal-delay-1" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
@@ -2402,6 +2407,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="footer-top">
  <div class="footer-brand">
  <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond™" crossorigin="anonymous">
+ <div style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-top:2px;margin-left:15px;">Independent &middot; Founder-Operated</div>
  </div>
  <div>
  <div class="footer-col-title">Navigate</div>
@@ -2768,6 +2774,7 @@ function openBottle(id) {
  document.querySelectorAll('.bottle-card').forEach(c => c.classList.remove('active'));
  document.getElementById('bottle-card-' + id)?.classList.add('active');
  const b = BOTTLES[id];
+ trackEvent('bottle_view', { series: b.series, bottle: b.name });
  const mashAllZero = (b.mashBill || []).every(g => g.p === 0);
  const grainDots = {C:'#C8952A',R:'#8B3A2A',W:'#8B7355',MB:'#3E3B35'};
  const mash = mashAllZero ? '' : b.mashBill.filter(g => g.p > 0).map(g => {
@@ -3090,19 +3097,65 @@ function closeModal(id) {
 var RETAIL = {
   live: false,
   collectionUrl: 'https://bourbonoutfitter.com/collections/throttled-in-bond',
-  bottleUrls: { FS: '', CS: '', BF: '' }
+  bottleUrls: { FS: '', CS: '', BF: '' },
+  available: { FS: false, CS: false, BF: false }
 };
 function retailUrl(series) {
   return (series && RETAIL.bottleUrls[series]) ? RETAIL.bottleUrls[series] : RETAIL.collectionUrl;
 }
+function boLive(series) {
+  if (series) return !!RETAIL.available[series];
+  return RETAIL.available.FS || RETAIL.available.CS || RETAIL.available.BF;
+}
+// Auto-check Bourbon Outfitter's live inventory; never shows "Buy" until a bottle is truly for sale.
+async function boCheckAvailability() {
+  try {
+    var res = await _supabase.functions.invoke('bo-availability');
+    var d = (res && res.data) ? res.data : null;
+    if (!d) return;
+    ['FS','CS','BF'].forEach(function(s){
+      if (d[s]) {
+        RETAIL.available[s] = !!d[s].available;
+        if (d[s].url) RETAIL.bottleUrls[s] = d[s].url;
+      }
+    });
+    RETAIL.live = boLive();
+    boApplyAvailability();
+  } catch (e) { /* on any failure, stay not-live (safe default) */ }
+}
+function boApplyAvailability() {
+  // Barn Find "Coming Fall 2026" sash auto-removes once it's live on BO
+  var sash = document.querySelector('.bf-sash');
+  if (sash) sash.style.display = RETAIL.available.BF ? 'none' : '';
+  // Barn Find "Limited Vintage Release" pill only appears once it's live on BO
+  var bfp = document.getElementById('bf-limited-pill');
+  if (bfp) bfp.style.display = RETAIL.available.BF ? 'inline-block' : 'none';
+}
+window.addEventListener('load', boCheckAvailability);
+// ── ANALYTICS: buy-intent events (GA4 + Google Ads already loaded in <head>) ──
+function trackEvent(name, params){ try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){} }
+// To also count Buy clicks as a Google Ads conversion: create a conversion action
+// in Google Ads, then paste its send_to value (e.g. 'AW-1022472544/AbC-dEfGh') below.
+var ADS_BUY_CONVERSION = '';
+function trackBuyConversion(){ try { if (ADS_BUY_CONVERSION && typeof gtag === 'function') gtag('event','conversion',{ send_to: ADS_BUY_CONVERSION }); } catch(e){} }
+// Any retailer/purchase link click = a buy action (delegated, capture phase)
+document.addEventListener('click', function(e){
+  var a = (e.target && e.target.closest) ? e.target.closest('a.retailer-link, a.buy-cta') : null;
+  if (!a) return;
+  trackEvent('buy_click', { link_url: a.getAttribute('href') || '', link_text: (a.textContent || '').trim() });
+  trackBuyConversion();
+}, true);
+
 function openFindBottle(series) {
+  trackEvent('find_a_bottle', { series: series || 'all' });
   var t = document.getElementById('fb-title');
   var b = document.getElementById('fb-body');
   var a = document.getElementById('fb-actions');
-  if (RETAIL.live) {
+  var avail = boLive(series);
+  if (avail) {
     if (t) t.textContent = 'Buy Throttled In Bond';
     if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our retail partner. Ships to 42 states.';
-    if (a) a.innerHTML = '<a class="btn-primary" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
+    if (a) a.innerHTML = '<a class="btn-primary buy-cta" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
       '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
   } else {
     if (t) t.textContent = 'Available Summer 2026';
@@ -5343,11 +5396,7 @@ async function garageLoadRetailers(series, containerId) {
   
   var html = '<div class="where-to-buy-title">Where to Buy</div>';
   data.forEach(function(r) {
-    html += '<div class="retailer-item">' +
-      '<div><div class="retailer-name">' + fbEscape(r.name) + '</div>' +
-      '<div class="retailer-type">' + (r.city ? r.city + ', ' : '') + r.state + ' &middot; ' + (r.type||'').replace('_',' ') + '</div></div>' +
-      (r.url ? '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy on ' + fbEscape(r.name) + '</a>' : '') +
-    '</div>';
+    html += retailerRow(r);
   });
   el.innerHTML = html;
 }
@@ -5516,10 +5565,17 @@ var STATE_ABBR = {"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","C
 function retailerRow(r) {
   var loc = [r.city, r.state].filter(Boolean).join(', ');
   var typ = (r.type || '').replace('_', ' ');
+  var isBO = /bourbonoutfitter\.com/i.test(r.url || '');
+  var buy = '';
+  if (r.url && isBO && !boLive()) {
+    buy = '<span class="retailer-link" style="opacity:.6;">Coming soon</span>';
+  } else if (r.url) {
+    buy = '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy on ' + fbEscape(r.name) + '</a>';
+  }
   return '<div class="retailer-item">' +
     '<div><div class="retailer-name">' + fbEscape(r.name) + '</div>' +
     '<div class="retailer-type">' + (loc ? fbEscape(loc) + ' &middot; ' : '') + fbEscape(typ) + '</div></div>' +
-    (r.url ? '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy on ' + fbEscape(r.name) + '</a>' : '') +
+    buy +
     '</div>';
 }
 
@@ -5527,6 +5583,7 @@ async function openStateAvailability(stateName) {
   var titleEl = document.getElementById('sa-title');
   var bodyEl = document.getElementById('sa-body');
   var actEl = document.getElementById('sa-actions');
+  trackEvent('where_to_buy_state', { state: stateName });
   if (titleEl) titleEl.textContent = stateName;
   if (bodyEl) bodyEl.innerHTML = '<div style="font-size:12px;color:var(--cream3);">Loading availability&hellip;</div>';
   if (actEl) actEl.innerHTML = '<button class="btn-ghost" onclick="closeModal(\'state-avail-modal\')">Close</button>';
