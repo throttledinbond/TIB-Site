@@ -165,7 +165,9 @@ a{color:inherit;text-decoration:none;}
  height:clamp(160px,22vw,340px);
  width:auto;
  filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));
+ pointer-events:auto;cursor:pointer;transition:filter .2s ease;
 }
+.hero-bottle-img:hover{filter:drop-shadow(0 16px 48px rgba(0,0,0,.7)) brightness(1.1);}
 .hero-bottle-img:nth-child(1){transform:rotate(-5deg) translateX(14px);z-index:1;position:relative;}
 .hero-bottle-img:nth-child(2){transform:scale(1.1);z-index:3;position:relative;}
 .hero-bottle-img:nth-child(3){transform:rotate(5deg) translateX(-14px);z-index:1;position:relative;}
@@ -325,6 +327,11 @@ a{color:inherit;text-decoration:none;}
 .bf-sash{position:absolute;top:50%;left:-30%;width:160%;transform:translateY(-50%) rotate(-45deg);background:var(--rust);box-shadow:0 4px 16px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;gap:9px;padding:10px 14px;z-index:6;pointer-events:none;--bf-fs:clamp(13px,1.7vw,18px);}
 .bf-sash-logo{height:var(--bf-fs);width:auto;display:block;flex-shrink:0;}
 .bf-sash-txt{font-size:var(--bf-fs);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
+/* Hero announcement ribbon (absolute overlay — does not affect hero layout) */
+.hero-ribbon{position:absolute;top:calc(var(--nav-h) + 22px);left:50%;transform:translateX(-50%);z-index:4;max-width:94vw;overflow:hidden;background:var(--rust);box-shadow:0 6px 22px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 46px;clip-path:polygon(0 0,100% 0,calc(100% - 18px) 50%,100% 100%,0 100%,18px 50%);pointer-events:none;}
+.hero-ribbon img{height:19px;width:auto;display:block;flex-shrink:0;}
+.hero-ribbon span{font-size:clamp(10px,2.6vw,18px);font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
+@media(max-width:520px){.hero-ribbon{padding:9px 26px;gap:8px;}.hero-ribbon span{letter-spacing:.04em;}.hero-ribbon img{height:14px;}}
 
 /* Bottle detail panel */
 #bottle-detail{
@@ -694,7 +701,7 @@ a{color:inherit;text-decoration:none;}
  opacity:0;
 }
 .bottle-grid-section.revealed{
- max-height:2000px;
+ max-height:none;
  opacity:1;
 }
 
@@ -1425,15 +1432,19 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
  <div class="hero-overlay"></div>
 
-
+ <!-- Inaugural release announcement ribbon (overlay) -->
+ <div class="hero-ribbon">
+ <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous">
+ <span>Inaugural Release Available July 23, 2026</span>
+ </div>
 
  <div class="hero-inner">
 
  <!-- Bottles above slogan, centered -->
  <div class="hero-bottles reveal">
- <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" crossorigin="anonymous">
- <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" crossorigin="anonymous">
- <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" crossorigin="anonymous">
+ <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" title="Founders Select — view details" onclick="heroToRelease(0)" crossorigin="anonymous">
+ <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" title="Barn Find — view details" onclick="heroToRelease(2)" crossorigin="anonymous">
+ <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" title="Collection Series — view details" onclick="heroToRelease(1)" crossorigin="anonymous">
  </div>
 
  <h1 class="hero-headline reveal reveal-delay-1" style="color:var(--cream);">THE SPIRIT OF AMERICAN MUSCLE<span class="tm">™</span></h1>
@@ -1497,31 +1508,16 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <section id="whiskey" class="section" style="min-height:auto;">
  <div class="section-inner">
 
- <div class="whiskey-intro">
- <div class="whiskey-intro-copy">
+ <div class="whiskey-intro" style="display:block;text-align:center;margin-bottom:56px;">
+ <div class="whiskey-intro-copy" style="max-width:none;">
  <div class="eyebrow reveal">First Generation &nbsp;·&nbsp; G1 &nbsp;·&nbsp; 2026</div>
- <h2 class="display-sm reveal reveal-delay-1">The Inaugural<br>Release</h2>
- <div class="gold-line reveal reveal-delay-2"></div>
- <p class="body-copy reveal reveal-delay-2">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
- <p class="body-copy reveal reveal-delay-3" style="margin-top:16px;">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
- </div>
- <div class="whiskey-intro-bottles reveal reveal-delay-2">
- <div class="intro-bottle-wrap">
- <div class="intro-bottle" id="intro-b-0" onclick="selectBottle(0)">
- <img class="intro-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" crossorigin="anonymous">
- </div>
- <div class="intro-bottle" id="intro-b-2" onclick="selectBottle(2)">
- <img class="intro-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" crossorigin="anonymous">
- </div>
- <div class="intro-bottle" id="intro-b-1" onclick="selectBottle(1)">
- <img class="intro-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" crossorigin="anonymous">
+ <div class="gold-line reveal reveal-delay-1" style="margin:20px auto;"></div>
+ <p class="body-copy reveal reveal-delay-2" style="max-width:none;font-size:clamp(14px,1.15vw,16px);text-wrap:balance;">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
+ <p class="body-copy reveal reveal-delay-3" style="max-width:none;margin-top:16px;font-size:clamp(14px,1.15vw,16px);text-wrap:balance;">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
  </div>
  </div>
- <div class="intro-bottle-prompt" id="intro-bottle-prompt">Select a release to explore</div>
- </div>
- </div>
- <!-- Full bottle grid, hidden until user clicks a bottle above -->
- <div class="bottle-grid-section" id="bottle-grid-section">
+ <!-- Full bottle grid — always visible -->
+ <div class="bottle-grid-section revealed" id="bottle-grid-section">
 
  <div class="bottles-eyebrow-row reveal">
  <div class="eyebrow">Select a Release</div>
@@ -2795,6 +2791,10 @@ function openBottle(id) {
  document.getElementById('bottle-detail').classList.add('open');
  loadBottleProvenance(b.code, id);
 
+ // Reveal the label section on first bottle interaction (previously tied to the removed intro showcase)
+ var _lbl = document.getElementById('label-section');
+ if (_lbl && !_lbl.classList.contains('revealed')) { setTimeout(function(){ _lbl.classList.add('revealed'); }, 250); }
+
  setTimeout(() => {
  document.querySelectorAll('#bottle-detail .vin-mash-seg[data-target]').forEach(s => {
  s.style.width = s.dataset.target + '%';
@@ -2807,6 +2807,12 @@ function closeBottle() {
  activeBottle = null;
  document.querySelectorAll('.bottle-card').forEach(c => c.classList.remove('active'));
  document.getElementById('bottle-detail').classList.remove('open');
+}
+
+// Hero bottle click → scroll to Select a Release and open that bottle's report
+function heroToRelease(id) {
+ if (typeof navTo === 'function') navTo('whiskey');
+ setTimeout(function(){ try { openBottle(id); } catch(e){} }, 480);
 }
 
 // Members-only barrel provenance on the bottle detail
