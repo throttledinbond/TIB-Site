@@ -2029,6 +2029,12 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <div class="admin-section">
         <div class="admin-section-title">Barrel Archive &mdash; Stories</div>
         <p style="font-size:12px;color:var(--cream3);margin-bottom:12px;">Create the members-only history for each barrel. Save as Draft while you work; set Published when ready for registered users.</p>
+        <div style="margin-bottom:16px;max-width:560px;">
+          <label class="feedback-label">Edit a saved story</label>
+          <select id="bs-edit-select" class="auth-input" onchange="if(this.value){adminEditStory(this.value);this.selectedIndex=0;}">
+            <option value="">&mdash; Select a story to load into the form below &mdash;</option>
+          </select>
+        </div>
         <div id="admin-stories-list" style="margin-bottom:20px;"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
         <div class="bs-form">
           <input type="hidden" id="bs-id">
@@ -4538,11 +4544,21 @@ function bsParseLines(txt,keys){ var out=[]; (txt||'').split('\n').forEach(funct
 function bsStringifyLines(arr,keys){ if(!Array.isArray(arr)) return ''; return arr.map(function(o){ return keys.map(function(k){return o[k]||'';}).join(' | '); }).join('\n'); }
 function bsSet(id,v){ var e=document.getElementById(id); if(!e) return; if(e.type==='checkbox'){ e.checked=!!v; } else { e.value=(v==null?'':v); } }
 function bsGet(id){ var e=document.getElementById(id); if(!e) return ''; return e.type==='checkbox'?e.checked:e.value.trim(); }
+function bsFillEditSelect(){
+  var sel=document.getElementById('bs-edit-select'); if(!sel) return;
+  var opts='<option value="">&mdash; Select a story to load into the form below &mdash;</option>';
+  _bsAll.forEach(function(s){
+    var lbl=(s.title||'Untitled')+'  ·  '+([s.series,s.generation].filter(Boolean).join(' ')||'—')+'  ·  '+(s.status||'');
+    opts+='<option value="'+fbEscape(s.id)+'">'+fbEscape(lbl)+'</option>';
+  });
+  sel.innerHTML=opts;
+}
 async function adminLoadStories(){
   var el=document.getElementById('admin-stories-list'); if(!el) return;
   var res=await _supabase.from('barrel_stories').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false});
   if(res.error){ el.innerHTML='<p style="color:#8B3A2A;font-size:12px;">Could not load stories.</p>'; return; }
   _bsAll=res.data||[];
+  bsFillEditSelect();
   if(!_bsAll.length){ el.innerHTML='<p style="color:var(--cream3);font-size:12px;">No stories yet. Create one below.</p>'; return; }
   var html='';
   _bsAll.forEach(function(s){
