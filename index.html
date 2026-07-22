@@ -1843,6 +1843,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 .archive-title{font-size:clamp(22px,3vw,30px);font-weight:700;color:var(--cream);line-height:1.15;}
 .archive-code{font-size:12px;letter-spacing:2px;color:#A69C8C;margin-top:8px;}
 .archive-rule{width:52px;border-top:1px solid var(--gold);margin:18px 0;}
+.archive-cta{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 28px;}
+.archive-cta-btn{font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--charcoal);border:none;padding:11px 18px;cursor:pointer;transition:background .2s;}
+.archive-cta-btn:hover{background:var(--gold-lt);}
+.archive-cta-btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold-dk);}
+.archive-cta-btn.ghost:hover{background:rgba(200,149,42,.12);color:var(--gold-lt);}
 .archive-intro{font-size:15px;line-height:1.7;color:var(--cream3);max-width:680px;margin:0;}
 .archive-sec{margin-top:30px;}
 .archive-sec-h{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
@@ -4474,6 +4479,12 @@ function archiveRenderStory(s){
   h+='<div class="archive-rule"></div>';
   if(s.intro) h+='<p class="archive-intro">'+bsEscMulti(s.intro)+'</p>';
   h+='</div>';
+  // Links to the specific bottle this story is about (shown only when the field is set)
+  var _sn={FS:'Founders Select',CS:'Collection Series',BF:'Barn Find'};
+  var _ctas='';
+  if(s.series && _sn[s.series]) _ctas+='<button class="archive-cta-btn" onclick="archiveToBottle(\''+s.series+'\')">View the '+fbEscape(_sn[s.series])+' &#8594;</button>';
+  if(s.vintage_code){ var _c=String(s.vintage_code).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); _ctas+='<button class="archive-cta-btn ghost" onclick="archiveDecode(\''+_c+'\')">Decode this VIN-TAG<span class="lowercase-e">e</span> &#8594;</button>'; }
+  if(_ctas) h+='<div class="archive-cta">'+_ctas+'</div>';
   var facts=bsFact('Discovered',s.discovered_date)+bsFact('Location',s.location)
     +bsFact('Drilled for a taste', s.drilled?'Yes — thief pull, on site':'', true)
     +bsFact('Mash bill known first',(s.mash_bill_known?'Yes':(s.blind?'No — tasted blind':'')),true);
@@ -4506,6 +4517,19 @@ function archiveRenderStory(s){
   var tn=bsFact('Nose',s.nose)+bsFact('Palate',s.palate)+bsFact('Finish',s.finish);
   if(tn) h+='<div class="archive-sec"><div class="archive-sec-h">Tasting notes</div><div class="bs-facts">'+tn+'</div></div>';
   return h;
+}
+
+// Archive story → specific bottle links
+function archiveToBottle(series){
+  var map={FS:0,CS:1,BF:2};
+  var id=map[series];
+  if(id==null) return;
+  if(typeof navTo==='function') navTo('whiskey');
+  setTimeout(function(){ try{ openBottle(id); }catch(e){} }, 480);
+}
+function archiveDecode(code){
+  if(typeof navTo==='function') navTo('vintage');
+  setTimeout(function(){ try{ vinFill(code); }catch(e){} }, 480);
 }
 
 // ── ADMIN: barrel stories ──
@@ -5560,7 +5584,7 @@ async function loadRetailersOnMap() {
 }
 
 // ── STATE CLICK → RETAILERS (online ships everywhere + in-state stores) ──
-var STATE_ABBR = {"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA","Colorado":"CO","Connecticut":"CT","Delaware":"DE","District of Columbia":"DC","Florida":"FL","Georgia":"GA","Hawaii":"HI","Idaho":"ID","Illinois":"IL","Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA","Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI","Minnesota":"MN","Mississippi":"MS","Missouri":"MO","Montana":"MT","Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ","New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND","Ohio":"OH","Oklahoma":"OK","Oregon":"OR","Pennsylvania":"PA","Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD","Tennessee":"TN","Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA","West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY"};
+var STATE_NAME_TO_ABBR = {"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA","Colorado":"CO","Connecticut":"CT","Delaware":"DE","District of Columbia":"DC","Florida":"FL","Georgia":"GA","Hawaii":"HI","Idaho":"ID","Illinois":"IL","Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA","Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI","Minnesota":"MN","Mississippi":"MS","Missouri":"MO","Montana":"MT","Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ","New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND","Ohio":"OH","Oklahoma":"OK","Oregon":"OR","Pennsylvania":"PA","Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD","Tennessee":"TN","Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA","West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY"};
 
 function retailerRow(r) {
   var loc = [r.city, r.state].filter(Boolean).join(', ');
@@ -5589,7 +5613,7 @@ async function openStateAvailability(stateName) {
   if (actEl) actEl.innerHTML = '<button class="btn-ghost" onclick="closeModal(\'state-avail-modal\')">Close</button>';
   openModal('state-avail-modal');
 
-  var abbr = STATE_ABBR[stateName] || '';
+  var abbr = STATE_NAME_TO_ABBR[stateName] || '';
   var norm = function(s){ return (s || '').trim().toLowerCase(); };
   var res = await _supabase.from('retailers').select('*').eq('active', true);
   var data = (res && res.data) || [];
