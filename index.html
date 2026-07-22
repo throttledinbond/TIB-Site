@@ -2315,8 +2315,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <p class="reveal reveal-delay-2" style="font-size:12px;letter-spacing:.06em;color:var(--cream3);margin-bottom:clamp(28px,4vh,44px);">Made to order, ships direct to you.</p>
 
     <div id="shop-embed" class="reveal reveal-delay-2">
-      <!-- Public sees this until launch -->
-      <div id="shop-placeholder">
+      <!-- Fallback shown only if the store fails to load -->
+      <div id="shop-placeholder" style="display:none;">
         <div style="border:1px solid var(--charcoal4);background:var(--charcoal);padding:clamp(32px,6vw,56px);text-align:center;">
           <div style="font-size:30px;color:var(--gold);margin-bottom:12px;">&#9878;</div>
           <div class="eyebrow" style="color:var(--gold);margin-bottom:10px;">Coming Soon</div>
@@ -2324,9 +2324,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <button class="btn-ghost" onclick="navTo('inventory')">Never Miss A Release</button>
         </div>
       </div>
-      <!-- Admins only (you) see the live store until we launch publicly -->
-      <div id="shop-store" style="display:none;">
-        <div style="font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:16px;">Admin preview &middot; visible only to you until launch</div>
+      <!-- Live store — public -->
+      <div id="shop-store">
         <div id="shop-filters" class="shop-filters">
           <button type="button" class="shop-filter active" data-col="313251528790" onclick="shopFilter(this)">All</button>
           <button type="button" class="shop-filter" data-col="313454592086" onclick="shopFilter(this)">Apparel</button>
@@ -2367,7 +2366,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
   <div class="section-inner pt-wrap">
     <div style="text-align:center;padding:10px 0 6px;">
       <div class="eyebrow" style="margin-bottom:14px;">Trade &middot; Partners</div>
-      <h2 class="display-sm" style="margin-bottom:14px;">Partner With Throttled In Bond<span class="tm">&#8482;</span></h2>
+      <h2 class="display-sm" style="margin-bottom:14px;">Partner With<br><img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond&trade;" style="display:inline-block;width:min(400px,84%);height:auto;margin-top:14px;vertical-align:middle;" crossorigin="anonymous"></h2>
       <p class="pt-lead" style="max-width:560px;margin:0 auto 26px;">A small, premium single-barrel whiskey brand built for accounts that value scarcity, story, and provenance.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <a class="btn-primary" href="mailto:info@throttledinbond.com?subject=Line Sheet Request - Throttled In Bond" style="text-decoration:none;">Request Our Line Sheet</a>
@@ -5098,21 +5097,16 @@ function shopInitStore() {
   }
 }
 
+// Shop is public — always show the live store and initialize it for every visitor.
 async function shopAdminGate() {
   var placeholder = document.getElementById('shop-placeholder');
   var store = document.getElementById('shop-store');
   if (!store) return;
-  var isAdmin = false;
-  try { if (_currentUser) { isAdmin = await adminCheck(); } } catch (e) { isAdmin = false; }
-  if (isAdmin) {
-    if (placeholder) placeholder.style.display = 'none';
-    store.style.display = '';
-    shopInitStore();
-  } else {
-    if (placeholder) placeholder.style.display = '';
-    store.style.display = 'none';
-  }
+  if (placeholder) placeholder.style.display = 'none';
+  store.style.display = '';
+  shopInitStore();
 }
+window.addEventListener('load', shopAdminGate);
 function feedbackCurrentPage() {
   var h = (window.location.hash || '').replace('#', '');
   return h ? h : (window.location.pathname || '/');
