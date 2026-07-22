@@ -2081,6 +2081,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <textarea id="bs-finish_narrative" class="auth-input" rows="2" style="resize:vertical;"></textarea>
           <div class="bs-subhead">On-site gallery <span class="bs-hint">one per line &mdash; image URL | caption</span></div>
           <textarea id="bs-gallery" class="auth-input" rows="3" style="resize:vertical;" placeholder="https://.../photo1.jpg | Rickhouse D&#10;https://.../photo2.jpg | The thief pull"></textarea>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-2px 0 6px;">
+            <button type="button" class="btn-ghost" style="width:auto;font-size:11px;padding:8px 14px;" onclick="document.getElementById('bs-gallery-file').click()">&#43; Upload image</button>
+            <input type="file" id="bs-gallery-file" accept="image/*" multiple style="display:none;" onchange="bsUploadGalleryImages(this)">
+            <span id="bs-gallery-msg" style="font-size:11px;color:var(--cream3);"></span>
+          </div>
           <div class="bs-subhead">Tasting notes</div>
           <div class="bs-grid">
             <div><label class="feedback-label">Nose</label><input id="bs-nose" class="auth-input"></div>
@@ -4544,6 +4549,31 @@ function bsParseLines(txt,keys){ var out=[]; (txt||'').split('\n').forEach(funct
 function bsStringifyLines(arr,keys){ if(!Array.isArray(arr)) return ''; return arr.map(function(o){ return keys.map(function(k){return o[k]||'';}).join(' | '); }).join('\n'); }
 function bsSet(id,v){ var e=document.getElementById(id); if(!e) return; if(e.type==='checkbox'){ e.checked=!!v; } else { e.value=(v==null?'':v); } }
 function bsGet(id){ var e=document.getElementById(id); if(!e) return ''; return e.type==='checkbox'?e.checked:e.value.trim(); }
+async function bsUploadGalleryImages(input){
+  if(!input.files || !input.files.length) return;
+  var files=[].slice.call(input.files);
+  var msg=document.getElementById('bs-gallery-msg');
+  var ta=document.getElementById('bs-gallery');
+  function setMsg(c,t){ if(msg){ msg.style.color=c; msg.textContent=t; } }
+  setMsg('var(--cream3)','Uploading '+files.length+' image'+(files.length>1?'s':'')+'…');
+  var done=0, failed=0;
+  for(var i=0;i<files.length;i++){
+    var file=files[i];
+    var ext=((file.name||'').split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+    var path='stories/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+    var up=await _supabase.storage.from('barrel-stories').upload(path, file, { upsert:false, contentType:(file.type||undefined) });
+    if(up.error){ failed++; continue; }
+    var pub=_supabase.storage.from('barrel-stories').getPublicUrl(path);
+    var url=(pub.data && pub.data.publicUrl) || '';
+    if(url && ta){ var cur=ta.value.replace(/\n+$/,''); ta.value=(cur?cur+'\n':'')+url+' | '; }
+    done++;
+  }
+  input.value='';
+  if(ta) ta.focus();
+  if(failed && !done) setMsg('var(--rust)','Upload failed — make sure you are signed in as an admin, then try again.');
+  else if(failed) setMsg('#c77d2e', done+' added, '+failed+' failed.');
+  else setMsg('var(--gold)', done+' image'+(done>1?'s':'')+' added — type a caption after each "|", then Save the story.');
+}
 function bsFillEditSelect(){
   var sel=document.getElementById('bs-edit-select'); if(!sel) return;
   var opts='<option value="">&mdash; Select a story to load into the form below &mdash;</option>';
