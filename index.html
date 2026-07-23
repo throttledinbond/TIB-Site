@@ -1529,12 +1529,12 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <!-- LEFT: The Whiskey title + paragraph -->
  <div class="whiskey-copy-col">
  <div class="eyebrow reveal">First Generation &nbsp;·&nbsp; G1 &nbsp;·&nbsp; 2026</div>
- <h2 class="display-sm reveal reveal-delay-1" style="margin-top:6px;">The Whiskey</h2>
+ <h2 class="display-sm reveal reveal-delay-1" style="margin-top:6px;white-space:nowrap;">The Whiskey</h2>
  <div class="gold-line reveal reveal-delay-2" style="margin:20px 0;"></div>
  <p class="body-copy reveal reveal-delay-2" style="font-size:clamp(14px,1.15vw,16px);">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
  <p class="body-copy reveal reveal-delay-3" style="margin-top:16px;font-size:clamp(14px,1.15vw,16px);">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
  <div class="whiskey-cta-row reveal reveal-delay-3" style="margin-top:28px;flex-wrap:wrap;">
- <button class="btn-primary" onclick="openFindBottle()">Find a Bottle</button>
+ <a class="btn-primary buy-cta" href="https://bourbonoutfitter.com/collections/throttled-in-bond" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Buy on Bourbon Outfitter</a>
  <button class="btn-ghost" onclick="navTo('vintage')">Decode VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
  </div>
  <div class="reveal reveal-delay-3" style="margin-top:12px;">
@@ -2832,6 +2832,9 @@ function openBottle(id) {
    return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--ink);margin-right:12px;margin-top:4px;"><span style="width:7px;height:7px;background:' + (grainDots[g.k] || '#888') + ';display:inline-block;"></span>' + g.p + '% ' + (VIN_GRAIN[g.k] || g.k) + '</span>';
  }).join('');
 
+ var buyBtn = boLive(b.series)
+   ? '<a class="btn-primary buy-cta" href="' + safeUrl(retailUrl(b.series)) + '" target="_blank" rel="noopener noreferrer" style="display:inline-block;text-decoration:none;margin-top:22px;">Buy on Bourbon Outfitter</a>'
+   : '<div style="margin-top:22px;font-size:12px;color:var(--cream3);">Not yet available. <span onclick="navTo(\'inventory\')" style="color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);">Join The Barrel Inventory</span></div>';
 
  document.getElementById('bottle-detail-inner').innerHTML = `
  <div class="bottle-detail-img-col">
@@ -2855,6 +2858,7 @@ function openBottle(id) {
    : '<div style="display:flex;height:16px;overflow:hidden;border:1px solid var(--cream3);">' + mash + '</div><div style="display:flex;flex-wrap:wrap;">' + legend + '</div>'}
  </div>
  <div class="bottle-prov" id="bottle-prov-${id}"></div>
+ ${buyBtn}
  </div>`;
 
  document.getElementById('bottle-detail').classList.add('open');
@@ -2868,8 +2872,9 @@ function openBottle(id) {
  document.querySelectorAll('#bottle-detail .vin-mash-seg[data-target]').forEach(s => {
  s.style.width = s.dataset.target + '%';
  });
- document.getElementById('bottle-detail').scrollIntoView({ behavior:'smooth', block:'nearest' });
- }, 80);
+ var _rep = document.getElementById('bottle-detail');
+ if (_rep) { var _off = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64; window.scrollTo({ top: _rep.getBoundingClientRect().top + window.scrollY - _off - 14, behavior:'smooth' }); }
+ }, 120);
 }
 
 function closeBottle() {
