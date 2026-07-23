@@ -3217,7 +3217,7 @@ function openFindBottle(series) {
   var a = document.getElementById('fb-actions');
   var avail = boLive(series);
   if (avail) {
-    if (t) t.innerHTML = 'Buy<img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond&trade;" style="display:block;width:min(250px,88%);height:auto;margin:10px auto 0;">';
+    if (t) t.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;font-size:19px;font-weight:700;letter-spacing:.02em;line-height:1;">Buy<img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond&trade;" style="height:18px;width:auto;max-width:80%;display:block;flex:0 1 auto;"></span>';
     if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our retail partner. Ships to 42 states.';
     if (a) a.innerHTML = '<a class="btn-primary buy-cta" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
       '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
