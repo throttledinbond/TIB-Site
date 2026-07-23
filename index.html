@@ -359,7 +359,8 @@ a{color:inherit;text-decoration:none;}
 .bf-sash-logo{height:var(--bf-fs);width:auto;display:block;flex-shrink:0;}
 .bf-sash-txt{font-size:var(--bf-fs);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
 /* Hero announcement ribbon (absolute overlay — does not affect hero layout) */
-.hero-ribbon{position:absolute;top:calc(var(--nav-h) + 22px);left:50%;transform:translateX(-50%);z-index:4;max-width:94vw;overflow:hidden;background:var(--rust);box-shadow:0 6px 22px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 46px;clip-path:polygon(0 0,100% 0,calc(100% - 18px) 50%,100% 100%,0 100%,18px 50%);pointer-events:none;}
+.hero-ribbon{position:absolute;top:calc(var(--nav-h) + 22px);left:50%;transform:translateX(-50%);z-index:4;max-width:94vw;overflow:hidden;background:var(--rust);box-shadow:0 6px 22px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 46px;clip-path:polygon(0 0,100% 0,calc(100% - 18px) 50%,100% 100%,0 100%,18px 50%);pointer-events:auto;cursor:pointer;transition:filter .2s;}
+.hero-ribbon:hover{filter:brightness(1.09);}
 .hero-ribbon img{height:19px;width:auto;display:block;flex-shrink:0;}
 .hero-ribbon span{font-size:clamp(10px,2.6vw,18px);font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
 @media(max-width:520px){.hero-ribbon{padding:9px 26px;gap:8px;}.hero-ribbon span{letter-spacing:.04em;}.hero-ribbon img{height:14px;}}
@@ -1465,9 +1466,9 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="hero-overlay"></div>
 
  <!-- Inaugural release announcement ribbon (overlay) -->
- <div class="hero-ribbon">
+ <div class="hero-ribbon" onclick="navTo('whiskey')" role="button" tabindex="0" title="View the releases">
  <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous">
- <span>Inaugural Release Available July 23, 2026</span>
+ <span>Inaugural Release Available Now!</span>
  </div>
 
  <div class="hero-inner">
@@ -3244,6 +3245,8 @@ window.addEventListener('load', applyCaseShipPromo);
 
 // ── CART BUILDER (pick quantities → Bourbon Outfitter cart permalink) ──
 var _cartQty = { FS: 0, CS: 0, BF: 0 };
+// Estimated shipping shown in the cart-builder. standard = under 6 bottles; caseFlat = 6+ during the promo.
+var CART_SHIPPING = { standard: 29.99, caseFlat: 10.00 };
 function cartVariant(s){ return (RETAIL.variants && RETAIL.variants[s]) ? RETAIL.variants[s] : ''; }
 function cartPrice(s){ return (RETAIL.prices && RETAIL.prices[s]) ? Number(RETAIL.prices[s]) : 0; }
 function openCartBuilder(preSeries){ _cartQty = { FS:0, CS:0, BF:0 }; if (preSeries && boLive(preSeries) && cartVariant(preSeries)) _cartQty[preSeries] = 1; cartRender(); openModal('cart-modal'); }
@@ -3277,26 +3280,33 @@ function cartRender(){
 
   var totalBottles = (_cartQty.FS||0) + (_cartQty.CS||0) + (_cartQty.BF||0);
   var subtotal = (_cartQty.FS||0)*cartPrice('FS') + (_cartQty.CS||0)*cartPrice('CS') + (_cartQty.BF||0)*cartPrice('BF');
+  var shipping = (totalBottles > 0) ? ((totalBottles >= 6 && caseShipPromoLive()) ? CART_SHIPPING.caseFlat : CART_SHIPPING.standard) : 0;
+  var total = subtotal + shipping;
   var sumEl = document.getElementById('cart-summary');
   if (sumEl){
+    var shipRow = (totalBottles > 0)
+      ? '<div class="cart-summary-row"><span>Estimated shipping</span><span>$' + shipping.toFixed(2) + '</span></div>'
+      : '';
     sumEl.innerHTML =
       '<div class="cart-summary-row"><span>' + totalBottles + ' bottle' + (totalBottles===1?'':'s') + ' selected</span><span></span></div>' +
-      '<div class="cart-summary-row total"><span>Estimated subtotal</span><span>$' + subtotal.toFixed(2) + '</span></div>';
+      '<div class="cart-summary-row"><span>Estimated subtotal</span><span>$' + subtotal.toFixed(2) + '</span></div>' +
+      shipRow +
+      '<div class="cart-summary-row total"><span>Estimated total</span><span>$' + total.toFixed(2) + '</span></div>';
   }
-  // Shipping incentive banner — always visible during the promo, so people are nudged toward a case of 6.
+  // Shipping incentive banner — always visible during the promo, nudging toward a case of 6.
   var shipBanner = document.getElementById('cart-ship-banner');
   if (shipBanner){
     if (caseShipPromoLive()){
       shipBanner.style.display = '';
       if (totalBottles >= 6){
         shipBanner.className = 'cart-ship-banner unlocked';
-        shipBanner.innerHTML = '<strong>Flat $10 shipping unlocked.</strong> Applied on your order at checkout &mdash; through Sept 5.';
+        shipBanner.innerHTML = '<strong>Flat $10 shipping unlocked.</strong> Your shipping drops to $10 at checkout &mdash; through Sept 5.';
       } else {
         shipBanner.className = 'cart-ship-banner';
         var need = 6 - totalBottles;
         shipBanner.innerHTML = (totalBottles > 0)
-          ? '<strong>Buy a case, ship for $10.</strong> Add ' + need + ' more bottle' + (need===1?'':'s') + ' to unlock flat $10 shipping &mdash; through Sept 5.'
-          : '<strong>Buy a case, ship for $10.</strong> Order 6 bottles and shipping drops to a flat $10 &mdash; a limited-time deal through Sept 5.';
+          ? '<strong>Buy a case, ship for $10.</strong> Add ' + need + ' more bottle' + (need===1?'':'s') + ' to drop shipping from $29.99 to a flat $10 &mdash; through Sept 5.'
+          : '<strong>Buy a case, ship for $10.</strong> Order 6 bottles and shipping drops from $29.99 to a flat $10 &mdash; through Sept 5.';
       }
     } else {
       shipBanner.style.display = 'none';
