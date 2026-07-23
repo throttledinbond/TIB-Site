@@ -2861,10 +2861,10 @@ function closeBottle() {
  document.getElementById('bottle-detail').classList.remove('open');
 }
 
-// Hero bottle click → scroll to Select a Release and open that bottle's report
+// Hero bottle click → scroll to the Whiskey / Select A Release section only.
+// The bottle report opens only when a card in Select A Release is clicked.
 function heroToRelease(id) {
  if (typeof navTo === 'function') navTo('whiskey');
- setTimeout(function(){ try { openBottle(id); } catch(e){} }, 480);
 }
 
 // Members-only barrel provenance on the bottle detail
