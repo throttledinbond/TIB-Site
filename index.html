@@ -314,6 +314,14 @@ a{color:inherit;text-decoration:none;}
 .bottle-card.active .bottle-card-img{transform:translateY(-4px);}
 
 .bottle-card-info{padding:20px 24px 24px;}
+/* Whiskey section — two-column layout + card proof/age */
+.whiskey-two-col{display:grid;grid-template-columns:0.8fr 1.7fr;gap:clamp(28px,4vw,60px);align-items:start;margin-bottom:44px;}
+.whiskey-copy-col .body-copy{max-width:440px;}
+.bottle-card-stats{display:flex;gap:8px;margin:10px 0 12px;}
+.bc-stat{flex:1;background:var(--charcoal);border:1px solid var(--charcoal4);padding:8px 4px;text-align:center;}
+.bc-stat-v{display:block;font-size:15px;font-weight:800;color:var(--gold-lt);line-height:1;}
+.bc-stat-l{display:block;font-size:7px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cream3);margin-top:4px;}
+@media(max-width:820px){.whiskey-two-col{grid-template-columns:1fr;gap:36px;}}
 .bottle-card-series{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
 .bottle-card-name{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--cream);letter-spacing:-.01em;margin-bottom:8px;line-height:1.3;}
 .bottle-card-code{font-size:10px;font-weight:400;letter-spacing:.14em;color:var(--cream3);}
@@ -1509,36 +1517,53 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <section id="whiskey" class="section" style="min-height:auto;">
  <div class="section-inner">
 
- <div class="whiskey-intro" style="display:block;text-align:center;margin-bottom:56px;">
- <div class="whiskey-intro-copy" style="max-width:none;">
+ <div class="whiskey-two-col">
+
+ <!-- LEFT: The Whiskey title + paragraph -->
+ <div class="whiskey-copy-col">
  <div class="eyebrow reveal">First Generation &nbsp;·&nbsp; G1 &nbsp;·&nbsp; 2026</div>
  <h2 class="display-sm reveal reveal-delay-1" style="margin-top:6px;">The Whiskey</h2>
- <div class="gold-line reveal reveal-delay-2" style="margin:20px auto;"></div>
- <p class="body-copy reveal reveal-delay-2" style="max-width:none;font-size:clamp(14px,1.15vw,16px);text-wrap:balance;">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
- <p class="body-copy reveal reveal-delay-3" style="max-width:none;margin-top:16px;font-size:clamp(14px,1.15vw,16px);text-wrap:balance;">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
+ <div class="gold-line reveal reveal-delay-2" style="margin:20px 0;"></div>
+ <p class="body-copy reveal reveal-delay-2" style="font-size:clamp(14px,1.15vw,16px);">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
+ <p class="body-copy reveal reveal-delay-3" style="margin-top:16px;font-size:clamp(14px,1.15vw,16px);">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
  </div>
- </div>
- <!-- Full bottle grid — always visible -->
- <div class="bottle-grid-section revealed" id="bottle-grid-section">
 
- <div class="bottles-eyebrow-row reveal">
- <div class="eyebrow">Select a Release</div>
+ <!-- RIGHT: Select A Release -->
+ <div class="whiskey-releases-col reveal reveal-delay-1">
+ <div class="bottles-eyebrow-row">
+ <div class="eyebrow">Select A Release</div>
  <div style="font-size:11px;font-weight:400;color:var(--charcoal4);letter-spacing:.08em;">Click a bottle to see details</div>
  </div>
+ <div class="bottle-grid">
 
- <div class="bottle-grid reveal reveal-delay-1">
  <div class="bottle-card" onclick="openBottle(0)" id="bottle-card-0">
  <div class="bottle-card-ribbon">Founders Select</div>
  <div class="bottle-card-img-wrap">
  <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" loading="lazy" crossorigin="anonymous">
  </div>
  <div class="bottle-card-info">
- <div class="limited-pill">Limited Single-Barrel Release</div>
  <div class="bottle-card-series">FS · Founders Select</div>
  <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
+ <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">117.8</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
  <div class="bottle-card-code">TIB 26 FS G1 00001</div>
+ <div class="limited-pill">Limited Single-Barrel Release</div>
  </div>
  </div>
+
+ <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
+ <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
+ <div class="bottle-card-img-wrap">
+ <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous">
+ </div>
+ <div class="bottle-card-info">
+ <div class="bottle-card-series">CS · Collection Series</div>
+ <div class="bottle-card-name">High Rye Bourbon, Rum Cask Finish</div>
+ <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+ <div class="bottle-card-code">TIB 26 CS G1 00002</div>
+ <div class="limited-pill">Limited Single-Barrel Release</div>
+ </div>
+ </div>
+
  <div class="bottle-card" onclick="openBottle(2)" id="bottle-card-2">
  <div class="bottle-card-ribbon" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--gold);">Barn Find</div>
  <div class="bottle-card-img-wrap">
@@ -1549,34 +1574,24 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
  </div>
  <div class="bottle-card-info">
- <div class="limited-pill" id="bf-limited-pill" style="display:none;">Limited Vintage Release</div>
  <div class="bottle-card-series">BF · Barn Find</div>
  <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
+ <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">Pending</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">11 Yr</span><span class="bc-stat-l">Age</span></div></div>
  <div class="bottle-card-code">TIB 26 BF G1 00003</div>
+ <div class="limited-pill" id="bf-limited-pill" style="display:none;">Limited Vintage Release</div>
  </div>
  </div>
- <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
- <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
- <div class="bottle-card-img-wrap">
- <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous">
- </div>
- <div class="bottle-card-info">
- <div class="limited-pill">Limited Single-Barrel Release</div>
- <div class="bottle-card-series">CS · Collection Series</div>
- <div class="bottle-card-name">High Rye Bourbon, Rum Cask Finish</div>
- <div class="bottle-card-code">TIB 26 CS G1 00002</div>
+
  </div>
  </div>
  </div>
 
- <!-- Detail panel -->
+ <!-- Full-width report — appears below both columns when a release is selected -->
  <div id="bottle-detail" style="position:relative;">
  <div class="bottle-detail-inner" id="bottle-detail-inner"></div>
  <button class="btn-ghost" style="font-size:10px;padding:10px 16px;" onclick="garageAddWishList(activeBottle)">&#9733; Add to Wish List</button>
-          <button class="bottle-detail-close" onclick="closeBottle()">✕</button>
+ <button class="bottle-detail-close" onclick="closeBottle()">✕</button>
  </div>
-
- </div><!-- /bottle-grid-section -->
 
  <div class="whiskey-cta-row reveal">
  <button class="btn-primary" onclick="openFindBottle()">Find a Bottle</button>
@@ -2746,7 +2761,7 @@ const BOTTLES = [
   proof: '117.8', age: '6 Years', origin: 'Kentucky',
   distiller: 'Bardstown Bourbon Company', distDate: '12/10/2019',
   category: 'Single Barrel', bottling: 'F26',
-  desc: 'Single barrel, barrel strength. Selected by the founders for character, complexity, and source.',
+  desc: 'Founders Select 6 year single-barrel Kentucky straight bourbon is the expression that started it all. From the very first tasting, this mash bill stood apart. Balanced and inviting, this pour does not try to overpower, it draws you in. Layered, nuanced, and quietly confident, it opens light and builds into something warmer, deeper, and undeniably memorable.',
   mashBill: [{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}]
  },
  {
@@ -2758,7 +2773,7 @@ const BOTTLES = [
   proof: '108.2', age: '6 Years', origin: 'Kentucky',
   distiller: 'Wilderness Trail', distDate: '5/24/2020',
   category: 'Single Barrel', bottling: 'F26',
-  desc: 'A high-rye with exceptional rum cask finish, an unexpected reward for the adventurous collector.',
+  desc: 'Collection Series 6 year single-barrel High Rye Bourbon finished in rum casks brings together structure and softness in a way that feels both familiar and unexpected. Built on a bold, rye-forward foundation, then rounded by time in a well-aged rum cask, this expression opens with restraint and evolves into layered warmth and sweet depth. It is balanced without losing its edge. A whiskey that holds its line while inviting you back for more. A standout expression that feels like a well-balanced treat for the senses.',
   mashBill: [{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}]
  },
  {
