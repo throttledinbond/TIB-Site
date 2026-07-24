@@ -1004,7 +1004,8 @@ sup.tm, .tm {
 .admin-table tr:hover td{background:var(--charcoal3);}
 .admin-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;background:var(--gold);color:var(--charcoal);}
 .admin-badge.member{background:var(--charcoal4);color:var(--cream3);}
-.admin-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:32px;}
+.admin-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:2px;margin-bottom:32px;}
+.intl-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--gold-dk);color:var(--gold);padding:1px 6px;margin-left:6px;vertical-align:middle;white-space:nowrap;}
 .admin-stat{background:var(--charcoal2);padding:20px;text-align:center;}
 .admin-stat-val{font-size:28px;font-weight:700;color:var(--gold);display:block;margin-bottom:4px;}
 .admin-stat-lbl{font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--charcoal4);}
@@ -1238,8 +1239,9 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <input class="auth-input" id="signup-name" type="text" placeholder="Your name (optional)">
       <div style="display:flex;gap:10px;">
         <input class="auth-input" id="signup-city" type="text" placeholder="City (optional)" style="flex:1;margin-bottom:10px;">
-        <input class="auth-input" id="signup-state" type="text" placeholder="State (optional)" style="flex:1;margin-bottom:10px;">
+        <input class="auth-input" id="signup-state" type="text" placeholder="State / Region (optional)" style="flex:1;margin-bottom:10px;">
       </div>
+      <input class="auth-input" id="signup-country" type="text" placeholder="Country (optional, defaults to United States)">
       <div class="auth-msg" id="signup-msg"></div>
       <button class="btn-primary" style="width:100%;" onclick="authSignUp()">Create Account</button>
     </div>
@@ -2056,6 +2058,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div class="admin-stat"><span class="admin-stat-val" id="admin-stat-saves">—</span><span class="admin-stat-lbl">Garage Saves</span></div>
         <div class="admin-stat"><span class="admin-stat-val" id="admin-stat-top">—</span><span class="admin-stat-lbl">Top Saved Series</span></div>
         <div class="admin-stat"><span class="admin-stat-val" id="admin-stat-admins">—</span><span class="admin-stat-lbl">Admins</span></div>
+        <div class="admin-stat"><span class="admin-stat-val" id="admin-stat-intl">—</span><span class="admin-stat-lbl">International</span></div>
       </div>
 
       <!-- Requests for Claude -->
@@ -2214,9 +2217,9 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         </div>
         <table class="admin-table">
           <thead><tr>
-            <th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Change Role</th><th>Tester</th>
+            <th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Location</th><th>Change Role</th><th>Tester</th>
           </tr></thead>
-          <tbody id="admin-users-tbody"><tr><td colspan="6" style="color:var(--charcoal4);">Loading...</td></tr></tbody>
+          <tbody id="admin-users-tbody"><tr><td colspan="7" style="color:var(--charcoal4);">Loading...</td></tr></tbody>
         </table>
       </div>
 
@@ -2273,7 +2276,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           </div>
           <div class="profile-field-row">
             <span class="profile-field-label">State</span>
-            <input class="profile-field-input" id="profile-state" placeholder="State (optional)" maxlength="40">
+            <input class="profile-field-input" id="profile-state" placeholder="State / Region (optional)" maxlength="40">
+          </div>
+          <div class="profile-field-row">
+            <span class="profile-field-label">Country</span>
+            <input class="profile-field-input" id="profile-country" placeholder="Country (optional)" maxlength="60">
           </div>
           <div class="profile-field-row">
             <span class="profile-field-label">Favorite Muscle Car</span>
@@ -2381,6 +2388,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <div style="display:flex;align-items:center;gap:8px;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--cream3);"><span style="width:12px;height:12px;background:var(--gold);opacity:.65;flex-shrink:0;"></span>Active members</div>
           <div style="display:flex;align-items:center;gap:8px;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--cream3);"><span style="width:12px;height:12px;background:var(--charcoal4);opacity:.5;flex-shrink:0;"></span>No members yet</div>
         </div>
+        <div id="community-intl" style="margin-top:22px;"></div>
       </div>
     </div>
 
@@ -3609,6 +3617,43 @@ function drawCommunityMap(container, data) {
   }).catch(function(){ container.innerHTML = '<p style="color:#8a857a;text-align:center;padding:40px 0;font-size:13px;">Community map unavailable right now.</p>'; _communityMapRendered=false; });
 }
 
+// ── COMMUNITY: INTERNATIONAL MEMBERS ("Also Representing") ──
+var _COUNTRY_ISO2 = {
+  'slovenia':'si','united kingdom':'gb','uk':'gb','u.k.':'gb','great britain':'gb','england':'gb','scotland':'gb','wales':'gb','northern ireland':'gb',
+  'ireland':'ie','france':'fr','germany':'de','deutschland':'de','spain':'es','italy':'it','portugal':'pt','netherlands':'nl','holland':'nl',
+  'belgium':'be','switzerland':'ch','austria':'at','sweden':'se','norway':'no','denmark':'dk','finland':'fi','iceland':'is','poland':'pl',
+  'czechia':'cz','czech republic':'cz','slovakia':'sk','hungary':'hu','romania':'ro','bulgaria':'bg','greece':'gr','croatia':'hr','serbia':'rs',
+  'ukraine':'ua','russia':'ru','turkey':'tr','turkiye':'tr','estonia':'ee','latvia':'lv','lithuania':'lt','luxembourg':'lu','malta':'mt',
+  'cyprus':'cy','canada':'ca','mexico':'mx','brazil':'br','argentina':'ar','chile':'cl','colombia':'co','peru':'pe','uruguay':'uy',
+  'australia':'au','new zealand':'nz','japan':'jp','china':'cn','south korea':'kr','korea':'kr','india':'in','singapore':'sg','hong kong':'hk',
+  'philippines':'ph','thailand':'th','vietnam':'vn','indonesia':'id','malaysia':'my','taiwan':'tw','israel':'il','united arab emirates':'ae',
+  'uae':'ae','saudi arabia':'sa','south africa':'za','egypt':'eg','nigeria':'ng','kenya':'ke','morocco':'ma'
+};
+function countryToISO2(name){ return _COUNTRY_ISO2[String(name||'').trim().toLowerCase()] || ''; }
+function flagEmoji(cc){
+  if(!cc || cc.length!==2) return '🌍';
+  var A=0x1F1E6, u=cc.toUpperCase();
+  return String.fromCodePoint(A + u.charCodeAt(0) - 65, A + u.charCodeAt(1) - 65);
+}
+async function renderCommunityCountries(){
+  var el=document.getElementById('community-intl'); if(!el) return;
+  try{
+    var res=await _supabase.rpc('get_community_countries');
+    var rows=res.data||[];
+    if(!rows.length){ el.innerHTML=''; return; }
+    var chips=rows.map(function(r){
+      var name=String(r.country||'').trim(); if(!name) return '';
+      var cc=countryToISO2(name); var flag=cc?flagEmoji(cc):'🌍';
+      var n=Number(r.members)||0;
+      return '<span style="display:inline-flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.04em;color:var(--cream3);border:1px solid var(--charcoal4);padding:6px 11px;">'
+        + '<span style="font-size:15px;line-height:1;">'+flag+'</span>'+fbEscape(name)
+        + (n>1?(' <span style="color:var(--gold);font-weight:600;">'+n+'</span>'):'') + '</span>';
+    }).join('');
+    el.innerHTML='<div style="font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;">Also Representing</div>'
+      + '<div style="display:flex;flex-wrap:wrap;gap:8px;">'+chips+'</div>';
+  }catch(e){ el.innerHTML=''; }
+}
+
 // ── SHARE TRADE CARD ──
 async function shareTradeCard() {
   const shareData = {
@@ -3743,6 +3788,29 @@ function welcomeShare() {
   else { window.prompt('Copy this link to share:', url); }
 }
 
+// ── LOCATION CAPTURE ──
+// Silently records timezone + locale for signed-in members, and backfills country from
+// signup metadata when missing. Used to flag members outside the US in the admin dashboard.
+var _locationCaptured = false;
+async function locationCapture() {
+  if (_locationCaptured || !_currentUser) return;
+  _locationCaptured = true;
+  try {
+    var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+    var loc = navigator.language || (navigator.languages && navigator.languages[0]) || '';
+    var res = await _supabase.from('profiles').select('timezone, locale, country').eq('id', _currentUser.id).single();
+    var p = res.data || {};
+    var upd = {};
+    if (!p.timezone && tz) upd.timezone = tz;
+    if (!p.locale && loc) upd.locale = loc;
+    if (!p.country) {
+      var mc = (_currentUser.user_metadata && _currentUser.user_metadata.country) ? String(_currentUser.user_metadata.country).trim() : '';
+      if (mc) upd.country = mc;
+    }
+    if (Object.keys(upd).length) await _supabase.from('profiles').update(upd).eq('id', _currentUser.id);
+  } catch(e){}
+}
+
 // Check session on load
 _supabase.auth.getSession().then(function({ data }) {
   if (data.session) {
@@ -3753,6 +3821,7 @@ _supabase.auth.getSession().then(function({ data }) {
     feedbackAccessRefresh();
     shopAdminGate();
     welcomeCheck();
+    locationCapture();
   }
 });
 
@@ -3779,8 +3848,10 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     feedbackAccessRefresh();
     shopAdminGate();
     welcomeCheck();
+    locationCapture();
   } else {
     _welcomeChecked = false;
+    _locationCaptured = false;
     document.getElementById('garage').style.display = '';
     if (header) header.style.display = 'none';
     if (headerLine) headerLine.style.display = 'none';
@@ -3851,11 +3922,16 @@ async function authSignUp() {
   var name = document.getElementById('signup-name').value.trim();
   var city = document.getElementById('signup-city').value.trim();
   var state = document.getElementById('signup-state').value.trim();
+  var countryEl = document.getElementById('signup-country');
+  var country = countryEl ? countryEl.value.trim() : '';
+  if (!country) country = 'United States';
+  var tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+  var loc = navigator.language || (navigator.languages && navigator.languages[0]) || '';
   var msg = document.getElementById('signup-msg');
   msg.style.color = 'var(--cream3)'; msg.textContent = 'Creating account...';
   var { error, data: signUpData } = await _supabase.auth.signUp({
     email: email, password: password,
-    options: { data: { full_name: name, email: email, city: city, state: state, ref: (function(){ try { return localStorage.getItem('tib_ref') || ''; } catch(e){ return ''; } })() } }
+    options: { data: { full_name: name, email: email, city: city, state: state, country: country, timezone: tz, locale: loc, ref: (function(){ try { return localStorage.getItem('tib_ref') || ''; } catch(e){ return ''; } })() } }
   });
   if (error) { msg.style.color = '#8B3A2A'; msg.textContent = error.message; }
   else { msg.style.color = 'var(--gold)'; msg.innerHTML = 'Check your email to confirm your account.<br><span style="color:var(--cream3);font-size:12px;">Don\'t see it? Check your spam or junk folder — and mark it &ldquo;Not spam&rdquo; so future emails reach your inbox.</span>'; }
@@ -4236,6 +4312,21 @@ function adminIsNew(key, ts){
   if(!s || !ts) return false;
   return new Date(ts).getTime() > new Date(s).getTime();
 }
+// ── LOCATION HELPERS (flag members outside the US) ──
+var _US_NAMES = ['united states','usa','us','u.s.','u.s.a.','united states of america','america'];
+function profileIsIntl(p){
+  var c = (p.country||'').trim().toLowerCase();
+  if (c) return _US_NAMES.indexOf(c) === -1;
+  // No stated country: fall back to timezone region (America/, US/, Pacific/Honolulu are treated as domestic)
+  var tz = p.timezone || '';
+  return /^(Europe|Asia|Africa|Australia|Antarctica|Indian|Atlantic)\//.test(tz);
+}
+function profileCountryLabel(p){
+  if (p.country && String(p.country).trim()) return String(p.country).trim();
+  var tz = p.timezone || '';
+  if (tz) { var reg = tz.split('/')[0]; if (reg && reg !== 'America' && reg !== 'US') return reg; }
+  return '';
+}
 // Section registry: [title-prefix, tile label, stable key]
 var ADMIN_SECTIONS=[
   ['Requests for Claude','Requests','requests'],
@@ -4328,9 +4419,10 @@ async function adminLoad() {
 
 async function adminLoadStats() {
   // Total users
-  var { data: users } = await _supabase.from('profiles').select('id, role');
+  var { data: users } = await _supabase.from('profiles').select('id, role, country, timezone');
   var totalUsers = users ? users.length : 0;
   var adminCount = users ? users.filter(function(u){ return u.role === 'admin'; }).length : 0;
+  var intlCount = users ? users.filter(profileIsIntl).length : 0;
 
   // Total garage saves
   var { data: garage } = await _supabase.from('garage').select('id, series');
@@ -4345,12 +4437,13 @@ async function adminLoadStats() {
   document.getElementById('admin-stat-saves').textContent = totalSaves;
   document.getElementById('admin-stat-top').textContent = topSeries;
   document.getElementById('admin-stat-admins').textContent = adminCount;
+  var intlEl = document.getElementById('admin-stat-intl'); if (intlEl) intlEl.textContent = intlCount;
 }
 
 var _adminUsersData = [];
 var _adminUsersNewIds = {};
 async function adminLoadUsers() {
-  var { data: profiles } = await _supabase.from('profiles').select('id, role, full_name, email, created_at, is_tester');
+  var { data: profiles } = await _supabase.from('profiles').select('id, role, full_name, email, created_at, is_tester, country, timezone');
   _adminUsersData = profiles || [];
   // Freeze the "new since last opened" set at load time so the highlight persists through sort/search
   _adminUsersNewIds = {};
@@ -4367,7 +4460,8 @@ function adminRenderUsers() {
   if (q) {
     rows = rows.filter(function(p){
       return String(p.full_name||'').toLowerCase().indexOf(q) > -1
-          || String(p.email||'').toLowerCase().indexOf(q) > -1;
+          || String(p.email||'').toLowerCase().indexOf(q) > -1
+          || String(p.country||'').toLowerCase().indexOf(q) > -1;
     });
   }
   var cmp = {
@@ -4383,11 +4477,15 @@ function adminRenderUsers() {
   rows.forEach(function(p) {
     var date = new Date(p.created_at).toLocaleDateString();
     var isNew = !!_adminUsersNewIds[p.id];
+    var intl = profileIsIntl(p);
+    var locLabel = profileCountryLabel(p);
+    var locCell = (locLabel ? fbEscape(locLabel) : '<span style="color:var(--charcoal4);">—</span>') + (intl ? ' <span class="intl-badge">&#127758; Intl</span>' : '');
     html += '<tr class="'+(isNew?'admin-row-new':'')+'">' +
       '<td>'+fbEscape(p.full_name||'—')+(isNew?' <span class="admin-new-pill">New</span>':'')+'</td>' +
       '<td style="font-size:11px;">'+fbEscape(p.email||'—')+'</td>' +
       '<td><span class="admin-badge '+(p.role==='admin'?'':'member')+'">'+fbEscape(p.role)+'</span></td>' +
       '<td>'+date+'</td>' +
+      '<td>'+locCell+'</td>' +
       '<td><select class="admin-role-select" onchange="adminUpdateRole(\''+p.id+'\',this.value)">' +
         '<option value="member"'+(p.role==='member'?' selected':'')+'>member</option>' +
         '<option value="admin"'+(p.role==='admin'?' selected':'')+'>admin</option>' +
@@ -4399,7 +4497,7 @@ function adminRenderUsers() {
     '</tr>';
   });
   if (!rows.length) {
-    html = '<tr><td colspan="6" style="color:var(--charcoal4);">'+(q?'No users match your search.':'No users yet.')+'</td></tr>';
+    html = '<tr><td colspan="7" style="color:var(--charcoal4);">'+(q?'No users match your search.':'No users yet.')+'</td></tr>';
   }
   el.innerHTML = html;
   var c = document.getElementById('admin-users-count');
@@ -5464,7 +5562,7 @@ var _profileData = null;
 
 async function profileLoad() {
   if (!_currentUser) return;
-  var { data } = await _supabase.from('profiles').select('display_name,avatar_url,public_on_leaderboard,show_avatar_public,city,state,favorite_muscle_car,owns_muscle_car,favorite_whiskey_type').eq('id', _currentUser.id).single();
+  var { data } = await _supabase.from('profiles').select('display_name,avatar_url,public_on_leaderboard,show_avatar_public,city,state,country,favorite_muscle_car,owns_muscle_car,favorite_whiskey_type').eq('id', _currentUser.id).single();
   _profileData = data;
   if (data) {
     var dn = document.getElementById('profile-display-name');
@@ -5473,6 +5571,8 @@ async function profileLoad() {
     if (cy) cy.value = data.city || '';
     var st = document.getElementById('profile-state');
     if (st) st.value = data.state || '';
+    var ct = document.getElementById('profile-country');
+    if (ct) ct.value = data.country || '';
     var pcar = document.getElementById('profile-car');
     if (pcar) pcar.value = data.favorite_muscle_car || '';
     var powns = document.getElementById('profile-owns');
@@ -5496,6 +5596,8 @@ async function profileSave() {
   var dn = document.getElementById('profile-display-name').value.trim();
   var cy = document.getElementById('profile-city').value.trim();
   var st = document.getElementById('profile-state').value.trim();
+  var ctEl = document.getElementById('profile-country');
+  var ctV = ctEl ? ctEl.value.trim() : '';
   var pcarV = document.getElementById('profile-car').value.trim();
   var pownsV = document.getElementById('profile-owns').value;
   var powns = pownsV === 'yes' ? true : (pownsV === 'no' ? false : null);
@@ -5506,6 +5608,7 @@ async function profileSave() {
     display_name: dn,
     city: cy,
     state: st,
+    country: ctV || null,
     favorite_muscle_car: pcarV || null,
     owns_muscle_car: powns,
     favorite_whiskey_type: pwhV || null,
@@ -5571,6 +5674,7 @@ async function notifyAdminPendingVerification(garageId) {
 // ══════════════════════════════════════════════════════
 async function leaderboardLoad() {
   renderCommunityMap();
+  renderCommunityCountries();
   // Reads via a SECURITY DEFINER function so the public leaderboard is visible to
   // everyone (guests + members), not just admins, without exposing private garage data.
   var { data: rows } = await _supabase.rpc('get_leaderboard');
