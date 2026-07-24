@@ -1029,6 +1029,16 @@ sup.tm, .tm {
 #admin-dashboard .admin-section{display:none;margin-bottom:0;scroll-margin-top:calc(var(--nav-h,64px) + 16px);}
 #admin-dashboard .admin-section.active-panel{display:block;margin-top:24px;}
 .admin-badge-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#EF4326;color:#fff;font-size:10px;font-weight:700;letter-spacing:0;line-height:1;box-shadow:0 0 6px rgba(239,67,38,.5);}
+/* Admin — new-item highlight (rows/cards added since the section was last opened) */
+.admin-row-new td{background:rgba(200,149,42,.12)!important;}
+.admin-row-new td:first-child{box-shadow:inset 3px 0 0 var(--gold);}
+.admin-item-new{background:rgba(200,149,42,.07)!important;box-shadow:inset 3px 0 0 var(--gold);}
+.admin-new-pill{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--charcoal);padding:1px 6px;margin-left:8px;vertical-align:middle;}
+/* Admin — Users filter/sort controls */
+.admin-users-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;}
+.admin-users-controls input,.admin-users-controls select{background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--cream);font-family:var(--f);font-size:12px;padding:7px 10px;outline:none;}
+.admin-users-controls input:focus,.admin-users-controls select:focus{border-color:var(--gold);}
+.admin-users-controls .az-count{font-size:10px;color:var(--charcoal4);letter-spacing:.1em;text-transform:uppercase;margin-left:auto;}
 
 
 .garage-tab{font-family:var(--f);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;background:none;border:1px solid #6A655C;color:var(--cream3);padding:8px 16px;cursor:pointer;transition:all .2s;}
@@ -1357,6 +1367,30 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <div class="modal-title" id="notif-title" style="margin-bottom:12px;"></div>
     <p class="body-copy" id="notif-msg" style="margin-bottom:24px;"></p>
     <button class="btn-primary" onclick="closeModal('notif-modal')" id="notif-btn">OK</button>
+  </div>
+</div>
+
+
+<!-- Welcome New Member Modal -->
+<div class="modal-overlay" id="welcome-modal">
+  <div class="modal-bg" onclick="closeModal('welcome-modal')"></div>
+  <div class="modal-box" style="max-width:440px;text-align:center;">
+    <button class="modal-close-x" onclick="closeModal('welcome-modal')">&times;</button>
+    <div class="modal-eyebrow">The Spirit of American Muscle&trade;</div>
+    <div class="modal-title" id="welcome-greeting" style="margin-bottom:12px;">Welcome.</div>
+    <p class="body-copy" style="margin-bottom:16px;">You&rsquo;re in. Welcome to THROTTLED IN BOND&trade; and The Garage. We&rsquo;re a small, founder-operated brand, and every enthusiast who joins helps fuel what we&rsquo;re building.</p>
+    <p class="body-copy" style="margin-bottom:12px;font-size:13px;color:var(--cream3);">Come ride with us. Follow along and say hello:</p>
+    <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:22px;">
+      <a href="https://www.instagram.com/throttledinbond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">Instagram</a>
+      <a href="https://www.youtube.com/@ThrottledInBond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">YouTube</a>
+      <a href="https://x.com/throttledinbond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">X</a>
+      <a href="https://www.tiktok.com/@throttledinbond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">TikTok</a>
+    </div>
+    <p class="body-copy" style="margin-bottom:16px;font-size:13px;color:var(--cream3);">Know someone who&rsquo;d appreciate a good barrel? Share the brand with your friends and your own audience. It means the world to us.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <button class="btn-primary" onclick="welcomeShare()">Share Throttled In Bond</button>
+      <button class="btn-ghost" onclick="closeModal('welcome-modal')">Enter The Garage</button>
+    </div>
   </div>
 </div>
 
@@ -2166,11 +2200,23 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <!-- Users -->
       <div class="admin-section">
         <div class="admin-section-title">Registered Users</div>
+        <div class="admin-users-controls">
+          <input id="admin-users-search" type="text" placeholder="Search name or email…" oninput="adminRenderUsers()" style="min-width:200px;flex:1;">
+          <select id="admin-users-sort" onchange="adminRenderUsers()">
+            <option value="joined_desc">Date Joined (Newest First)</option>
+            <option value="joined_asc">Date Joined (Oldest First)</option>
+            <option value="name_asc">Name (A to Z)</option>
+            <option value="name_desc">Name (Z to A)</option>
+            <option value="email_asc">Email (A to Z)</option>
+            <option value="email_desc">Email (Z to A)</option>
+          </select>
+          <span class="az-count" id="admin-users-count"></span>
+        </div>
         <table class="admin-table">
           <thead><tr>
             <th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Change Role</th><th>Tester</th>
           </tr></thead>
-          <tbody id="admin-users-tbody"><tr><td colspan="5" style="color:var(--charcoal4);">Loading...</td></tr></tbody>
+          <tbody id="admin-users-tbody"><tr><td colspan="6" style="color:var(--charcoal4);">Loading...</td></tr></tbody>
         </table>
       </div>
 
@@ -3668,6 +3714,35 @@ function ageGateFail() {
 // ══════════════════════════════════════════════════════
 let _currentUser = null;
 
+// ── WELCOME NEW MEMBER ──
+// One-time welcome pop-up, shown automatically on a new member's first authenticated visit.
+// Gated by profiles.welcome_shown (existing users were backfilled to true, so only future signups see it).
+var _welcomeChecked = false;
+async function welcomeCheck() {
+  if (_welcomeChecked || !_currentUser) return;
+  _welcomeChecked = true;
+  try {
+    var res = await _supabase.from('profiles').select('welcome_shown, full_name').eq('id', _currentUser.id).single();
+    var p = res.data;
+    if (!p || p.welcome_shown !== false) return;
+    welcomeShow(p.full_name);
+    _supabase.from('profiles').update({ welcome_shown: true }).eq('id', _currentUser.id);
+  } catch (e) {}
+}
+function welcomeShow(name) {
+  var first = String(name || '').trim().split(/\s+/)[0] || '';
+  var g = document.getElementById('welcome-greeting');
+  if (g) g.textContent = first ? ('Welcome, ' + first + '.') : 'Welcome.';
+  setTimeout(function(){ openModal('welcome-modal'); }, 700);
+}
+function welcomeShare() {
+  var url = 'https://www.throttledinbond.com/';
+  var text = 'Check out THROTTLED IN BOND, The Spirit of American Muscle. Single barrel, barrel strength whiskey.';
+  if (navigator.share) { navigator.share({ title: 'THROTTLED IN BOND', text: text, url: url }).catch(function(){}); }
+  else if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(function(){ showNotif('Share', 'Link Copied', 'The link is on your clipboard. Paste it anywhere to share.', 'OK'); }); }
+  else { window.prompt('Copy this link to share:', url); }
+}
+
 // Check session on load
 _supabase.auth.getSession().then(function({ data }) {
   if (data.session) {
@@ -3677,6 +3752,7 @@ _supabase.auth.getSession().then(function({ data }) {
     engageInit();
     feedbackAccessRefresh();
     shopAdminGate();
+    welcomeCheck();
   }
 });
 
@@ -3702,7 +3778,9 @@ _supabase.auth.onAuthStateChange(function(event, session) {
     engageInit();
     feedbackAccessRefresh();
     shopAdminGate();
+    welcomeCheck();
   } else {
+    _welcomeChecked = false;
     document.getElementById('garage').style.display = '';
     if (header) header.style.display = 'none';
     if (headerLine) headerLine.style.display = 'none';
@@ -4152,6 +4230,12 @@ function adminSetBadge(key, n){
   if(n>0){ t.textContent = (n>99?'99+':n); t.style.display='inline-flex'; }
   else { t.style.display='none'; }
 }
+// True if an item's timestamp is newer than the last time this section was opened
+function adminIsNew(key, ts){
+  var s=adminSeen()[key];
+  if(!s || !ts) return false;
+  return new Date(ts).getTime() > new Date(s).getTime();
+}
 // Section registry: [title-prefix, tile label, stable key]
 var ADMIN_SECTIONS=[
   ['Requests for Claude','Requests','requests'],
@@ -4263,18 +4347,44 @@ async function adminLoadStats() {
   document.getElementById('admin-stat-admins').textContent = adminCount;
 }
 
+var _adminUsersData = [];
+var _adminUsersNewIds = {};
 async function adminLoadUsers() {
   var { data: profiles } = await _supabase.from('profiles').select('id, role, full_name, email, created_at, is_tester');
-  var { data: authUsers } = await _supabase.auth.admin ? _supabase.auth.admin.listUsers() : { data: null };
-
+  _adminUsersData = profiles || [];
+  // Freeze the "new since last opened" set at load time so the highlight persists through sort/search
+  _adminUsersNewIds = {};
+  _adminUsersData.forEach(function(p){ if(adminIsNew('users', p.created_at)) _adminUsersNewIds[p.id] = 1; });
+  adminRenderUsers();
+  adminSetBadge('users', adminNewCount('users', _adminUsersData, 'created_at'));
+}
+function adminRenderUsers() {
   var el = document.getElementById('admin-users-tbody');
-  if (!el || !profiles) return;
-
+  if (!el) return;
+  var q = ((document.getElementById('admin-users-search')||{}).value || '').trim().toLowerCase();
+  var sort = (document.getElementById('admin-users-sort')||{}).value || 'joined_desc';
+  var rows = _adminUsersData.slice();
+  if (q) {
+    rows = rows.filter(function(p){
+      return String(p.full_name||'').toLowerCase().indexOf(q) > -1
+          || String(p.email||'').toLowerCase().indexOf(q) > -1;
+    });
+  }
+  var cmp = {
+    joined_desc: function(a,b){ return new Date(b.created_at) - new Date(a.created_at); },
+    joined_asc:  function(a,b){ return new Date(a.created_at) - new Date(b.created_at); },
+    name_asc:  function(a,b){ return String(a.full_name||'').localeCompare(String(b.full_name||'')); },
+    name_desc: function(a,b){ return String(b.full_name||'').localeCompare(String(a.full_name||'')); },
+    email_asc: function(a,b){ return String(a.email||'').localeCompare(String(b.email||'')); },
+    email_desc:function(a,b){ return String(b.email||'').localeCompare(String(a.email||'')); }
+  }[sort];
+  if (cmp) rows.sort(cmp);
   var html = '';
-  profiles.forEach(function(p) {
+  rows.forEach(function(p) {
     var date = new Date(p.created_at).toLocaleDateString();
-    html += '<tr>' +
-      '<td>'+fbEscape(p.full_name||'—')+'</td>' +
+    var isNew = !!_adminUsersNewIds[p.id];
+    html += '<tr class="'+(isNew?'admin-row-new':'')+'">' +
+      '<td>'+fbEscape(p.full_name||'—')+(isNew?' <span class="admin-new-pill">New</span>':'')+'</td>' +
       '<td style="font-size:11px;">'+fbEscape(p.email||'—')+'</td>' +
       '<td><span class="admin-badge '+(p.role==='admin'?'':'member')+'">'+fbEscape(p.role)+'</span></td>' +
       '<td>'+date+'</td>' +
@@ -4288,8 +4398,12 @@ async function adminLoadUsers() {
       '</select></td>' +
     '</tr>';
   });
+  if (!rows.length) {
+    html = '<tr><td colspan="6" style="color:var(--charcoal4);">'+(q?'No users match your search.':'No users yet.')+'</td></tr>';
+  }
   el.innerHTML = html;
-  adminSetBadge('users', adminNewCount('users', profiles, 'created_at'));
+  var c = document.getElementById('admin-users-count');
+  if (c) c.textContent = rows.length + (rows.length===1?' user':' users');
 }
 
 async function adminUpdateRole(userId, role) {
@@ -4361,13 +4475,15 @@ async function adminLoadFeedback() {
   data.forEach(function(f) {
     _adminFeedbackById[f.id] = f;
     var when = new Date(f.created_at).toLocaleString();
+    var isNew = adminIsNew('feedback', f.created_at);
     var sc = sevColor[f.severity] || 'var(--charcoal4)';
     var opts = statuses.map(function(s){
       return '<option value="'+s+'"'+(f.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>';
     }).join('');
-    html += '<div style="border:1px solid var(--charcoal4);border-left:3px solid '+sc+';padding:14px 16px;margin-bottom:12px;background:var(--charcoal2);">' +
+    html += '<div style="border:1px solid var(--charcoal4);border-left:3px solid '+sc+';padding:14px 16px;margin-bottom:12px;background:'+(isNew?'rgba(200,149,42,.07)':'var(--charcoal2)')+';">' +
       '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">' +
         '<span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);">'+fbEscape(f.category||'—')+'</span>' +
+        (isNew?'<span class="admin-new-pill">New</span>':'') +
         '<span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+sc+';border:1px solid '+sc+';padding:1px 6px;">'+fbEscape(f.severity||'—')+'</span>' +
         '<span style="font-size:10px;color:var(--charcoal4);">'+fbEscape(f.page||'')+'</span>' +
         (f.device ? '<span style="font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cream3);border:1px solid var(--charcoal4);padding:1px 6px;">'+fbEscape(f.device)+'</span>' : '') +
@@ -4465,8 +4581,9 @@ async function adminLoadGarageActivity() {
   var html = '';
   data.forEach(function(g) {
     var date = new Date(g.saved_at).toLocaleDateString();
-    html += '<tr>' +
-      '<td>'+fbEscape(g.vin_code)+'</td>' +
+    var isNew = adminIsNew('garage', g.saved_at);
+    html += '<tr class="'+(isNew?'admin-row-new':'')+'">' +
+      '<td>'+fbEscape(g.vin_code)+(isNew?' <span class="admin-new-pill">New</span>':'')+'</td>' +
       '<td>'+fbEscape(g.whiskey_name)+'</td>' +
       '<td>'+fbEscape(g.series)+'</td>' +
       '<td>'+fbEscape(g.user_id.substring(0,8))+'...</td>' +
@@ -4848,8 +4965,9 @@ async function adminLoadTradeInquiries(){
   var html='';
   data.forEach(function(t){
     var when=new Date(t.created_at).toLocaleDateString();
-    html+='<div style="background:var(--charcoal2);padding:12px 14px;margin-bottom:6px;">'
-      +'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><span style="font-size:13px;color:var(--cream);">'+fbEscape(t.name||'—')+(t.company?(' &middot; '+fbEscape(t.company)):'')+'</span><span style="font-size:11px;color:var(--cream3);">'+when+'</span></div>'
+    var isNew=adminIsNew('trade', t.created_at);
+    html+='<div class="'+(isNew?'admin-item-new':'')+'" style="background:var(--charcoal2);padding:12px 14px;margin-bottom:6px;">'
+      +'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><span style="font-size:13px;color:var(--cream);">'+fbEscape(t.name||'—')+(t.company?(' &middot; '+fbEscape(t.company)):'')+(isNew?' <span class="admin-new-pill">New</span>':'')+'</span><span style="font-size:11px;color:var(--cream3);">'+when+'</span></div>'
       +'<div style="font-size:11px;color:#A69C8C;margin-top:3px;">'+fbEscape([t.role,t.state].filter(Boolean).join(' · '))+'</div>'
       +(t.message?('<div style="font-size:12px;color:var(--cream3);margin-top:6px;line-height:1.6;">'+fbEscape(t.message)+'</div>'):'')
       +'</div>';
