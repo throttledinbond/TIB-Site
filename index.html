@@ -3811,7 +3811,8 @@ function ageGateFail() {
     '/trade':      function(){ setTimeout(openPartners, 400); },
     '/creators':   function(){ setTimeout(openCreators, 400); },
     '/creator':    function(){ setTimeout(openCreators, 400); },
-    '/media':      function(){ setTimeout(openCreators, 400); }
+    '/media':      function(){ setTimeout(openCreators, 400); },
+    '/collaborate':function(){ setTimeout(openCreators, 400); }
   };
   if (routes[path]) {
     window.addEventListener('load', function() {
@@ -5246,7 +5247,7 @@ function alertGo(link){
   if(/^https?:\/\//i.test(link)){ window.open(link, '_blank', 'noopener'); return; }
   var v = link.replace(/^#/, ''); if(v.charAt(0)==='/') v = v.slice(1); v = v.toLowerCase();
   if(v==='partners'){ if(typeof openPartners==='function') openPartners(); return; }
-  if(v==='creators'||v==='creator'||v==='media'){ if(typeof openCreators==='function') openCreators(); return; }
+  if(v==='creators'||v==='creator'||v==='media'||v==='collaborate'){ if(typeof openCreators==='function') openCreators(); return; }
   var map = { decoder:'vintage', vintage:'vintage', 'vin-tage':'vintage', whiskey:'whiskey', story:'story', inventory:'inventory', shop:'shop', home:'home', leaderboard:'leaderboard' };
   if(map[v]){ navTo(map[v]); return; }
   if(link.charAt(0)==='/'){ window.location.href = link; return; }
