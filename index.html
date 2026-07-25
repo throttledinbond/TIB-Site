@@ -2111,6 +2111,12 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         <div id="admin-trade-list"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
       </div>
 
+      <!-- Creator & Media Inquiries -->
+      <div class="admin-section">
+        <div class="admin-section-title">Creator Inquiries</div>
+        <div id="admin-creators-list"><p style="color:var(--cream3);font-size:12px;">Loading&hellip;</p></div>
+      </div>
+
       <!-- Barrel Archive Stories -->
       <div class="admin-section">
         <div class="admin-section-title">Barrel Archive &mdash; Stories</div>
@@ -2520,6 +2526,43 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
   </div>
 </section>
 
+<!-- ══════════════════════════════════════
+ SECTION: CREATORS & MEDIA
+══════════════════════════════════════ -->
+<section id="creators" class="section" style="display:none;min-height:auto;">
+  <div class="section-inner pt-wrap">
+    <div style="text-align:center;padding:10px 0 6px;">
+      <div class="eyebrow" style="margin-bottom:14px;">Creators &middot; Media</div>
+      <h2 class="display-sm" style="margin-bottom:14px;">Review. Promote.<br>Collaborate.</h2>
+      <p class="pt-lead" style="max-width:580px;margin:0 auto 26px;">Podcasters, bloggers, influencers, and brand ambassadors: partner with a small, founder-operated whiskey brand built on story and provenance. If your audience loves whiskey, cars, or a good barn find, let us give you something worth talking about.</p>
+    </div>
+    <div class="pt-sec"><div class="pt-eyb" style="text-align:center;">Ways To Work Together</div>
+      <div class="pt-grid">
+        <div class="pt-card"><h4>Reviews &amp; Tastings</h4><p>Bottles and single-barrel details in hand for honest reviews, tasting videos, and features for your audience.</p></div>
+        <div class="pt-card"><h4>Content &amp; Social</h4><p>Collaborate on reels, posts, and stories built around The Spirit of American Muscle and our VIN-TAG<span class="lowercase-e">e</span>&#8482; provenance system.</p></div>
+        <div class="pt-card"><h4>Brand Ambassadors</h4><p>Represent the brand in your market and community. We are building a small group of genuine enthusiasts to grow with us.</p></div>
+        <div class="pt-card"><h4>Press &amp; Features</h4><p>Writers and media covering whiskey, spirits, or car culture: reach out for our story, assets, and founder interviews.</p></div>
+        <div class="pt-card"><h4>Giveaways &amp; Collabs</h4><p>Co-branded giveaways, event pours, and creative collaborations that give your audience something memorable.</p></div>
+      </div>
+    </div>
+    <div class="pt-sec" style="text-align:center;"><div class="pt-eyb">Tell Us About You</div>
+      <p class="pt-lead pt-textblock" style="margin-bottom:8px;">Share a bit about your platform and how you would like to collaborate. We read every message and will be in touch.</p>
+      <div class="pt-form">
+        <input id="cr-name" placeholder="Name">
+        <input id="cr-email" type="email" placeholder="Email">
+        <select id="cr-type"><option value="">I am a &middot; select&hellip;</option><option>Podcaster</option><option>Blogger</option><option>Influencer / Content Creator</option><option>Brand Ambassador</option><option>Press / Media</option><option>Other</option></select>
+        <select id="cr-platform"><option value="">Primary platform &middot; select&hellip;</option><option>Instagram</option><option>YouTube</option><option>TikTok</option><option>Podcast</option><option>Blog / Website</option><option>X (Twitter)</option><option>Facebook</option><option>Other</option></select>
+        <input id="cr-handle" placeholder="Handle or profile URL">
+        <select id="cr-audience"><option value="">Audience size &middot; select&hellip;</option><option>Under 1K</option><option>1K to 10K</option><option>10K to 50K</option><option>50K to 250K</option><option>250K+</option></select>
+        <input id="cr-links" placeholder="Links to your work (comma separated)" style="grid-column:1/-1;">
+        <textarea id="cr-message" rows="3" placeholder="How would you like to collaborate?"></textarea>
+      </div>
+      <div style="margin-top:14px;"><button class="btn-ghost" id="cr-submit" onclick="creatorsSubmit()">Send Inquiry</button> <span id="cr-msg" style="font-size:12px;margin-left:8px;"></span></div>
+      <div style="font-size:13px;color:var(--gold);margin-top:18px;">Prefer email? <a href="mailto:info@throttledinbond.com?subject=Creator / Media Inquiry - Throttled In Bond" style="color:var(--gold);text-decoration:none;">info@throttledinbond.com</a></div>
+    </div>
+  </div>
+</section>
+
 <footer id="footer">
  <div class="footer-inner">
  <div class="footer-top">
@@ -2543,6 +2586,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
  <span class="footer-link" onclick="openPartners()">Liquor Store &amp; Bar Managers</span>
  <span class="footer-link" onclick="openPartners()">Trade &amp; Partners</span>
+ <span class="footer-link" onclick="openCreators()">Creators &amp; Media</span>
  </div>
  </div>
  <div>
@@ -3738,6 +3782,9 @@ function ageGateFail() {
     '/vin-tage':  function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
     '/partners':  function(){ setTimeout(openPartners, 400); },
     '/partner':   function(){ setTimeout(openPartners, 400); },
+    '/creators':  function(){ setTimeout(openCreators, 400); },
+    '/creator':   function(){ setTimeout(openCreators, 400); },
+    '/media':     function(){ setTimeout(openCreators, 400); },
     '/whiskey':   function(){ setTimeout(function(){ navTo('whiskey'); }, 400); },
     '/story':     function(){ setTimeout(function(){ navTo('story'); }, 400); },
     '/inventory': function(){ setTimeout(function(){ navTo('inventory'); }, 400); },
@@ -4332,6 +4379,7 @@ var ADMIN_SECTIONS=[
   ['Requests for Claude','Requests','requests'],
   ['Site Alerts','Alerts','alerts'],
   ['Trade','Trade Inquiries','trade'],
+  ['Creator Inquiries','Creators','creators'],
   ['Barrel Archive','Barrel Stories','stories'],
   ['Bottle Content','Bottle Content','bottle'],
   ['Barrel Provenance','Provenance','provenance'],
@@ -4414,7 +4462,7 @@ async function adminLoad() {
   }
   if (adminTab) adminTab.style.display = '';
   adminInitDashboard();
-  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories(), adminLoadTradeInquiries(), adminLoadAlerts()]);
+  await Promise.all([adminLoadStats(), adminLoadUsers(), adminLoadGarageActivity(), adminLoadBottleContent(), adminLoadProvenance(), adminLoadPendingVerifications(), adminLoadRetailers(), adminLoadFeedback(), adminLoadRequests(), adminLoadStories(), adminLoadTradeInquiries(), adminLoadCreatorInquiries(), adminLoadAlerts()]);
 }
 
 async function adminLoadStats() {
@@ -5053,6 +5101,51 @@ async function partnersSubmit(){
   ['pt-name','pt-company','pt-state','pt-message'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
   var r=document.getElementById('pt-role'); if(r) r.value='';
 }
+
+// ── CREATORS & MEDIA (podcasters, bloggers, influencers, ambassadors) ──
+function crVal(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
+function openCreators(){
+  var el=document.getElementById('creators'); if(!el) return;
+  el.style.display=''; document.body.style.overflow='';
+  var mm=document.getElementById('mobile-menu'); if(mm) mm.classList.remove('open');
+  setTimeout(function(){ navTo('creators'); }, 30);
+}
+async function creatorsSubmit(){
+  var msg=document.getElementById('cr-msg');
+  var name=crVal('cr-name'), email=crVal('cr-email'), ctype=crVal('cr-type'), platform=crVal('cr-platform'),
+      handle=crVal('cr-handle'), audience=crVal('cr-audience'), links=crVal('cr-links'), message=crVal('cr-message');
+  if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Please add a valid email so we can reach you.'; } return; }
+  if(!name && !message){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Add your name and a short note so we know who you are.'; } return; }
+  var btn=document.getElementById('cr-submit'); if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
+  try{ await _supabase.functions.invoke('brevo-proxy',{ body:{ action:'creator_inquiry', name:name, email:email, creator_type:ctype, platform:platform, handle:handle, audience_size:audience, links:links, message:message } }); }catch(e){}
+  if(btn){ btn.disabled=false; btn.textContent='Send Inquiry'; }
+  if(msg){ msg.style.color='var(--gold)'; msg.textContent='Thank you. We will be in touch shortly.'; }
+  ['cr-name','cr-email','cr-handle','cr-links','cr-message'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+  ['cr-type','cr-platform','cr-audience'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+}
+async function adminLoadCreatorInquiries(){
+  var el=document.getElementById('admin-creators-list'); if(!el) return;
+  var res=await _supabase.from('creator_inquiries').select('*').order('created_at',{ascending:false});
+  if(res.error){ el.innerHTML='<p style="color:#8B3A2A;font-size:12px;">Could not load inquiries.</p>'; return; }
+  var data=res.data||[];
+  adminSetBadge('creators', adminNewCount('creators', data, 'created_at'));
+  if(!data.length){ el.innerHTML='<p style="color:var(--cream3);font-size:12px;">No creator inquiries yet.</p>'; return; }
+  var html='';
+  data.forEach(function(c){
+    var when=new Date(c.created_at).toLocaleDateString();
+    var isNew=adminIsNew('creators', c.created_at);
+    var meta=[c.creator_type, c.platform, c.audience_size].filter(Boolean).join(' · ');
+    html+='<div class="'+(isNew?'admin-item-new':'')+'" style="background:var(--charcoal2);padding:12px 14px;margin-bottom:6px;">'
+      +'<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><span style="font-size:13px;color:var(--cream);">'+fbEscape(c.name||'—')+(isNew?' <span class="admin-new-pill">New</span>':'')+'</span><span style="font-size:11px;color:var(--cream3);">'+when+'</span></div>'
+      +(meta?('<div style="font-size:11px;color:#A69C8C;margin-top:3px;">'+fbEscape(meta)+'</div>'):'')
+      +(c.email?('<div style="font-size:11px;color:var(--gold);margin-top:3px;">'+fbEscape(c.email)+'</div>'):'')
+      +(c.handle?('<div style="font-size:11px;color:var(--cream3);margin-top:3px;">'+fbEscape(c.handle)+'</div>'):'')
+      +(c.links?('<div style="font-size:11px;color:var(--cream3);margin-top:3px;word-break:break-all;">'+fbEscape(c.links)+'</div>'):'')
+      +(c.message?('<div style="font-size:12px;color:var(--cream3);margin-top:6px;line-height:1.6;">'+fbEscape(c.message)+'</div>'):'')
+      +'</div>';
+  });
+  el.innerHTML=html;
+}
 async function adminLoadTradeInquiries(){
   var el=document.getElementById('admin-trade-list'); if(!el) return;
   var res=await _supabase.from('trade_inquiries').select('*').order('created_at',{ascending:false});
@@ -5128,6 +5221,7 @@ function alertGo(link){
   if(/^https?:\/\//i.test(link)){ window.open(link, '_blank', 'noopener'); return; }
   var v = link.replace(/^#/, ''); if(v.charAt(0)==='/') v = v.slice(1); v = v.toLowerCase();
   if(v==='partners'){ if(typeof openPartners==='function') openPartners(); return; }
+  if(v==='creators'||v==='creator'||v==='media'){ if(typeof openCreators==='function') openCreators(); return; }
   var map = { decoder:'vintage', vintage:'vintage', 'vin-tage':'vintage', whiskey:'whiskey', story:'story', inventory:'inventory', shop:'shop', home:'home', leaderboard:'leaderboard' };
   if(map[v]){ navTo(map[v]); return; }
   if(link.charAt(0)==='/'){ window.location.href = link; return; }
