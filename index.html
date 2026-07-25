@@ -649,6 +649,10 @@ a{color:inherit;text-decoration:none;}
 .modal-overlay.open{display:flex;}
 .modal-bg{position:absolute;inset:0;background:rgba(26,25,23,.9);cursor:pointer;}
 .modal-box{position:relative;background:var(--charcoal2);max-width:480px;width:90%;padding:clamp(28px,5vw,48px);z-index:1;border-top:2px solid var(--gold);}
+/* Wide, scrollable modal for content-rich pop-ups (Trade & Partners, Creators & Media) */
+.modal-box.modal-box-wide{max-width:760px;max-height:92vh;padding:0;display:flex;flex-direction:column;overflow:hidden;}
+.modal-box.modal-box-wide .modal-close-x{z-index:2;background:var(--charcoal2);}
+.modal-box.modal-box-wide .pt-wrap{max-width:none;width:100%;margin:0;overflow-y:auto;padding:clamp(28px,5vw,48px);box-sizing:border-box;}
 .modal-eyebrow{font-size:9px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
 .feedback-label{display:block;font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:5px;}
 #feedback-fab:hover{background:var(--rust-dk,#7a2e1e);}
@@ -2471,8 +2475,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 .pt-form input:focus,.pt-form select:focus,.pt-form textarea:focus{border-color:var(--gold);}
 .pt-form input::placeholder,.pt-form textarea::placeholder{color:#8A8178;}
 </style>
-<section id="partners" class="section" style="display:none;min-height:auto;">
-  <div class="section-inner pt-wrap">
+<div class="modal-overlay" id="partners-modal">
+  <div class="modal-bg" onclick="closeModal('partners-modal')"></div>
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close-x" onclick="closeModal('partners-modal')">&times;</button>
+    <div class="pt-wrap">
     <div style="text-align:center;padding:10px 0 6px;">
       <div class="eyebrow" style="margin-bottom:14px;">Trade &middot; Partners</div>
       <h2 class="display-sm" style="margin-bottom:14px;">Partner With<br><img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond&trade;" style="display:block;width:min(720px,94%);height:auto;margin:18px auto 0;" crossorigin="anonymous"></h2>
@@ -2523,14 +2530,19 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       </div>
       <div style="margin-top:14px;"><button class="btn-ghost" id="pt-submit" onclick="partnersSubmit()">Send Inquiry</button> <span id="pt-msg" style="font-size:12px;margin-left:8px;"></span></div>
     </div>
+    <div style="text-align:center;padding-bottom:8px;"><button class="btn-ghost" onclick="closeModal('partners-modal')">Close</button></div>
+    </div>
   </div>
-</section>
+</div>
 
 <!-- ══════════════════════════════════════
  SECTION: CREATORS & MEDIA
 ══════════════════════════════════════ -->
-<section id="creators" class="section" style="display:none;min-height:auto;">
-  <div class="section-inner pt-wrap">
+<div class="modal-overlay" id="creators-modal">
+  <div class="modal-bg" onclick="closeModal('creators-modal')"></div>
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close-x" onclick="closeModal('creators-modal')">&times;</button>
+    <div class="pt-wrap">
     <div style="text-align:center;padding:10px 0 6px;">
       <div class="eyebrow" style="margin-bottom:14px;">Creators &middot; Media</div>
       <h2 class="display-sm" style="margin-bottom:14px;">Review. Promote.<br>Collaborate.</h2>
@@ -2560,8 +2572,10 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <div style="margin-top:14px;"><button class="btn-ghost" id="cr-submit" onclick="creatorsSubmit()">Send Inquiry</button> <span id="cr-msg" style="font-size:12px;margin-left:8px;"></span></div>
       <div style="font-size:13px;color:var(--gold);margin-top:18px;">Prefer email? <a href="mailto:info@throttledinbond.com?subject=Creator / Media Inquiry - Throttled In Bond" style="color:var(--gold);text-decoration:none;">info@throttledinbond.com</a></div>
     </div>
+    <div style="text-align:center;padding-bottom:8px;"><button class="btn-ghost" onclick="closeModal('creators-modal')">Close</button></div>
+    </div>
   </div>
-</section>
+</div>
 
 <footer id="footer">
  <div class="footer-inner">
@@ -5099,10 +5113,8 @@ async function adminDeleteStory(id){
 
 // ── PARTNERS / TRADE ──────────────────────────────
 function openPartners(){
-  var el=document.getElementById('partners'); if(!el) return;
-  el.style.display=''; document.body.style.overflow='';
   var mm=document.getElementById('mobile-menu'); if(mm) mm.classList.remove('open');
-  setTimeout(function(){ navTo('partners'); }, 30);
+  openModal('partners-modal');
 }
 function ptVal(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
 async function partnersSubmit(){
@@ -5120,10 +5132,8 @@ async function partnersSubmit(){
 // ── CREATORS & MEDIA (podcasters, bloggers, influencers, ambassadors) ──
 function crVal(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
 function openCreators(){
-  var el=document.getElementById('creators'); if(!el) return;
-  el.style.display=''; document.body.style.overflow='';
   var mm=document.getElementById('mobile-menu'); if(mm) mm.classList.remove('open');
-  setTimeout(function(){ navTo('creators'); }, 30);
+  openModal('creators-modal');
 }
 async function creatorsSubmit(){
   var msg=document.getElementById('cr-msg');
