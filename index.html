@@ -628,7 +628,7 @@ a{color:inherit;text-decoration:none;}
  padding:clamp(40px,6vh,64px) clamp(20px,5vw,60px) clamp(24px,3vh,40px);
 }
 .footer-inner{max-width:1200px;margin:0 auto;}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+.footer-top{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:48px;}
 .footer-brand img{height:20px;width:auto;margin-bottom:16px;}
 .footer-brand-desc{font-size:12px;font-weight:400;color:var(--charcoal4);line-height:1.7;max-width:280px;}
 .footer-col-title{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
@@ -2571,7 +2571,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-top:2px;margin-left:15px;">Independent &middot; Founder-Operated</div>
  </div>
  <div>
- <div class="footer-col-title">Navigate</div>
+ <div class="footer-col-title">Menu</div>
  <div class="footer-links">
  <span class="footer-link" onclick="navTo('home')">Home</span>
  <span class="footer-link" onclick="navTo('whiskey')">Whiskey</span>
@@ -2579,12 +2579,24 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
  <span class="footer-link" onclick="navTo('shop')">Shop</span>
  <a class="footer-link" href="https://blog.throttledinbond.com/blog" target="_blank" style="text-decoration:none;">Blog</a>
- <span class="footer-link" onclick="authNavClick()">The Garage</span>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
- <span class="footer-link" onclick="navTo('leaderboard')">Leaderboard</span>
+ </div>
+ </div>
+ <div>
+ <div class="footer-col-title">Interactive</div>
+ <div class="footer-links">
+ <span class="footer-link" onclick="authNavClick()">The Garage</span>
+ <span class="footer-link" onclick="garageGoto('collection')">The Collection</span>
+ <span class="footer-link" onclick="garageGoto('archive')">The Barrel Archive</span>
+ <span class="footer-link" onclick="navTo('leaderboard')">The Leaderboard</span>
  <span class="footer-link" onclick="openMapModal()">Availability Map</span>
+ </div>
+ </div>
+ <div>
+ <div class="footer-col-title">Brand</div>
+ <div class="footer-links">
  <span class="footer-link" onclick="openModal('trade-info-modal')">Help Us Bring TIB&#8482; To Your Area</span>
- <span class="footer-link" onclick="openPartners()">Liquor Store &amp; Bar Managers</span>
+ <span class="footer-link" onclick="openPartners()">Liquor Stores &amp; Bar Managers</span>
  <span class="footer-link" onclick="openPartners()">Trade &amp; Partners</span>
  <span class="footer-link" onclick="openCreators()">Creators &amp; Media</span>
  </div>
@@ -2592,22 +2604,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div>
  <div class="footer-col-title">Contact</div>
  <div class="footer-links">
- <a class="footer-link" href="mailto:info@throttledinbond.com">info@throttledinbond.com</a>
- </div>
- </div>
- <div>
- <div class="footer-col-title">Follow</div>
- <div class="footer-social">
- <a href="https://www.instagram.com/throttledinbond" target="_blank">Instagram</a>
- </div>
- <div class="footer-social" style="margin-top:6px;">
- <a href="https://www.youtube.com/@ThrottledInBond" target="_blank">YouTube</a>
- </div>
- <div class="footer-social" style="margin-top:6px;">
- <a href="https://x.com/throttledinbond" target="_blank">X</a>
- </div>
- <div class="footer-social" style="margin-top:6px;">
- <a href="https://www.tiktok.com/@throttledinbond" target="_blank">TikTok</a>
+ <a class="footer-link" href="mailto:info@throttledinbond.com" style="text-decoration:none;">info@throttledinbond.com</a>
+ <a class="footer-link" href="https://www.instagram.com/throttledinbond" target="_blank" style="text-decoration:none;">Instagram</a>
+ <a class="footer-link" href="https://www.youtube.com/@ThrottledInBond" target="_blank" style="text-decoration:none;">YouTube</a>
+ <a class="footer-link" href="https://x.com/throttledinbond" target="_blank" style="text-decoration:none;">X</a>
+ <a class="footer-link" href="https://www.tiktok.com/@throttledinbond" target="_blank" style="text-decoration:none;">TikTok</a>
  </div>
  </div>
  </div>
@@ -3777,18 +3778,26 @@ function ageGateFail() {
     if (_rt) path = '/' + _rt.replace(/^\/+|\/+$/g, '').toLowerCase();
   } catch(e){}
   var routes = {
-    '/decoder':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
-    '/vintage':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
-    '/vin-tage':  function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
-    '/partners':  function(){ setTimeout(openPartners, 400); },
-    '/partner':   function(){ setTimeout(openPartners, 400); },
-    '/creators':  function(){ setTimeout(openCreators, 400); },
-    '/creator':   function(){ setTimeout(openCreators, 400); },
-    '/media':     function(){ setTimeout(openCreators, 400); },
-    '/whiskey':   function(){ setTimeout(function(){ navTo('whiskey'); }, 400); },
-    '/story':     function(){ setTimeout(function(){ navTo('story'); }, 400); },
-    '/inventory': function(){ setTimeout(function(){ navTo('inventory'); }, 400); },
-    '/map':       function(){ setTimeout(function(){ navTo('whiskey'); openMapModal(); }, 600); }
+    '/home':       function(){ setTimeout(function(){ navTo('home'); }, 300); },
+    '/whiskey':    function(){ setTimeout(function(){ navTo('whiskey'); }, 400); },
+    '/shop':       function(){ setTimeout(function(){ navTo('shop'); }, 400); },
+    '/story':      function(){ setTimeout(function(){ navTo('story'); }, 400); },
+    '/decoder':    function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
+    '/vintage':    function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
+    '/vin-tage':   function(){ setTimeout(function(){ navTo('vintage'); }, 400); },
+    '/inventory':  function(){ setTimeout(function(){ navTo('inventory'); }, 400); },
+    '/leaderboard':function(){ setTimeout(function(){ navTo('leaderboard'); }, 400); },
+    '/community':  function(){ setTimeout(function(){ navTo('leaderboard'); }, 400); },
+    '/garage':     function(){ setTimeout(function(){ authNavClick(); }, 400); },
+    '/collection': function(){ setTimeout(function(){ garageGoto('collection'); }, 400); },
+    '/archive':    function(){ setTimeout(function(){ garageGoto('archive'); }, 400); },
+    '/map':        function(){ setTimeout(function(){ navTo('whiskey'); openMapModal(); }, 600); },
+    '/partners':   function(){ setTimeout(openPartners, 400); },
+    '/partner':    function(){ setTimeout(openPartners, 400); },
+    '/trade':      function(){ setTimeout(openPartners, 400); },
+    '/creators':   function(){ setTimeout(openCreators, 400); },
+    '/creator':    function(){ setTimeout(openCreators, 400); },
+    '/media':      function(){ setTimeout(openCreators, 400); }
   };
   if (routes[path]) {
     window.addEventListener('load', function() {
@@ -3926,6 +3935,12 @@ _supabase.auth.onAuthStateChange(function(event, session) {
 
 function authNavClick() {
   navTo('garage');
+}
+// Footer shortcuts into specific Garage views (Collection / Barrel Archive).
+// When signed in, jumps straight to that view; otherwise shows the Garage sign-in preview.
+function garageGoto(view) {
+  navTo('garage');
+  if (_currentUser) { setTimeout(function(){ if (typeof garageView === 'function') garageView(view); }, 80); }
 }
 
 function authUpdateNav(signedIn) {

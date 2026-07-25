@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/THROTTLEDINBOND-Logomark-Black.png">
+<title>Throttled In Bond™</title>
+<!--
+  SPA catch-all. GitHub Pages serves this file for any path that has no matching
+  file/folder. It forwards the clean path (e.g. /trade) to the app as /?route=trade,
+  which index.html already knows how to open. One file makes every section shareable
+  with a clean URL, now and for any section added later.
+-->
+<script>
+  (function () {
+    var p = location.pathname.replace(/^\/+|\/+$/g, '');
+    location.replace('/?route=' + encodeURIComponent(p) + location.hash);
+  })();
+</script>
+<noscript><meta http-equiv="refresh" content="0;url=/"></noscript>
+</head>
+<body></body>
+</html>
