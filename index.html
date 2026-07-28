@@ -3267,7 +3267,6 @@ async function submitEmail() {
  try {
    // Secret-free: the Brevo API key lives in the brevo-proxy Edge Function, not the client.
    await _supabase.functions.invoke('brevo-proxy', { body: { action: 'add_contact', email: email } });
-   trackEvent('generate_lead', { method: 'barrel_inventory' });
    msg.style.color = 'var(--gold)';
    msg.textContent = "You\'re on The Barrel Inventory. We\'ll be in touch.";
    input.value = '';
@@ -3277,6 +3276,8 @@ async function submitEmail() {
    input.value = '';
  } finally {
    btn.disabled = false; btn.textContent = 'Register';
+   // Count every valid Barrel Inventory submission as a lead, regardless of backend result
+   trackEvent('generate_lead', { method: 'barrel_inventory' });
  }
 }
 
