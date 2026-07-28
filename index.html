@@ -1172,6 +1172,9 @@ sup.tm, .tm {
 .retailer-link{font-size:10px;color:var(--gold);text-decoration:none;letter-spacing:.06em;white-space:nowrap;}
 .retailer-link:hover{color:var(--gold-lt);}
 
+/* ── RETAILER / MERCHANT-OF-RECORD DISCLOSURE ── */
+.retail-disclosure{font-size:11px;line-height:1.55;color:var(--cream3);letter-spacing:.01em;}
+
 /* ── ADMIN RETAILERS ── */
 .retailer-form{background:var(--charcoal2);padding:20px;margin-bottom:16px;}
 .retailer-form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
@@ -1598,6 +1601,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="reveal reveal-delay-3" style="margin-top:12px;">
    <span onclick="openMapModal()" style="font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;">Click For Availability Map</span>
  </div>
+ <div class="retail-disclosure js-retail-disclosure reveal reveal-delay-3" style="margin-top:18px;max-width:520px;"></div>
  </div>
 
  <!-- RIGHT: Select A Release -->
@@ -1662,8 +1666,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="case-ship-promo whiskey-ship-promo reveal" style="display:none;">
  <span class="csp-badge">Limited Time</span>
  <div class="csp-text">
- <span class="csp-head">Buy a Case, Ship for $10.</span>
- <span class="csp-detail">Order 6 bottles and shipping drops to just $10 per case &mdash; applied automatically at checkout.</span>
+ <span class="csp-head">Bourbon Outfitter: $10 Shipping On 6 Bottles.</span>
+ <span class="csp-detail">Add 6 bottles and Bourbon Outfitter drops shipping to a flat $10, applied automatically at their checkout. Through Sept 5.</span>
  </div>
  </div>
 
@@ -2643,7 +2647,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
   <div style="position:relative;background:var(--charcoal2);width:min(900px,95vw);max-height:90vh;overflow-y:auto;z-index:1;border-top:2px solid var(--gold);padding:32px clamp(16px,4vw,48px) 28px;">
     <button onclick="closeMapModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--charcoal4);font-size:20px;line-height:1;transition:color .2s;" onmouseover="this.style.color='var(--cream)'" onmouseout="this.style.color='var(--charcoal4)'">&#x2715;</button>
 
-    <div class="eyebrow" style="margin-bottom:10px;">THROTTLED IN BOND<span class="tm">™</span> Ships To 42 States</div>
+    <div class="eyebrow" style="margin-bottom:10px;">Available For Shipping To 42 States</div>
     <h2 class="display-sm" style="margin-bottom:20px;">Availability Map</h2>
 
     <!-- Tooltip — inside modal so position:fixed works correctly -->
@@ -2656,7 +2660,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
       <div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">
         <div style="width:12px;height:12px;background:var(--gold);flex-shrink:0;"></div>
-        Available Online &nbsp;·&nbsp; Ships Direct To You
+        Available Online &nbsp;·&nbsp; Shipped By Our Retail Partner
       </div>
       <div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">
         <div style="width:12px;height:12px;background:var(--charcoal4);flex-shrink:0;opacity:.6;"></div>
@@ -2709,7 +2713,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <a id="cart-buy-btn" class="btn-primary buy-cta" href="#" target="_blank" rel="noopener noreferrer" style="text-decoration:none;pointer-events:none;opacity:.45;">Buy on Bourbon Outfitter</a>
  <button class="btn-ghost" onclick="closeModal('cart-modal')">Close</button>
  </div>
- <div style="margin-top:12px;font-size:11px;color:var(--cream3);line-height:1.5;">Prices shown are estimates. Final price, tax, and shipping are calculated at Bourbon Outfitter checkout.</div>
+ <div class="retail-disclosure js-retail-disclosure" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--charcoal4);"></div>
+ <div style="margin-top:10px;font-size:11px;color:var(--cream3);line-height:1.5;">Prices shown are estimates. Final price, tax, and shipping are calculated at Bourbon Outfitter checkout.</div>
  </div>
 </div>
 
@@ -2721,7 +2726,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="modal-eyebrow">Purchase</div>
  <div class="modal-title" id="fb-title">Available Summer 2026</div>
  <div class="modal-body" id="fb-body">Our whiskey will be listed on Bourbon Outfitter when bottles are available. Join The Barrel Inventory to be first in line when bottles drop.</div>
- <div id="fb-ship-note" style="display:none;background:rgba(200,149,42,.1);border:1px solid var(--gold-dk);padding:10px 14px;margin:12px 0 2px;font-size:12.5px;color:var(--cream3);line-height:1.5;"><strong style="color:var(--gold-lt);">Buy a case, ship for $10.</strong> Add 6 bottles at checkout and shipping drops to just $10 per case &mdash; applied automatically.</div>
+ <div id="fb-ship-note" style="display:none;background:rgba(200,149,42,.1);border:1px solid var(--gold-dk);padding:10px 14px;margin:12px 0 2px;font-size:12.5px;color:var(--cream3);line-height:1.5;"><strong style="color:var(--gold-lt);">Bourbon Outfitter: $10 shipping on 6 bottles.</strong> Add 6 bottles and Bourbon Outfitter drops shipping to a flat $10, applied automatically at their checkout.</div>
  <div class="modal-actions" id="fb-actions">
  <button class="btn-primary" onclick="navTo('inventory');closeModal('find-bottle-modal')">Join The Barrel Inventory</button>
  <button class="btn-ghost" onclick="closeModal('find-bottle-modal')">Close</button>
@@ -2773,7 +2778,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
               <div style="background:var(--charcoal2);padding:7px 6px;text-align:center;"><div style="font-size:11px;font-weight:600;color:var(--gold);">3</div><div style="font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">Expressions</div></div>
               <div style="background:var(--charcoal2);padding:7px 6px;text-align:center;"><div style="font-size:11px;font-weight:600;color:var(--gold);">KY</div><div style="font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">Origin</div></div>
             </div>
-            <p style="font-size:11px;color:var(--cream3);line-height:1.6;margin-bottom:12px;font-style:italic;">Three unique single barrel expressions, each hand selected. Ships to 42 states.</p>
+            <p style="font-size:11px;color:var(--cream3);line-height:1.6;margin-bottom:12px;font-style:italic;">Three unique single barrel expressions, each hand selected. Available for shipping to 42 states through our licensed retail partner.</p>
             <div style="border-top:1px solid var(--charcoal4);padding-top:12px;">
               <div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Trade Inquiries</div>
               <div style="font-size:11px;color:var(--cream3);">info@throttledinbond.com</div>
@@ -3305,6 +3310,15 @@ var RETAIL = {
   variants: { FS: '55376161702193', CS: '55376162292017', BF: '' },
   prices: { FS: 69.99, CS: 84.99, BF: 0 }
 };
+// Licensed retailer of record for all consumer sales — single source of truth so the
+// disclosure and CTAs read one variable, not a hardcoded name in multiple places.
+var RETAILER = { name: 'Bourbon Outfitter' };
+function renderRetailerDisclosures(){
+  var txt = 'Sold and shipped by ' + RETAILER.name + ', a licensed retailer. Throttled In Bond Spirits, LLC does not sell alcohol directly to consumers.';
+  var els = document.querySelectorAll('.js-retail-disclosure');
+  for (var i=0;i<els.length;i++){ els[i].textContent = txt; }
+}
+window.addEventListener('load', renderRetailerDisclosures);
 function retailUrl(series) {
   return (series && RETAIL.bottleUrls[series]) ? RETAIL.bottleUrls[series] : RETAIL.collectionUrl;
 }
@@ -3360,7 +3374,8 @@ window.addEventListener('load', applyCaseShipPromo);
 // ── CART BUILDER (pick quantities → Bourbon Outfitter cart permalink) ──
 var _cartQty = { FS: 0, CS: 0, BF: 0 };
 // Estimated shipping shown in the cart-builder. standard = under 6 bottles; caseFlat = 6+ during the promo.
-var CART_SHIPPING = { standard: 29.99, caseFlat: 10.00 };
+// standard matches Bourbon Outfitter's published rate ($30 for 1-6 bottles); caseFlat is BO's $10 6-bottle offer.
+var CART_SHIPPING = { standard: 30.00, caseFlat: 10.00 };
 function cartVariant(s){ return (RETAIL.variants && RETAIL.variants[s]) ? RETAIL.variants[s] : ''; }
 function cartPrice(s){ return (RETAIL.prices && RETAIL.prices[s]) ? Number(RETAIL.prices[s]) : 0; }
 function openCartBuilder(preSeries){ _cartQty = { FS:0, CS:0, BF:0 }; if (preSeries && boLive(preSeries) && cartVariant(preSeries)) _cartQty[preSeries] = 1; cartRender(); openModal('cart-modal'); }
@@ -3414,13 +3429,13 @@ function cartRender(){
       shipBanner.style.display = '';
       if (totalBottles >= 6){
         shipBanner.className = 'cart-ship-banner unlocked';
-        shipBanner.innerHTML = '<strong>Flat $10 shipping unlocked.</strong> Your shipping drops to $10 at checkout &mdash; through Sept 5.';
+        shipBanner.innerHTML = '<strong>Bourbon Outfitter $10 shipping unlocked.</strong> Bourbon Outfitter drops your shipping to a flat $10 at their checkout, through Sept 5.';
       } else {
         shipBanner.className = 'cart-ship-banner';
         var need = 6 - totalBottles;
         shipBanner.innerHTML = (totalBottles > 0)
-          ? '<strong>Buy a case, ship for $10.</strong> Add ' + need + ' more bottle' + (need===1?'':'s') + ' to drop shipping from $29.99 to a flat $10 &mdash; through Sept 5.'
-          : '<strong>Buy a case, ship for $10.</strong> Order 6 bottles and shipping drops from $29.99 to a flat $10 &mdash; through Sept 5.';
+          ? '<strong>Bourbon Outfitter: $10 shipping on 6 bottles.</strong> Add ' + need + ' more bottle' + (need===1?'':'s') + ' and Bourbon Outfitter drops shipping to a flat $10 at their checkout, through Sept 5.'
+          : '<strong>Bourbon Outfitter: $10 shipping on 6 bottles.</strong> Add 6 bottles and Bourbon Outfitter drops shipping to a flat $10 at their checkout, through Sept 5.';
       }
     } else {
       shipBanner.style.display = 'none';
@@ -3455,7 +3470,7 @@ function openFindBottle(series) {
   var avail = boLive(series);
   if (avail) {
     if (t) t.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;font-size:19px;font-weight:700;letter-spacing:.02em;line-height:1;">Buy<img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond&trade;" style="height:18px;width:auto;max-width:80%;display:block;flex:0 1 auto;"></span>';
-    if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our retail partner. Ships to 42 states.';
+    if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our licensed retail partner, who ships to 42 states.';
     if (a) a.innerHTML = '<a class="btn-primary buy-cta" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
       '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
   } else {
@@ -3587,7 +3602,7 @@ function renderMap() {
       .on('mousemove', function(event, d) {
         const avail = !UNAVAIL_STATES.has(d.properties.name);
         tipName.textContent = d.properties.name;
-        tipStatus.textContent = avail ? 'Ships Direct To You — Click to see retailers' : 'Not yet available for shipping to this state';
+        tipStatus.textContent = avail ? 'Available for shipping. Click to see retailers' : 'Not yet available for shipping to this state';
         tipStatus.style.color = avail ? '#C8952A' : '#D6CCBA';
         tip.style.left = (event.clientX + 14) + 'px';
         tip.style.top = (event.clientY - 52) + 'px';
@@ -6179,7 +6194,7 @@ async function openStateAvailability(stateName) {
 
   var html = '';
   if (online.length) {
-    html += '<div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Available Online &middot; Ships Direct To You</div>';
+    html += '<div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Available Online &middot; Shipped By Our Retail Partner</div>';
     online.forEach(function(r){ html += retailerRow(r); });
   }
   if (inState.length) {
