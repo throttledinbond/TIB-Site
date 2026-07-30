@@ -8,7 +8,7 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-YQG2P2BG96');
-  gtag('config', 'AW-18355889436');
+  gtag('config', 'AW-1022472544');
 </script>
 <meta charset="UTF-8">
 
@@ -3276,8 +3276,6 @@ async function submitEmail() {
    input.value = '';
  } finally {
    btn.disabled = false; btn.textContent = 'Register';
-   // Count every valid Barrel Inventory submission as a lead, regardless of backend result
-   trackEvent('generate_lead', { method: 'barrel_inventory' });
  }
 }
 
@@ -3453,7 +3451,7 @@ function cartRender(){
 // ── ANALYTICS: buy-intent events (GA4 + Google Ads already loaded in <head>) ──
 function trackEvent(name, params){ try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){} }
 // To also count Buy clicks as a Google Ads conversion: create a conversion action
-// in Google Ads, then paste its send_to value (e.g. 'AW-18355889436/AbC-dEfGh') below.
+// in Google Ads, then paste its send_to value (e.g. 'AW-1022472544/AbC-dEfGh') below.
 var ADS_BUY_CONVERSION = '';
 function trackBuyConversion(){ try { if (ADS_BUY_CONVERSION && typeof gtag === 'function') gtag('event','conversion',{ send_to: ADS_BUY_CONVERSION }); } catch(e){} }
 // Any retailer/purchase link click = a buy action (delegated, capture phase)
@@ -4375,10 +4373,13 @@ async function garageConfirmDelete() {
 // ══════════════════════════════════════════════════════
 let _isAdmin = false;
 
+var _adminCheckedFor = null;
 async function adminCheck() {
-  if (!_currentUser) return false;
+  if (!_currentUser) { _isAdmin = false; _adminCheckedFor = null; return false; }
+  if (_adminCheckedFor === _currentUser.id) return _isAdmin; // cache per session — avoids repeat role queries
   var { data } = await _supabase.from('profiles').select('role').eq('id', _currentUser.id).single();
   _isAdmin = data && data.role === 'admin';
+  _adminCheckedFor = _currentUser.id;
   return _isAdmin;
 }
 
@@ -5309,7 +5310,7 @@ async function adminDeleteAlert(id){
   if(res.error){ showNotif('Alerts','Error','Could not delete. Try again.','OK'); return; }
   await adminLoadAlerts(); alertsLoad();
 }
-window.addEventListener('load', function(){ if(typeof alertsLoad==='function') alertsLoad(); });
+window.addEventListener('load', function(){ if(typeof isBot==='function' && isBot()) return; if(typeof alertsLoad==='function') alertsLoad(); });
 
 // ── FOCUS TRAP for auth modal ──
 document.addEventListener('keydown', function(e) {
@@ -5759,12 +5760,30 @@ async function profileSave() {
   leaderboardLoad();
 }
 
+// Downscale an image File to a small JPEG Blob before upload. Keeps avatars tiny so
+// Storage/egress stays minimal (a full-size phone photo could be 5-10 MB otherwise).
+function resizeImageFile(file, maxDim, quality){
+  return new Promise(function(resolve){
+    try {
+      var img = new Image();
+      img.onload = function(){
+        var w = img.width || maxDim, h = img.height || maxDim;
+        var scale = Math.min(1, maxDim / Math.max(w, h));
+        var nw = Math.max(1, Math.round(w*scale)), nh = Math.max(1, Math.round(h*scale));
+        var c = document.createElement('canvas'); c.width = nw; c.height = nh;
+        c.getContext('2d').drawImage(img, 0, 0, nw, nh);
+        c.toBlob(function(blob){ resolve(blob || file); }, 'image/jpeg', quality || 0.85);
+      };
+      img.onerror = function(){ resolve(file); };
+      img.src = URL.createObjectURL(file);
+    } catch(e){ resolve(file); }
+  });
+}
 async function profileUploadAvatar(input) {
   if (!input.files || !input.files[0]) return;
-  var file = input.files[0];
-  var ext = file.name.split('.').pop();
-  var path = _currentUser.id + '/avatar.' + ext;
-  var { error } = await _supabase.storage.from('avatars').upload(path, file, { upsert: true });
+  var blob = await resizeImageFile(input.files[0], 256, 0.85);
+  var path = _currentUser.id + '/avatar.jpg';
+  var { error } = await _supabase.storage.from('avatars').upload(path, blob, { upsert: true, contentType: 'image/jpeg' });
   if (error) { showNotif('Profile', 'Error', 'Could not upload photo.', 'OK'); return; }
   var { data } = _supabase.storage.from('avatars').getPublicUrl(path);
   var url = data.publicUrl + '?t=' + Date.now();
@@ -5829,7 +5848,7 @@ async function leaderboardLoad() {
     var rank = i + 1;
     var name = fbEscape(p.display_name || 'Collector');
     var avatarHtml = p.avatar_url
-      ? '<img class="leaderboard-avatar" src="' + encodeURI(p.avatar_url) + '" crossorigin="anonymous">'
+      ? '<img class="leaderboard-avatar" src="' + encodeURI(p.avatar_url) + '" loading="lazy" decoding="async" crossorigin="anonymous">'
       : '<div class="leaderboard-avatar-placeholder">&#128100;</div>';
     var sc = p.series_counts || {};
     var seriesHtml = Object.keys(sc).map(function(s) {
@@ -6221,7 +6240,30 @@ function openLightbox(src) {
 }
 
 // ── INIT ──
-leaderboardLoad();
+// Egress guard: the community map + leaderboard (and its avatar image) were loading on
+// EVERY page view, including for search-engine and AI crawlers, which drove Supabase egress.
+// Now we (a) never fire these Supabase queries for bots, and (b) lazy-load them only when a
+// real visitor scrolls the community section near the viewport.
+function isBot(){
+  try {
+    return /bot|crawl|spider|slurp|bingpreview|facebookexternalhit|embedly|whatsapp|telegrambot|discordbot|slackbot|gptbot|ccbot|claudebot|claude-web|anthropic|perplexitybot|amazonbot|bytespider|dataforseo|ahrefs|semrush|mj12bot|dotbot|petalbot|applebot|yandex|baiduspider|duckduckbot|headlesschrome|python-requests|axios|libwww|curl|wget|node-fetch|go-http|okhttp/i.test(navigator.userAgent || '');
+  } catch(e){ return false; }
+}
+var _leaderboardLoaded = false;
+function leaderboardLoadOnce(){ if(_leaderboardLoaded || typeof leaderboardLoad!=='function') return; _leaderboardLoaded = true; leaderboardLoad(); }
+(function initCommunityLazy(){
+  if (isBot()) return;               // crawlers never trigger the community/leaderboard queries
+  var sec = document.getElementById('leaderboard');
+  if (!sec || !('IntersectionObserver' in window)) {
+    var once = function(){ leaderboardLoadOnce(); window.removeEventListener('scroll', once); };
+    window.addEventListener('scroll', once, { passive:true });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    for (var i=0;i<entries.length;i++){ if(entries[i].isIntersecting){ leaderboardLoadOnce(); io.disconnect(); break; } }
+  }, { rootMargin:'300px' });
+  io.observe(sec);
+})();
 triggerReveals();
 
 // ── VIDEO MODAL ──
