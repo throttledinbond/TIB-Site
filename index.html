@@ -8,8 +8,25 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-YQG2P2BG96');
-  gtag('config', 'AW-1022472544');
+  gtag('config', 'AW-18355889436');
 </script>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1760507628301408');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -3276,6 +3293,9 @@ async function submitEmail() {
    input.value = '';
  } finally {
    btn.disabled = false; btn.textContent = 'Register';
+   // Count every valid Barrel Inventory submission as a conversion (Google + Meta)
+   trackEvent('generate_lead', { method: 'barrel_inventory' });
+   if (window.fbq) fbq('track', 'Lead', { content_name: 'Barrel Inventory' });
  }
 }
 
@@ -3451,7 +3471,7 @@ function cartRender(){
 // ── ANALYTICS: buy-intent events (GA4 + Google Ads already loaded in <head>) ──
 function trackEvent(name, params){ try { if (typeof gtag === 'function') gtag('event', name, params || {}); } catch(e){} }
 // To also count Buy clicks as a Google Ads conversion: create a conversion action
-// in Google Ads, then paste its send_to value (e.g. 'AW-1022472544/AbC-dEfGh') below.
+// in Google Ads, then paste its send_to value (e.g. 'AW-18355889436/AbC-dEfGh') below.
 var ADS_BUY_CONVERSION = '';
 function trackBuyConversion(){ try { if (ADS_BUY_CONVERSION && typeof gtag === 'function') gtag('event','conversion',{ send_to: ADS_BUY_CONVERSION }); } catch(e){} }
 // Any retailer/purchase link click = a buy action (delegated, capture phase)
