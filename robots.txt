@@ -1,0 +1,48 @@
+# Throttled In Bond robots.txt
+# Public content is open to search engines and reputable AI crawlers.
+# Member-only areas are excluded; Google Ads crawler always has full access.
+
+User-agent: *
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+# Reputable AI crawlers — explicitly welcome (same member-area exclusions)
+User-agent: GPTBot
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+User-agent: OAI-SearchBot
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+User-agent: ChatGPT-User
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+User-agent: ClaudeBot
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+User-agent: PerplexityBot
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+User-agent: Google-Extended
+Disallow: /garage
+Disallow: /collection
+Disallow: /archive
+
+# Google Ads landing-page crawler — full access
+User-agent: AdsBot-Google
+Disallow:
+
+User-agent: AdsBot-Google-Mobile
+Disallow:
+
+Sitemap: https://www.throttledinbond.com/sitemap.xml
