@@ -2733,6 +2733,18 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 .gift-field input:focus,.gift-field select:focus,.gift-field textarea:focus{border-color:var(--gold);}
 .gift-field input[readonly]{color:var(--cream3);background:var(--charcoal);}
 .gift-field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.gift-bypass{font-size:12px;color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;display:inline-block;margin:6px 0 20px;}
+.gift-bypass:hover{color:var(--gold-lt);}
+.gift-section-label{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:24px 0 12px;}
+.gift-presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;}
+.gift-preset{text-align:left;background:var(--charcoal2);border:1px solid var(--charcoal4);padding:14px 16px;cursor:pointer;font-family:var(--f);transition:background .15s,border-color .15s;}
+.gift-preset:hover{background:var(--charcoal3);border-color:var(--gold-dk);}
+.gift-preset-name{display:block;font-size:12px;font-weight:700;color:var(--cream);margin-bottom:3px;}
+.gift-preset-sub{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--cream3);}
+.gift-pending{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--charcoal4);color:var(--cream3);padding:2px 6px;margin-left:6px;vertical-align:middle;}
+#gift-sku-picker{margin:14px 0;padding:14px;border:1px dashed var(--gold-dk);background:var(--charcoal2);}
+.gift-sku-btn{font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:none;border:1px solid var(--charcoal4);color:var(--cream);padding:8px 14px;cursor:pointer;margin-right:6px;margin-top:6px;}
+.gift-sku-btn:hover{border-color:var(--gold);color:var(--gold);}
 @media(max-width:640px){.gift-tiers{grid-template-columns:1fr;}.gift-field-row{grid-template-columns:1fr;}}
 </style>
 <section id="gifting" class="section" style="display:none;min-height:auto;">
@@ -2742,11 +2754,26 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <h2 class="display-sm" style="margin-bottom:14px;">Case Builder</h2>
     <p class="body-copy" style="margin-bottom:6px;">Give the gift of American Muscle. TIB Private Reserve orders for corporate clients, events, and branded occasions.</p>
 
+    <!-- Bypass link -->
+    <div><span class="gift-bypass" onclick="giftBypass()">Already know what you want? Skip the builder and submit an inquiry directly →</span></div>
+
+    <!-- Preset case selector -->
+    <div class="gift-section-label">Quick Start · Choose a Preset</div>
+    <div class="gift-presets">
+      <button type="button" class="gift-preset" onclick="giftPreset('single6')"><span class="gift-preset-name">Single SKU Case</span><span class="gift-preset-sub">6 bottles · Tier 1</span></button>
+      <button type="button" class="gift-preset" onclick="giftPreset('mixed6')"><span class="gift-preset-name">Mixed Case</span><span class="gift-preset-sub">6 bottles · Tier 1</span></button>
+      <button type="button" class="gift-preset" onclick="giftPreset('single12')"><span class="gift-preset-name">Single SKU Double Case</span><span class="gift-preset-sub">12 bottles · Tier 3</span></button>
+      <button type="button" class="gift-preset" onclick="giftPreset('mixed12')"><span class="gift-preset-name">Mixed Double Case</span><span class="gift-preset-sub">12 bottles · Tier 3</span></button>
+      <button type="button" class="gift-preset" onclick="giftPreset('custom')"><span class="gift-preset-name">Custom</span><span class="gift-preset-sub">Build it yourself</span></button>
+    </div>
+    <div id="gift-sku-picker" style="display:none;"></div>
+
     <!-- Tier selector -->
+    <div class="gift-section-label">Your Tier</div>
     <div class="gift-tiers">
       <button type="button" class="gift-tier active" data-tier="t1" onclick="giftSelectTier('t1')">
         <span class="gift-tier-name">Standard Case</span>
-        <span class="gift-tier-sub">Tier 1 &middot; Min 6 bottles &middot; No service fee &middot; Buy on Bourbon Outfitter</span>
+        <span class="gift-tier-sub">Tier 1 &middot; Min 6 bottles &middot; No co-branding &middot; Buy on Bourbon Outfitter</span>
       </button>
       <button type="button" class="gift-tier" data-tier="t2" onclick="giftSelectTier('t2')">
         <span class="gift-tier-name">Branded Case</span>
@@ -2782,15 +2809,19 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
           <div class="gift-field"><label>Phone</label><input id="gift-f-phone" type="tel" placeholder="(555) 555-5555"></div>
         </div>
         <div class="gift-field"><label>Quantity Breakdown</label><input id="gift-f-qty" type="text" readonly></div>
-        <div class="gift-field"><label>Tier</label><input id="gift-f-tier" type="text" readonly></div>
-        <div class="gift-field">
-          <label>Co-Brand Requirement</label>
-          <select id="gift-f-cobrand" onchange="giftToggleCobrand()"><option value="No">No</option><option value="Yes">Yes — add our logo</option></select>
+        <div class="gift-field"><label>Tier</label>
+          <select id="gift-f-tier"><option value="t1">Standard Case</option><option value="t2">Branded Case</option><option value="t3">Signature Selection</option></select>
         </div>
-        <div class="gift-field" id="gift-logo-wrap" style="display:none;">
-          <label>Logo File (PNG, SVG, or EPS)</label>
-          <input id="gift-f-logo" type="file" accept=".png,.svg,.eps,image/png,image/svg+xml,application/postscript" onchange="giftUploadLogo(this)">
-          <div id="gift-logo-msg" style="font-size:11px;color:var(--cream3);margin-top:6px;"></div>
+        <div class="gift-field">
+          <label>Co-Brand Interest</label>
+          <select id="gift-f-cobrand" onchange="giftToggleCobrand()"><option value="No">No</option><option value="Yes">Yes — co-brand with our logo</option></select>
+        </div>
+        <div id="gift-logo-wrap" style="display:none;">
+          <div class="gift-field"><label>Brand / Company Name (for sticker)</label><input id="gift-f-brand" type="text" placeholder="Name as it should appear on the sticker"></div>
+          <div class="gift-field"><label>Logo File (PNG, SVG, or EPS)</label>
+            <input id="gift-f-logo" type="file" accept=".png,.svg,.eps,image/png,image/svg+xml,application/postscript" onchange="giftUploadLogo(this)">
+            <div id="gift-logo-msg" style="font-size:11px;color:var(--cream3);margin-top:6px;"></div>
+          </div>
         </div>
         <div class="gift-field"><label>Desired Delivery Date</label><input id="gift-f-date" type="date"></div>
         <div class="gift-field"><label>Delivery Address or Number of Recipients</label><textarea id="gift-f-address" rows="3" placeholder="Ship-to address, or how many recipients"></textarea></div>
@@ -2800,7 +2831,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
         </div>
         <div class="gift-field"><label>Additional Notes</label><textarea id="gift-f-notes" rows="3" placeholder="Special requests, timing, budget, etc."></textarea></div>
         <div style="margin-top:8px;"><button class="btn-primary" id="gift-submit" onclick="giftSubmit()">Submit Inquiry</button> <span id="gift-msg" style="font-size:12px;margin-left:8px;"></span></div>
-        <p style="font-size:11px;color:var(--cream3);line-height:1.5;margin-top:14px;">Bottle purchases are completed directly with Bourbon Outfitter, a licensed retailer. Any TIB coordination and sticker service fee is invoiced separately by Throttled In Bond Spirits, LLC and is not a charge for alcohol.</p>
+        <p style="font-size:11px;color:var(--cream3);line-height:1.5;margin-top:14px;">All bottle purchases and any custom-order pricing are set and collected directly by Bourbon Outfitter, a licensed retailer. Throttled In Bond Spirits, LLC does not sell alcohol or collect payment.</p>
       </div>
     </div>
   </div>
@@ -3677,24 +3708,27 @@ function cartRender(){
   }
 }
 // ── CORPORATE GIFTING CASE BUILDER (admin testing) ──
-// Extends the cart-builder pattern with tiers + a service-fee estimate. Tier 1 routes to a
-// Bourbon Outfitter cart permalink (reusing cartVariant); Tier 2/3 route to an inquiry form.
-// Manually maintained bottle prices (update when BO retail changes):
-var GIFT_PRICES = { FS: 90, CS: 90, BF: 110 };
+// Extends the cart-builder pattern with tiers, presets, and a bypass. Displays Bourbon Outfitter
+// retail pricing ONLY — no TIB fees or markups are computed or shown (BO sets/collects all pricing).
+// Tier 1 routes to a BO cart permalink (reusing cartVariant); Tier 2/3 route to the inquiry form.
+// Manually maintained bottle prices — Bourbon Outfitter retail (update when BO retail changes):
+var GIFT_PRICES = { FS: 69.99, CS: 84.99, BF: 149.99 };
 var GIFT_NAMES  = { FS: 'Founders Select — Gen 1', CS: 'Collection Series — Gen 1', BF: 'Barn Find' };
 var GIFT_IMG = {
   FS: 'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png',
   CS: 'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png',
   BF: 'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png'
 };
+var GIFT_PENDING = { FS: false, CS: false, BF: true }; // Barn Find pending bottling
 var GIFT_TIERS = {
-  t1: { label: 'Tier 1 — Standard Case', min: 6,  fee: null,        route: 'bo' },
-  t2: { label: 'Tier 2 — Branded Case',  min: 6,  fee: [150, 200],  route: 'inquiry' },
-  t3: { label: 'Tier 3 — Signature Selection', min: 12, fee: [250, 350], route: 'inquiry' }
+  t1: { label: 'Tier 1 — Standard Case', min: 6,  route: 'bo' },
+  t2: { label: 'Tier 2 — Branded Case',  min: 6,  route: 'inquiry' },
+  t3: { label: 'Tier 3 — Signature Selection', min: 12, route: 'inquiry' }
 };
 var _giftQty = { FS: 0, CS: 0, BF: 0 };
 var _giftTier = 't1';
 var _giftLogoUrl = '';
+var _giftVia = 'builder';
 
 async function openGifting(){
   if (!_currentUser){ authSwitchTab('signin'); openModal('auth-modal'); return; }
@@ -3704,12 +3738,36 @@ async function openGifting(){
   giftRender();
   setTimeout(function(){ navTo('gifting'); }, 30);
 }
+// ── Presets ──
+function giftScrollBuilder(){ var g = document.getElementById('gift-grid'); if (g){ try { g.scrollIntoView({ behavior:'smooth', block:'center' }); } catch(e){} } }
+function giftPreset(kind){
+  var picker = document.getElementById('gift-sku-picker'); if (picker) picker.style.display = 'none';
+  _giftQty = { FS:0, CS:0, BF:0 };
+  if (kind === 'single6'){ giftAskSku(6, 't1'); return; }
+  if (kind === 'single12'){ giftAskSku(12, 't3'); return; }
+  if (kind === 'mixed6'){ giftSelectTier('t1'); giftRender(); giftScrollBuilder(); return; }
+  if (kind === 'mixed12'){ giftSelectTier('t3'); giftRender(); giftScrollBuilder(); return; }
+  giftSelectTier('t1'); giftRender(); giftScrollBuilder(); // custom
+}
+function giftAskSku(qty, tier){
+  var picker = document.getElementById('gift-sku-picker'); if (!picker) return;
+  var btns = ['FS','CS','BF'].map(function(s){
+    return '<button type="button" class="gift-sku-btn" onclick="giftPickSku(\''+s+'\','+qty+',\''+tier+'\')">'+GIFT_NAMES[s]+(GIFT_PENDING[s]?' (pending)':'')+'</button>';
+  }).join('');
+  picker.innerHTML = '<div style="font-size:12px;color:var(--cream3);margin-bottom:4px;">Choose your expression for a '+qty+'-bottle single-SKU case:</div>' + btns;
+  picker.style.display = '';
+}
+function giftPickSku(s, qty, tier){
+  _giftQty = { FS:0, CS:0, BF:0 }; _giftQty[s] = qty;
+  var picker = document.getElementById('gift-sku-picker'); if (picker) picker.style.display = 'none';
+  giftSelectTier(tier); giftRender(); giftScrollBuilder();
+}
 function giftSelectTier(t){
   _giftTier = t;
   var btns = document.querySelectorAll('.gift-tier');
   for (var i=0;i<btns.length;i++){ btns[i].classList.toggle('active', btns[i].getAttribute('data-tier') === t); }
   // Switching to a Tier-1 (buy) flow hides the inquiry form; Tier 2/3 keeps it available.
-  if (GIFT_TIERS[t].route === 'bo'){ var inq = document.getElementById('gift-inquiry'); if (inq) inq.style.display = 'none'; }
+  if (GIFT_TIERS[t].route === 'bo'){ var inq = document.getElementById('gift-inquiry'); if (inq && _giftVia !== 'bypass') inq.style.display = 'none'; }
   giftRender();
 }
 function giftAdjust(s, delta){ _giftQty[s] = Math.max(0, Math.min(99, (_giftQty[s]||0) + delta)); giftRender(); }
@@ -3734,8 +3792,8 @@ function giftRender(){
     ['FS','CS','BF'].forEach(function(s){
       html += '<div class="cart-row">' +
         '<img class="cart-row-img" src="' + GIFT_IMG[s] + '" alt="' + GIFT_NAMES[s] + '" crossorigin="anonymous">' +
-        '<div class="cart-row-info"><div class="cart-row-name">' + GIFT_NAMES[s] + '</div>' +
-        '<div class="cart-row-price">~$' + GIFT_PRICES[s].toFixed(2) + ' each</div></div>' +
+        '<div class="cart-row-info"><div class="cart-row-name">' + GIFT_NAMES[s] + (GIFT_PENDING[s] ? '<span class="gift-pending">Pending Bottling</span>' : '') + '</div>' +
+        '<div class="cart-row-price">$' + GIFT_PRICES[s].toFixed(2) + ' each</div></div>' +
         '<div class="cart-stepper"><button class="cart-step-btn" onclick="giftAdjust(\'' + s + '\',-1)">&minus;</button>' +
         '<span class="cart-qty" id="gift-qty-' + s + '">' + (_giftQty[s]||0) + '</span>' +
         '<button class="cart-step-btn" onclick="giftAdjust(\'' + s + '\',1)">+</button></div></div>';
@@ -3746,16 +3804,19 @@ function giftRender(){
   var n = giftTotalBottles(), sub = giftSubtotal();
   var sumEl = document.getElementById('gift-summary');
   if (sumEl){
-    var feeRow = tier.fee
-      ? '<div class="gift-summary-row"><span>Estimated TIB service fee <span class="fee">(billed separately)</span></span><span class="fee">$' + tier.fee[0] + '–' + tier.fee[1] + '</span></div>'
-      : '';
-    sumEl.innerHTML =
-      '<div class="gift-summary-row"><span>' + n + ' bottle' + (n===1?'':'s') + ' selected</span><span></span></div>' +
-      '<div class="gift-summary-row"><span>Estimated bottle subtotal</span><span>$' + sub.toFixed(2) + '</span></div>' +
-      feeRow +
-      '<div class="gift-summary-row total"><span>Estimated bottles total</span><span>$' + sub.toFixed(2) + '</span></div>' +
-      '<div class="gift-fee-note">Estimate only, based on approximate Bourbon Outfitter retail. Final bottle pricing is set by Bourbon Outfitter.' +
-      (tier.fee ? ' The TIB service fee is a separate invoice for coordination and sticker production, not a charge for alcohol.' : '') + '</div>';
+    var isCustom = (tier.route === 'inquiry'); // Tier 2 / Tier 3 orders get a BO-set premium on a custom product
+    if (isCustom){
+      sumEl.innerHTML =
+        '<div class="gift-summary-row"><span>' + n + ' bottle' + (n===1?'':'s') + ' selected</span><span></span></div>' +
+        '<div class="gift-summary-row"><span>Estimated bottle cost</span><span>$' + sub.toFixed(2) + '</span></div>' +
+        '<div class="gift-summary-row"><span>Co-branding and handling</span><span>Set by Bourbon Outfitter</span></div>' +
+        '<div class="gift-fee-note">Bottle cost estimated at Bourbon Outfitter retail. Co-branding and handling on custom orders are set and confirmed by Bourbon Outfitter; your final total is provided before purchase.</div>';
+    } else {
+      sumEl.innerHTML =
+        '<div class="gift-summary-row"><span>' + n + ' bottle' + (n===1?'':'s') + ' selected</span><span></span></div>' +
+        '<div class="gift-summary-row total"><span>Estimated bottle subtotal</span><span>$' + sub.toFixed(2) + '</span></div>' +
+        '<div class="gift-fee-note">Estimated at Bourbon Outfitter retail pricing. Final pricing is set and confirmed by Bourbon Outfitter.</div>';
+    }
   }
   // Gate message + action button
   var gateEl = document.getElementById('gift-gate-msg');
@@ -3770,20 +3831,37 @@ function giftRender(){
       var url = giftBuildBoUrl();
       if (url){
         actEl.innerHTML = '<a class="btn-primary buy-cta" href="' + url + '" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Buy on Bourbon Outfitter</a>';
-        if (_giftQty.BF > 0) actEl.innerHTML += '<div style="font-size:11px;color:var(--cream3);margin-top:8px;">Note: Barn Find is not yet live on Bourbon Outfitter, so it is excluded from the cart link.</div>';
+        if (_giftQty.BF > 0) actEl.innerHTML += '<div style="font-size:11px;color:var(--cream3);margin-top:8px;">Barn Find is pending bottling and not yet live on Bourbon Outfitter, so it is excluded from the cart link.</div>';
       } else {
-        actEl.innerHTML = '<div style="font-size:12px;color:var(--cream3);">The selected bottles are not yet purchasable on Bourbon Outfitter. Choose Founders Select or Collection Series, or switch to a Branded/Signature tier to submit an inquiry.</div>';
+        actEl.innerHTML = '<div style="font-size:12px;color:var(--cream3);">Founders Select or Collection Series are required for a direct Bourbon Outfitter cart (Barn Find is pending bottling). Or switch to a Branded / Signature tier to submit an inquiry.</div>';
       }
     } else {
       actEl.innerHTML = '<button class="btn-primary" onclick="giftGoInquiry()">Submit Inquiry</button>';
     }
   }
 }
+function giftPrefillInquiry(via){
+  _giftVia = via;
+  var qf = document.getElementById('gift-f-qty');
+  var tf = document.getElementById('gift-f-tier');
+  if (via === 'builder'){
+    if (qf){ qf.value = giftBreakdownStr() + ' (' + giftTotalBottles() + ' bottles)'; qf.setAttribute('readonly','readonly'); }
+    if (tf){ tf.value = _giftTier; }
+  } else {
+    if (qf){ qf.value = ''; qf.removeAttribute('readonly'); qf.setAttribute('placeholder','e.g., Founders Select x6, Collection Series x6'); }
+  }
+}
 function giftGoInquiry(){
   var form = document.getElementById('gift-inquiry'); if (!form) return;
   form.style.display = '';
-  var qf = document.getElementById('gift-f-qty'); if (qf) qf.value = giftBreakdownStr() + ' (' + giftTotalBottles() + ' bottles)';
-  var tf = document.getElementById('gift-f-tier'); if (tf) tf.value = GIFT_TIERS[_giftTier].label;
+  giftPrefillInquiry('builder');
+  try { form.scrollIntoView({ behavior:'smooth', block:'start' }); } catch(e){ form.scrollIntoView(); }
+}
+function giftBypass(){
+  var sec = document.getElementById('gifting'); if (sec) sec.style.display = '';
+  var form = document.getElementById('gift-inquiry'); if (!form) return;
+  form.style.display = '';
+  giftPrefillInquiry('bypass');
   try { form.scrollIntoView({ behavior:'smooth', block:'start' }); } catch(e){ form.scrollIntoView(); }
 }
 function giftToggleCobrand(){
@@ -3805,21 +3883,25 @@ async function giftUploadLogo(input){
 async function giftSubmit(){
   var msg = document.getElementById('gift-msg');
   var v = function(id){ var e = document.getElementById(id); return e ? e.value.trim() : ''; };
-  var name = v('gift-f-name'), company = v('gift-f-company'), email = v('gift-f-email');
+  var name = v('gift-f-name'), company = v('gift-f-company'), email = v('gift-f-email'), phone = v('gift-f-phone');
+  if (!name){ if (msg){ msg.style.color='var(--rust)'; msg.textContent='Please add your contact name.'; } return; }
+  if (!company){ if (msg){ msg.style.color='var(--rust)'; msg.textContent='Please add your company name.'; } return; }
   if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if (msg){ msg.style.color='var(--rust)'; msg.textContent='Please add a valid email.'; } return; }
-  if (!name && !company){ if (msg){ msg.style.color='var(--rust)'; msg.textContent='Please add your name or company.'; } return; }
-  var tier = GIFT_TIERS[_giftTier];
-  var feeStr = tier.fee ? ('$' + tier.fee[0] + '–' + tier.fee[1]) : '';
+  if (!phone){ if (msg){ msg.style.color='var(--rust)'; msg.textContent='Please add a phone number.'; } return; }
+  var tierSelVal = (document.getElementById('gift-f-tier')||{}).value || _giftTier;
+  var tierLabel = GIFT_TIERS[tierSelVal] ? GIFT_TIERS[tierSelVal].label : tierSelVal;
+  var viaBuilder = (_giftVia === 'builder');
   var btn = document.getElementById('gift-submit'); if (btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
   try {
     await _supabase.functions.invoke('brevo-proxy', { body: {
       action: 'gifting_inquiry',
-      name: name, company: company, email: email, phone: v('gift-f-phone'),
-      tier: tier.label,
-      qty_fs: _giftQty.FS, qty_cs: _giftQty.CS, qty_bf: _giftQty.BF,
-      bottle_subtotal: '$' + giftSubtotal().toFixed(2),
-      service_fee: feeStr,
+      name: name, company: company, email: email, phone: phone,
+      tier: tierLabel,
+      qty_fs: viaBuilder ? _giftQty.FS : 0, qty_cs: viaBuilder ? _giftQty.CS : 0, qty_bf: viaBuilder ? _giftQty.BF : 0,
+      qty_text: v('gift-f-qty'),
+      bottle_subtotal: viaBuilder ? ('$' + giftSubtotal().toFixed(2)) : '',
       cobrand: v('gift-f-cobrand') || 'No',
+      brand_name: v('gift-f-brand'),
       logo_url: _giftLogoUrl,
       delivery_date: v('gift-f-date'),
       delivery_address: v('gift-f-address'),
