@@ -1587,7 +1587,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="nav-link" onclick="navTo('whiskey')">Whiskey</span>
  <span class="nav-link" onclick="navTo('story')">The Story</span>
  <span class="nav-link" onclick="navTo('vintage')">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
- <span class="nav-link" onclick="navTo('shop')">Shop</span>
+ <span class="nav-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
  <a class="nav-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" style="color:var(--cream3);text-decoration:none;">Blog</a>
  </div>
  <div class="nav-auth-wrap" id="nav-auth-wrap">
@@ -1616,7 +1616,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="mobile-link" onclick="navTo('whiskey');toggleMenu()">Whiskey</span>
  <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
  <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
- <span class="mobile-link" onclick="navTo('shop');toggleMenu()">Shop</span>
+ <span class="mobile-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
  <a class="mobile-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" onclick="toggleMenu()" style="text-decoration:none;">Blog</a>
  <span class="mobile-link" onclick="authNavClick();toggleMenu()">The Garage</span>
  <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
@@ -2557,9 +2557,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       <span>Shop</span>
       <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond" style="height:.6em;width:auto;" crossorigin="anonymous">
     </h2>
-    <p class="reveal reveal-delay-2" style="font-size:clamp(12px,1.6vw,15px);letter-spacing:.04em;margin-bottom:clamp(28px,4vh,44px);white-space:nowrap;text-align:center;margin-left:auto;margin-right:auto;"><span style="color:var(--gold);font-weight:600;">Wear The Spirit of American Muscle<span class="tm">&#8482;</span></span>&nbsp;&nbsp;<span style="color:var(--cream);">Made to order. Ships directly to you.</span></p>
-
-    <div class="reveal reveal-delay-2">
+    <div class="reveal reveal-delay-2" style="display:flex;align-items:center;justify-content:center;gap:clamp(14px,2.4vw,28px);flex-wrap:wrap;">
+      <p style="font-size:clamp(12px,1.6vw,15px);letter-spacing:.04em;white-space:nowrap;margin:0;"><span style="color:var(--gold);font-weight:600;">Wear The Spirit of American Muscle<span class="tm">&#8482;</span></span>&nbsp;&nbsp;<span style="color:var(--cream);">Made to order. Ships directly to you.</span></p>
       <a class="btn-primary" href="https://shop.throttledinbond.com" style="text-decoration:none;">Enter The Shop</a>
     </div>
   </div>
@@ -2831,7 +2830,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="footer-link" onclick="navTo('whiskey')">Whiskey</span>
  <span class="footer-link" onclick="navTo('story')">The Story</span>
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
- <span class="footer-link" onclick="navTo('shop')">Shop</span>
+ <span class="footer-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
  <a class="footer-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Blog</a>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
  </div>
