@@ -2547,13 +2547,13 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 </style>
 <!-- Floating shop prompt (dismissible, remembered via localStorage) -->
 <style>
-.shop-prompt{position:fixed;right:20px;bottom:20px;z-index:840;width:min(280px,calc(100vw - 32px));background:rgba(20,19,17,.97);border:1px solid var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.55);padding:18px 18px 16px;animation:shopPromptIn .45s ease both;}
+.shop-prompt{position:fixed;right:20px;bottom:20px;z-index:840;width:min(300px,calc(100vw - 32px));background:rgba(20,19,17,.97);border:1px solid var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.55);padding:18px 18px 16px;animation:shopPromptIn .45s ease both;}
 .shop-prompt-x{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--cream3);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px;}
 .shop-prompt-x:hover{color:var(--gold);}
 .shop-prompt-body{display:block;text-decoration:none;cursor:pointer;}
 .shop-prompt-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
-.shop-prompt-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);}
-.shop-prompt-title img{height:13px;width:auto;}
+.shop-prompt-title{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);}
+.shop-prompt-title img{height:12px;width:auto;max-width:100%;}
 .shop-prompt-sub{font-size:11px;color:var(--cream3);margin-top:9px;letter-spacing:.04em;}
 @keyframes shopPromptIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 @media(max-width:520px){.shop-prompt{right:12px;bottom:12px;padding:15px 15px 13px;}}
