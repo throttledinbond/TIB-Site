@@ -2552,8 +2552,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 .shop-prompt-x:hover{color:var(--gold);}
 .shop-prompt-body{display:block;text-decoration:none;cursor:pointer;}
 .shop-prompt-eyebrow{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
-.shop-prompt-title{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--cream);}
-.shop-prompt-title img{height:12px;width:auto;max-width:100%;}
+.shop-prompt-title{display:flex;align-items:center;justify-content:center;flex-wrap:nowrap;white-space:nowrap;gap:5px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cream);}
+.shop-prompt-title img{height:11px;width:auto;flex-shrink:0;}
 .shop-prompt-sub{font-size:11px;color:var(--cream3);margin-top:9px;letter-spacing:.04em;}
 @keyframes shopPromptIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 @media(max-width:520px){.shop-prompt{right:12px;bottom:12px;padding:15px 15px 13px;}}
@@ -2562,7 +2562,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
   <button class="shop-prompt-x" onclick="dismissShopPrompt()" aria-label="Close">&times;</button>
   <a class="shop-prompt-body" href="https://shop.throttledinbond.com">
     <div class="shop-prompt-eyebrow">Now Open</div>
-    <div class="shop-prompt-title">Shop <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond" crossorigin="anonymous"></div>
+    <div class="shop-prompt-title">Shop <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond" crossorigin="anonymous"> Merch</div>
     <div class="shop-prompt-sub">Wear The Spirit of American Muscle&trade;</div>
   </a>
 </div>
