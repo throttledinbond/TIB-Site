@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Throttled In Bond&trade; &ndash; Industry VIP Access</title>
+<meta name="robots" content="noindex, nofollow, noarchive">
+<link rel="icon" type="image/png" href="https://www.throttledinbond.com/favicon.png?v=20260710">
+<style>
+@font-face { font-family:'BasierSquare'; src:url('https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BasierSquare-Regular.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'BasierSquare'; src:url('https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BasierSquare-RegularItalic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
+@font-face { font-family:'BasierSquare'; src:url('https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BasierSquare-Medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'BasierSquare'; src:url('https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BasierSquare-SemiBold.otf') format('opentype'); font-weight:600; font-style:normal; font-display:swap; }
+@font-face { font-family:'BasierSquare'; src:url('https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BasierSquare-Bold.otf') format('opentype'); font-weight:700; font-style:normal; font-display:swap; }
+:root{
+ --cream:#F2EDE3;--cream2:#E8E0D0;--cream3:#D6CCBA;
+ --charcoal:#1A1917;--charcoal2:#242220;--charcoal3:#2E2C28;--charcoal4:#3E3B35;
+ --gold:#C8952A;--gold-lt:#E8B84B;--gold-dk:#9A6E18;
+ --ink:#2A2722;--rust:#8B3A2A;
+ --f:'BasierSquare',system-ui,sans-serif;
+ --nav-h:64px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--charcoal);color:var(--cream);font-family:var(--f);overflow-x:hidden;cursor:default;}
+img{max-width:100%;display:block;}
+button{font-family:var(--f);}
+.lowercase-e{text-transform:lowercase!important;font-size:.85em;position:relative;top:.04em;}
+
+/* NAV */
+.vipbar{background:var(--gold);color:var(--charcoal);text-align:center;font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:8px 12px;}
+.nav{position:sticky;top:0;z-index:50;background:rgba(20,19,17,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--charcoal4);}
+.nav-in{height:var(--nav-h);max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,60px);display:flex;align-items:center;gap:14px;}
+.nav-in .lm{height:26px;width:auto;}
+.nav-in .wm{height:22px;width:auto;opacity:.95;}
+.vip-chip{margin-left:auto;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);padding:6px 12px;}
+
+/* TYPOGRAPHY / LAYOUT */
+.section{position:relative;}
+.section-inner{width:100%;max-width:1200px;margin:0 auto;padding:clamp(48px,7vh,84px) clamp(20px,5vw,60px);}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.display-sm{font-size:clamp(28px,4.5vw,60px);font-weight:700;letter-spacing:-.01em;line-height:1;color:var(--cream);}
+.body-copy{font-size:clamp(15px,1.4vw,18px);font-weight:400;line-height:1.75;color:var(--cream3);max-width:640px;}
+.gold-line{width:48px;height:2px;background:var(--gold);margin:24px 0;}
+
+/* HERO (car image, matches main site #home) */
+#home{min-height:100vh;background:var(--charcoal);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;}
+.hero-bg{position:absolute;inset:0;overflow:hidden;}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.22;transition:opacity 1s;display:block;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(26,25,23,.3) 0%, rgba(26,25,23,.1) 50%, rgba(26,25,23,.95) 100%);}
+.hero-inner{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,60px);min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:var(--nav-h);}
+.hero-bottles{display:flex;align-items:flex-end;justify-content:center;gap:0;pointer-events:none;opacity:.8;margin-bottom:clamp(16px,3vh,32px);position:relative;z-index:2;}
+.hero-bottle-img{height:clamp(160px,22vw,340px);width:auto;filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));pointer-events:auto;cursor:pointer;transition:filter .2s ease;}
+.hero-bottle-img:hover{filter:drop-shadow(0 16px 48px rgba(0,0,0,.7)) brightness(1.1);}
+.hero-bottle-img:nth-child(1){transform:rotate(-5deg) translateX(14px);z-index:1;position:relative;}
+.hero-bottle-img:nth-child(2){transform:scale(1.1);z-index:3;position:relative;}
+.hero-bottle-img:nth-child(3){transform:rotate(5deg) translateX(-14px);z-index:1;position:relative;}
+.hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;text-align:center;}
+.hero-headline{font-size:clamp(14px,2.2vw,28px);font-weight:400;letter-spacing:.28em;line-height:1;color:var(--cream);margin-bottom:clamp(16px,2.5vh,24px);white-space:nowrap;text-transform:uppercase;text-align:center;}
+.hero-tagline{font-size:clamp(13px,1.2vw,16px);font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:var(--cream3);margin-bottom:clamp(24px,4vh,44px);text-align:center;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn-primary{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--charcoal);padding:14px 28px;border:none;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.btn-primary:hover{background:var(--gold-lt);}
+.btn-ghost{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;background:transparent;color:var(--cream);padding:14px 28px;border:1px solid var(--charcoal4);cursor:pointer;transition:border-color .2s,color .2s;white-space:nowrap;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+@media(max-width:700px){.hero-bottle-img{height:clamp(120px,30vw,190px);}.hero-bottles{margin-bottom:clamp(12px,2vh,20px);}.hero-headline{white-space:normal;}}
+
+/* WHISKEY / BOTTLE SHOWCASE (matches main site) */
+#whiskey{background-color:var(--charcoal);border-top:1px solid var(--charcoal4);}
+.whiskey-two-col{display:grid;grid-template-columns:0.8fr 1.7fr;gap:clamp(28px,4vw,60px);align-items:start;margin-bottom:44px;}
+.whiskey-copy-col .body-copy{max-width:440px;}
+.bottles-eyebrow-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;gap:16px;flex-wrap:wrap;}
+.bottle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.bottle-card{background:var(--charcoal2);cursor:pointer;transition:background .2s;position:relative;overflow:hidden;}
+.bottle-card:hover{background:var(--charcoal3);}
+.bottle-card.active{background:var(--charcoal3);outline:1px solid var(--gold);}
+.bottle-card-img-wrap{height:clamp(280px,35vw,460px);display:flex;align-items:flex-end;justify-content:center;padding:20px 20px 0;position:relative;overflow:hidden;}
+.bottle-card-img{height:100%;width:auto;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6));transition:transform .4s cubic-bezier(.25,.46,.45,.94);}
+.bottle-card:hover .bottle-card-img{transform:translateY(-8px) scale(1.02);}
+.bottle-card.active .bottle-card-img{transform:translateY(-4px);}
+.bottle-card-info{padding:20px 24px 24px;}
+.bottle-card-stats{display:flex;gap:8px;margin:10px 0 12px;}
+.bc-stat{flex:1;background:var(--charcoal);border:1px solid var(--charcoal4);padding:8px 4px;text-align:center;}
+.bc-stat-v{display:block;font-size:15px;font-weight:800;color:var(--gold-lt);line-height:1;}
+.bc-stat-l{display:block;font-size:7px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cream3);margin-top:4px;}
+.bottle-card-series{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.bottle-card-name{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--cream);letter-spacing:-.01em;margin-bottom:8px;line-height:1.3;}
+.bottle-card-code{font-size:10px;font-weight:400;letter-spacing:.14em;color:var(--cream3);}
+.limited-pill{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--rust);color:#E7B9AB;background:rgba(139,58,42,.18);margin-bottom:10px;}
+.bottle-card-ribbon{position:absolute;top:16px;left:0;z-index:10;background:var(--gold);color:var(--charcoal);font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;box-shadow:0 2px 8px rgba(0,0,0,.45);}
+.bf-sash{position:absolute;top:50%;left:-30%;width:160%;transform:translateY(-50%) rotate(-45deg);background:var(--rust);box-shadow:0 4px 16px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;gap:9px;padding:10px 14px;z-index:6;pointer-events:none;--bf-fs:clamp(13px,1.7vw,18px);}
+.bf-sash-logo{height:var(--bf-fs);width:auto;display:block;flex-shrink:0;}
+.bf-sash-txt{font-size:var(--bf-fs);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
+#bottle-detail{background:var(--charcoal2);overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.4,0,.2,1);position:relative;}
+#bottle-detail.open{max-height:1600px;}
+.bottle-detail-inner{display:grid;grid-template-columns:1fr 2fr;gap:0;}
+.bottle-detail-img-col{background:var(--charcoal3);position:relative;min-height:480px;}
+.bottle-detail-img{position:absolute;top:0;bottom:0;left:20px;right:20px;margin:auto;width:auto;height:clamp(280px,35vw,460px);max-width:calc(100% - 40px);object-fit:contain;object-position:center;filter:drop-shadow(0 16px 32px rgba(0,0,0,.5));}
+.bottle-detail-info{padding:32px 40px;}
+.bottle-detail-badge{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:var(--gold);color:var(--charcoal);padding:4px 10px;margin-bottom:16px;}
+.bottle-detail-name{font-size:clamp(20px,2.5vw,32px);font-weight:700;color:var(--cream);letter-spacing:-.01em;line-height:1.1;margin-bottom:6px;}
+.bottle-detail-series{font-size:13px;font-weight:400;font-style:italic;color:var(--gold-dk);margin-bottom:24px;}
+.bottle-detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:20px;}
+.detail-stat{background:var(--cream2);padding:10px 12px;}
+.detail-stat-val{font-size:15px;font-weight:600;color:var(--ink);display:block;margin-bottom:2px;}
+.detail-stat-lbl{font-size:8px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dk);}
+.bottle-detail-desc{font-size:13px;font-weight:400;font-style:italic;color:#777;line-height:1.7;}
+.bottle-prov{margin-top:16px;}
+.prov-unlocked{background:var(--charcoal);padding:16px 18px;border-top:2px solid var(--gold);}
+.prov-eyebrow{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.prov-row{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-bottom:1px solid var(--charcoal4);}
+.prov-row:last-child{border-bottom:none;}
+.prov-row-label{color:var(--gold-dk);letter-spacing:.08em;text-transform:uppercase;font-size:9px;font-weight:600;align-self:center;flex-shrink:0;}
+.prov-row-val{color:var(--cream);text-align:right;font-size:12px;}
+.prov-notes{font-size:12px;color:var(--cream3);line-height:1.7;font-style:italic;margin-top:10px;padding-top:10px;border-top:1px solid var(--charcoal4);}
+.bottle-detail-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--cream3);font-size:18px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:color .2s;z-index:5;}
+.bottle-detail-close:hover{color:var(--gold);}
+@media(max-width:820px){.whiskey-two-col{grid-template-columns:1fr;gap:36px;}}
+@media(max-width:900px){.bottle-grid{grid-template-columns:1fr;}.bottle-detail-inner{grid-template-columns:1fr;}.bottle-detail-img-col{min-height:320px;}.bottle-detail-stats{grid-template-columns:1fr 1fr;}}
+
+/* ══ DECODER (matches main site #vintage) ══ */
+#vintage{background-color:var(--charcoal2);background-image:linear-gradient(180deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,0) 48%,rgba(0,0,0,.32) 100%),url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%271200%27%20height%3D%27800%27%20preserveAspectRatio%3D%27none%27%3E%3Cfilter%20id%3D%27gm%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%200.007%27%20numOctaves%3D%272%27%20seed%3D%278%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27matrix%27%20values%3D%270%200%200%200%200.85%200%200%200%200%200.85%200%200%200%200%200.85%200%200%200%200.5%200%27%2F%3E%3CfeComponentTransfer%3E%3CfeFuncA%20type%3D%27linear%27%20slope%3D%270.2%27%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23gm%29%27%2F%3E%3C%2Fsvg%3E");background-repeat:no-repeat,repeat;background-size:100% 100%,1200px 800px;background-position:center,top left;}
+.vintage-hero{text-align:center;margin-bottom:clamp(40px,6vh,72px);}
+.vintage-hero .display-sm{margin-bottom:16px;}
+.vintage-hero .body-copy{margin:0 auto;}
+.vintage-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px;align-items:start;}
+.vintage-decoder-col{position:sticky;top:calc(var(--nav-h) + 20px);}
+.vintage-decoder-panel{background:var(--charcoal3);padding:clamp(16px,3vw,28px);}
+.vintage-col-label{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.vin-input-wrap{display:flex;gap:0;margin-bottom:10px;width:100%;}
+.vin-input{flex:1;min-width:0;width:0;background:var(--charcoal);border:1px solid var(--charcoal4);border-right:none;color:var(--cream);font-family:var(--f);font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:10px 12px;outline:none;border-radius:0;transition:border-color .2s;}
+.vin-input::placeholder{color:#9A9186;font-weight:400;}
+.vin-input:focus{border-color:var(--gold);background:#1e1c1a;}
+.decode-btn{flex-shrink:0;background:var(--gold);color:var(--charcoal);border:none;font-family:var(--f);font-size:13px;font-weight:600;letter-spacing:.12em;padding:0 18px;cursor:pointer;border-radius:0;transition:background .15s;}
+.decode-btn:hover{background:var(--gold-lt);}
+.vin-hint{font-size:9px;letter-spacing:.10em;color:var(--cream3);text-transform:uppercase;margin-bottom:8px;}
+.vin-hint strong{color:var(--cream3);}
+.vin-example-label{font-size:9px;color:var(--cream3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.vin-pills{display:flex;gap:5px;flex-wrap:wrap;}
+.vin-pill{background:var(--charcoal2);color:var(--cream3);font-family:var(--f);font-size:9px;font-weight:500;letter-spacing:.12em;padding:5px 8px;cursor:pointer;text-transform:uppercase;border:none;transition:color .15s,background .15s;}
+.vin-pill:hover{color:var(--gold);background:var(--charcoal4);}
+/* Upload Label (VIP addition) */
+.vin-upload-wrap{margin-top:14px;padding-top:14px;border-top:1px solid var(--charcoal4);}
+.vin-upload-btn{width:100%;background:transparent;border:1px solid var(--gold-dk);color:var(--gold);font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:11px 14px;cursor:pointer;transition:border-color .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.vin-upload-btn:hover{border-color:var(--gold);color:var(--gold-lt);}
+.vin-upload-note{font-size:9px;letter-spacing:.08em;color:#9A9186;margin-top:8px;line-height:1.5;text-transform:uppercase;}
+.vin-ocr-status{font-size:10px;letter-spacing:.06em;color:var(--gold-lt);margin-top:10px;min-height:14px;line-height:1.5;}
+.vin-ocr-status.err{color:#E88A6A;}
+
+#vin-result{opacity:0;transform:translateY(10px);transition:opacity .35s,transform .35s;pointer-events:none;margin-top:8px;}
+#vin-result.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+.vin-result-card{background:var(--cream);position:relative;}
+.vin-result-header{background:var(--charcoal);border-bottom:2px solid var(--gold);padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+.vin-result-tag{font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.vin-result-code-disp{font-size:11px;color:var(--gold-lt);letter-spacing:.14em;}
+.vin-result-badge{background:var(--gold);color:var(--charcoal);font-size:11px;font-weight:700;letter-spacing:.1em;padding:3px 8px;white-space:nowrap;flex-shrink:0;}
+.vin-result-title-bar{padding:12px 14px;border-bottom:1px solid var(--cream3);}
+.vin-result-wname{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.15;}
+.vin-result-series{font-size:11px;font-style:italic;color:var(--gold-dk);margin-top:2px;}
+.vin-result-body{display:grid;grid-template-columns:150px 1fr;gap:0;align-items:stretch;}
+.vin-result-img-col{position:relative;min-height:0;border-right:1px solid var(--cream3);}
+.vin-result-img{position:absolute;inset:12px;width:auto;height:auto;max-width:calc(100% - 24px);max-height:calc(100% - 24px);margin:auto;object-fit:contain;object-position:center;filter:drop-shadow(0 4px 12px rgba(0,0,0,.15));}
+.vin-result-data-col{display:flex;flex-direction:column;gap:2px;padding:2px;}
+.vin-stat-block{background:var(--cream2);border-left:2px solid var(--gold);padding:8px 10px;display:flex;flex-direction:column;gap:2px;}
+.vin-stat-lbl{font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);}
+.vin-stat-val{font-size:13px;font-weight:500;color:var(--ink);letter-spacing:.02em;}
+.vin-stat-sub{font-size:9px;font-style:italic;color:#888;letter-spacing:.06em;}
+.vin-mash-wrap{background:var(--cream2);padding:8px 10px;}
+.vin-mash-lbl{font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:5px;}
+.vin-mash-bar{display:flex;height:18px;overflow:hidden;margin-bottom:5px;}
+.vin-mash-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600;transition:width .6s cubic-bezier(.4,0,.2,1);overflow:hidden;white-space:nowrap;}
+.vin-mash-legend{display:flex;flex-wrap:wrap;gap:6px;}
+.vin-mash-legend-item{font-size:8px;font-weight:400;color:var(--ink);display:flex;align-items:center;gap:3px;}
+.vin-mash-dot{width:7px;height:7px;flex-shrink:0;}
+.vin-garage-cta{background:var(--charcoal);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.vin-garage-text{font-size:9px;color:var(--cream3);letter-spacing:.08em;line-height:1.5;}
+.vin-garage-text strong{display:block;color:var(--cream);font-size:10px;margin-bottom:1px;}
+.vin-btn-garage{background:transparent;border:1px solid var(--charcoal4);color:var(--gold);font-family:var(--f);font-size:9px;font-weight:500;letter-spacing:.14em;padding:6px 10px;cursor:pointer;text-transform:uppercase;transition:border-color .15s;}
+.vin-btn-garage:hover{border-color:var(--gold);}
+.vin-error{background:var(--cream);padding:16px;display:flex;gap:10px;}
+.vin-error-icon{font-size:18px;color:var(--rust);flex-shrink:0;}
+.vin-error-text{font-size:10px;color:var(--ink);letter-spacing:.06em;line-height:1.6;}
+.vin-error-text strong{display:block;font-size:11px;color:var(--rust);margin-bottom:3px;letter-spacing:.1em;}
+.vin-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:clamp(20px,3vw,36px);font-weight:700;letter-spacing:.2em;color:rgba(200,149,42,.15);white-space:nowrap;pointer-events:none;z-index:10;text-transform:uppercase;border:2px solid rgba(200,149,42,.15);padding:6px 12px;}
+/* right reference */
+.vintage-ref-col{display:flex;flex-direction:column;gap:2px;}
+.ref-panel{background:var(--charcoal3);padding:clamp(12px,2.5vw,18px) clamp(14px,3vw,22px);}
+.ref-divider{height:1px;background:var(--gold);opacity:.2;}
+.segs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;width:100%;}
+.seg-tile{background:var(--charcoal2);padding:9px 3px;text-align:center;cursor:default;transition:background .15s;overflow:hidden;}
+.seg-tile:hover{background:var(--charcoal4);}
+.seg-val{font-size:12px;font-weight:500;color:var(--gold);letter-spacing:.08em;display:block;margin-bottom:3px;transition:color .15s;}
+.seg-fld{font-size:6px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--cream3);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.series-rows{display:flex;flex-direction:column;gap:1px;}
+.series-row{background:var(--charcoal2);display:flex;align-items:center;gap:10px;padding:8px 12px;}
+.s-code{font-size:12px;font-weight:500;color:var(--gold);letter-spacing:.1em;min-width:22px;}
+.s-name{font-size:10px;font-weight:400;color:var(--cream3);letter-spacing:.08em;text-transform:uppercase;}
+.ref-body-text{font-size:13px;font-weight:400;font-style:italic;color:#C4BAA6;line-height:1.6;}
+.data-plate-row{display:flex;gap:1px;width:100%;}
+.dp-tile{flex:1 1 0;min-width:0;background:var(--charcoal2);padding:7px 8px;display:flex;flex-direction:column;gap:3px;}
+.dp-tile-wide{flex:2 1 0;min-width:0;background:var(--charcoal2);padding:7px 8px;display:flex;flex-direction:column;gap:3px;}
+.dp-code{font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.08em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dp-lbl{font-size:7px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--cream3);white-space:nowrap;}
+.dp-grain{font-size:7px;color:#A69C8C;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ══ BARREL ARCHIVE (matches main site) ══ */
+#archive-sec{background:var(--charcoal);border-top:1px solid var(--charcoal4);}
+.archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+.archive-card{background:var(--charcoal3);border:1px solid var(--charcoal4);cursor:pointer;transition:border-color .15s;overflow:hidden;}
+.archive-card:hover{border-color:var(--gold);}
+.archive-card-img{aspect-ratio:4/3;background:linear-gradient(180deg,#33302B,#242220);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.archive-card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.archive-card-img.render img{object-fit:contain;padding:16px 16px 0;filter:drop-shadow(0 12px 24px rgba(0,0,0,.6));}
+.archive-noimg{font-size:20px;letter-spacing:3px;color:#5A554C;font-weight:600;}
+.archive-card-body{padding:14px 16px;}
+.archive-card-series{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.archive-card-title{font-size:15px;color:var(--cream);line-height:1.3;font-weight:600;}
+.archive-card-code{font-size:11px;letter-spacing:1px;color:#A69C8C;margin-top:6px;}
+.archive-draft{display:inline-block;margin-left:8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#1A1917;background:#A69C8C;padding:1px 6px;vertical-align:middle;}
+.archive-back{background:none;border:none;color:var(--gold);font-family:var(--f);font-size:12px;letter-spacing:.06em;cursor:pointer;padding:0;margin-bottom:24px;}
+.archive-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.archive-title{font-size:clamp(22px,3vw,30px);font-weight:700;color:var(--cream);line-height:1.15;}
+.archive-code{font-size:12px;letter-spacing:2px;color:#A69C8C;margin-top:8px;}
+.archive-rule{width:52px;border-top:1px solid var(--gold);margin:18px 0;}
+.archive-cta{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 28px;}
+.archive-cta-btn{font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--charcoal);border:none;padding:11px 18px;cursor:pointer;transition:background .2s;}
+.archive-cta-btn:hover{background:var(--gold-lt);}
+.archive-cta-btn.ghost{background:transparent;color:var(--gold);border:1px solid var(--gold-dk);}
+.archive-cta-btn.ghost:hover{background:rgba(200,149,42,.12);color:var(--gold-lt);}
+.archive-intro{font-size:15px;line-height:1.7;color:var(--cream3);max-width:680px;margin:0;}
+.archive-sec{margin-top:30px;}
+.archive-sec-h{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.archive-body{font-size:14px;line-height:1.7;color:var(--cream3);max-width:680px;margin:14px 0 0;}
+.bs-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2px;}
+.bs-fact{background:var(--charcoal2);padding:14px 16px;}
+.bs-fact-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#A69C8C;margin-bottom:5px;}
+.bs-fact-val{font-size:14px;color:var(--cream);}
+.archive-timeline{border-left:1px solid var(--charcoal4);padding-left:18px;display:flex;flex-direction:column;gap:16px;}
+.archive-tl-item{position:relative;}
+.archive-tl-item:before{content:'';position:absolute;left:-23px;top:5px;width:8px;height:8px;background:var(--gold);border-radius:50%;}
+.archive-tl-year{font-size:12px;color:var(--gold);letter-spacing:.04em;}
+.archive-tl-note{font-size:14px;color:var(--cream3);margin-top:3px;line-height:1.6;}
+.archive-finish{margin-top:30px;background:var(--charcoal2);border-left:2px solid var(--gold);padding:18px 20px;}
+.archive-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;}
+.archive-fig{margin:0;}
+.archive-fig img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#2E2C28;}
+.archive-fig figcaption{font-size:11px;color:#A69C8C;margin-top:6px;letter-spacing:.04em;}
+
+footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:center;color:#8a857a;font-size:12px;}
+.proto-note{margin-top:8px;color:#8a857a;font-size:11px;max-width:64ch;margin-left:auto;margin-right:auto;line-height:1.6;}
+.tm{font-size:.62em;vertical-align:super;}
+
+@media(max-width:900px){
+ .vintage-cols{grid-template-columns:minmax(0,1fr);}
+ .vintage-decoder-col{position:static;min-width:0;order:-1;}
+ .vintage-ref-col{min-width:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="vipbar">Industry VIP Access &nbsp;&middot;&nbsp; Invitation Only</div>
+<header class="nav">
+ <div class="nav-in">
+  <img class="lm" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" crossorigin="anonymous">
+  <img class="wm" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond" crossorigin="anonymous">
+  <span class="vip-chip">VIP Access</span>
+ </div>
+</header>
+
+<!-- HERO (car image behind, matches main site) -->
+<section id="home">
+ <div class="hero-bg">
+  <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/A484537E-B4CB-4D6B-B97D-AD8A28952C64_1_201_a_edited.png" alt="" aria-hidden="true" crossorigin="anonymous">
+ </div>
+ <div class="hero-overlay"></div>
+ <div class="hero-inner">
+  <div class="hero-bottles">
+   <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" title="Founders Select — view details" onclick="heroToRelease(0)" crossorigin="anonymous">
+   <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" title="Barn Find — view details" onclick="heroToRelease(2)" crossorigin="anonymous">
+   <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" title="Collection Series — view details" onclick="heroToRelease(1)" crossorigin="anonymous">
+  </div>
+  <div class="hero-eyebrow">Industry VIP Access &nbsp;&middot;&nbsp; For The Trade</div>
+  <h1 class="hero-headline">THE SPIRIT OF AMERICAN MUSCLE<span class="tm">&trade;</span></h1>
+  <p class="hero-tagline">Single Barrel &nbsp;&middot;&nbsp; Barrel Strength</p>
+  <div class="hero-ctas">
+   <button class="btn-primary" onclick="document.getElementById('whiskey').scrollIntoView({behavior:'smooth'})">Explore The Releases</button>
+   <button class="btn-ghost" onclick="document.getElementById('vintage').scrollIntoView({behavior:'smooth'})">Decode a Bottle</button>
+  </div>
+ </div>
+</section>
+
+<!-- WHISKEY / BOTTLE SHOWCASE -->
+<section id="whiskey" class="section">
+ <div class="section-inner">
+  <div class="whiskey-two-col">
+   <div class="whiskey-copy-col">
+    <div class="eyebrow">First Generation &nbsp;&middot;&nbsp; G1 &nbsp;&middot;&nbsp; 2026</div>
+    <h2 class="display-sm" style="margin-top:6px;white-space:nowrap;">The Whiskey</h2>
+    <div class="gold-line" style="margin:20px 0;"></div>
+    <p class="body-copy" style="font-size:clamp(14px,1.15vw,16px);">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
+    <p class="body-copy" style="margin-top:16px;font-size:clamp(14px,1.15vw,16px);">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
+   </div>
+   <div class="whiskey-releases-col">
+    <div class="bottles-eyebrow-row">
+     <div class="eyebrow">Select A Release</div>
+     <div style="font-size:11px;font-weight:400;color:var(--cream3);letter-spacing:.08em;">Click a bottle to see details</div>
+    </div>
+    <div class="bottle-grid">
+     <div class="bottle-card" onclick="openBottle(0)" id="bottle-card-0">
+      <div class="bottle-card-ribbon">Founders Select</div>
+      <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" loading="lazy" crossorigin="anonymous"></div>
+      <div class="bottle-card-info">
+       <div class="bottle-card-series">FS · Founders Select</div>
+       <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
+       <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">117.8</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+       <div class="bottle-card-code">TIB 26 FS G1 00001</div>
+       <div class="limited-pill">Limited Single-Barrel Release</div>
+      </div>
+     </div>
+     <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
+      <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
+      <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous"></div>
+      <div class="bottle-card-info">
+       <div class="bottle-card-series">CS · Collection Series</div>
+       <div class="bottle-card-name">High Rye Bourbon, Rum Cask Finish</div>
+       <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+       <div class="bottle-card-code">TIB 26 CS G1 00002</div>
+       <div class="limited-pill">Limited Single-Barrel Release</div>
+      </div>
+     </div>
+     <div class="bottle-card" onclick="openBottle(2)" id="bottle-card-2">
+      <div class="bottle-card-ribbon" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--gold);">Barn Find</div>
+      <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" loading="lazy" crossorigin="anonymous">
+       <div class="bf-sash"><img class="bf-sash-logo" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous"><span class="bf-sash-txt">Coming Fall 2026</span></div>
+      </div>
+      <div class="bottle-card-info">
+       <div class="bottle-card-series">BF · Barn Find</div>
+       <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
+       <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">Pending</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">11 Yr</span><span class="bc-stat-l">Age</span></div></div>
+       <div class="bottle-card-code">TIB 26 BF G1 00003</div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="bottle-detail" style="position:relative;">
+   <div class="bottle-detail-inner" id="bottle-detail-inner"></div>
+   <button class="bottle-detail-close" onclick="closeBottle()">✕</button>
+  </div>
+ </div>
+</section>
+
+<!-- DECODER -->
+<section id="vintage" class="section">
+ <div class="section-inner">
+  <div class="vintage-hero">
+   <div class="eyebrow">Traceability System &nbsp;&middot;&nbsp; Every Bottle</div>
+   <h2 class="display-sm">The VIN-TAG<span class="lowercase-e">e</span><span class="tm">&trade;</span></h2>
+   <div class="gold-line" style="margin:16px auto;"></div>
+   <p class="body-copy">Every bottle is printed with a code and data plate, unique to its barrel. It tracks valuable information about each release.</p>
+  </div>
+
+  <div class="vintage-cols">
+   <!-- LEFT: DECODER -->
+   <div class="vintage-decoder-col">
+    <div class="vintage-decoder-panel">
+     <div class="vintage-col-label">VIN-TAG<span class="lowercase-e">e</span><span class="tm">&trade;</span> Lookup</div>
+     <div class="vin-input-wrap">
+      <input type="text" class="vin-input" id="vin-input" placeholder="TIB 26 FS G1 00001" maxlength="20" autocomplete="off" spellcheck="false">
+      <button class="decode-btn" onclick="vinDecode()">DECODE</button>
+     </div>
+     <div class="vin-hint">Format: <strong>TIB YY SS G# #####</strong> &nbsp;&middot;&nbsp; Found on your bottle label</div>
+     <div class="vin-example-label">Try an example</div>
+     <div class="vin-pills">
+      <div class="vin-pill" onclick="vinFill('TIB 26 FS G1 00001')">TIB 26 FS G1 00001</div>
+      <div class="vin-pill" onclick="vinFill('TIB 26 CS G1 00002')">TIB 26 CS G1 00002</div>
+      <div class="vin-pill" onclick="vinFill('TIB 26 BF G1 00003')">TIB 26 BF G1 00003</div>
+     </div>
+     <!-- Upload Label (on-device OCR) -->
+     <div class="vin-upload-wrap">
+      <button class="vin-upload-btn" onclick="pickLabel()">&#128247;&nbsp; Upload Label Photo</button>
+      <input type="file" id="label-input" accept="image/*" capture="environment" style="display:none" onchange="handleLabel(this.files[0])">
+      <div class="vin-upload-note">Reads the VIN-TAGe on your device &middot; photo is not uploaded or saved</div>
+      <div class="vin-ocr-status" id="vin-ocr-status"></div>
+     </div>
+    </div>
+    <div id="vin-result" style="position:relative;"></div>
+   </div>
+
+   <!-- RIGHT: REFERENCE -->
+   <div class="vintage-ref-col">
+    <div class="ref-panel">
+     <div class="vintage-col-label">Example VIN-TAG<span class="lowercase-e">e</span><span class="tm">&trade;</span> Code</div>
+     <div class="segs" id="rtc-segs">
+      <div class="seg-tile" onclick="rtcAct(0)"><span class="seg-val">TIB</span><span class="seg-fld">Brand</span></div>
+      <div class="seg-tile" onclick="rtcAct(1)"><span class="seg-val">26</span><span class="seg-fld">Bottling Yr</span></div>
+      <div class="seg-tile" onclick="rtcAct(2)"><span class="seg-val">FS</span><span class="seg-fld">Series</span></div>
+      <div class="seg-tile" onclick="rtcAct(3)"><span class="seg-val">G1</span><span class="seg-fld">Generation</span></div>
+      <div class="seg-tile" onclick="rtcAct(4)"><span class="seg-val">00001</span><span class="seg-fld">Barrel No.</span></div>
+     </div>
+    </div>
+    <div class="ref-divider"></div>
+    <div class="ref-panel">
+     <div class="vintage-col-label">Series Codes</div>
+     <div class="series-rows">
+      <div class="series-row"><span class="s-code">FS</span><span class="s-name">Founders Select</span></div>
+      <div class="series-row"><span class="s-code">CS</span><span class="s-name">Collection Series</span></div>
+      <div class="series-row"><span class="s-code">BF</span><span class="s-name">Barn Find</span></div>
+     </div>
+    </div>
+    <div class="ref-divider"></div>
+    <div class="ref-panel">
+     <div class="vintage-col-label">Generation Code</div>
+     <div class="series-rows" style="margin-bottom:10px;">
+      <div class="series-row"><span class="s-code">G1</span><span class="s-name">First Generation</span></div>
+      <div class="series-row"><span class="s-code">G2</span><span class="s-name">Second Generation</span></div>
+      <div class="series-row"><span class="s-code">G3</span><span class="s-name">Third Generation</span></div>
+     </div>
+     <div class="ref-body-text">Each series release marks a new Generation. The Generation Code tracks the release history of each series over time.</div>
+    </div>
+    <div class="ref-divider"></div>
+    <div class="ref-panel">
+     <div class="vintage-col-label">Barrel Number</div>
+     <div class="ref-body-text">Every barrel is assigned a sequential number starting at 00001, counting up across every series and generation forever. The number never resets.</div>
+    </div>
+    <div class="ref-divider"></div>
+    <div class="ref-panel">
+     <div class="vintage-col-label">More Data Plate Information</div>
+     <div class="data-plate-row">
+      <div class="dp-tile"><span class="dp-code">[Pend]</span><span class="dp-lbl">Proof</span></div>
+      <div class="dp-tile"><span class="dp-code">KY</span><span class="dp-lbl">Origin</span></div>
+      <div class="dp-tile"><span class="dp-code">6</span><span class="dp-lbl">Age</span></div>
+      <div class="dp-tile"><span class="dp-code">F26</span><span class="dp-lbl">Bot. Date</span></div>
+      <div class="dp-tile-wide">
+       <span class="dp-code" style="font-size:9px;">C74 R18 W0 MB8</span>
+       <span class="dp-lbl">Mash Bill</span>
+       <span class="dp-grain">C=Corn R=Rye W=Wheat MB=Malted Barley</span>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- BARREL ARCHIVE -->
+<section id="archive-sec" class="section">
+ <div class="section-inner">
+  <div style="margin-bottom:28px;">
+   <div class="eyebrow">The Releases</div>
+   <h2 class="display-sm">The Barrel Archive</h2>
+   <div class="gold-line"></div>
+   <p class="body-copy">The full history, provenance, and story behind every barrel we&rsquo;ve bottled.</p>
+  </div>
+  <div id="archive-list"></div>
+  <div id="archive-detail" style="display:none;"></div>
+ </div>
+</section>
+
+<footer>
+ Throttled In Bond&trade; &middot; Industry VIP Access &middot; By Invitation
+ <div class="proto-note">The Barrel Archive below is live &ndash; it always shows the current published barrel stories from Throttled In Bond. The label reader runs entirely in your browser; the photo is not uploaded or stored.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Supabase client (public anon key — same one used across the TIB sites) */
+var _supabase = supabase.createClient(
+ 'https://pzbfwzikctpyszthwpvt.supabase.co',
+ 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6YmZ3emlrY3RweXN6dGh3cHZ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMTgyMTcsImV4cCI6MjA5ODU5NDIxN30.j4KjQvEhAZPyKXpJHEsCQYTGuQ3p46WNHDgfb8B6Zjg'
+);
+/* Per-series bottle render used as the archive cover when a barrel has no photo yet */
+var SERIES_RENDER = {
+ FS:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png',
+ CS:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png',
+ BF:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png'
+};
+
+/* ── shared helpers (from main site) ── */
+function fbEscape(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function safeUrl(u){ var s=String(u==null?'':u).trim(); return /^https?:\/\//i.test(s)?fbEscape(s):'#'; }
+function bsEscMulti(s){ return fbEscape(s).replace(/\n/g,'<br>'); }
+function bsFact(lbl,val,gold){ if(!val) return ''; return '<div class="bs-fact"><div class="bs-fact-lbl">'+fbEscape(lbl)+'</div><div class="bs-fact-val"'+(gold?' style="color:var(--gold);"':'')+'>'+fbEscape(val)+'</div></div>'; }
+
+/* ── VIN-TAGe DECODER (exact from main site) ── */
+const GRAIN_COLORS = { C:'background:#C8952A;color:#1A1917', R:'background:#8B3A2A;color:#fff', W:'background:#8B7355;color:#fff', MB:'background:#3E3B35;color:#D6CCBA' };
+const VIN_BRANDS = {'TIB':'THROTTLED IN BOND™'};
+const VIN_SERIES = {
+ 'FS':{name:'Founders Select',desc:'The flagship release. The barrel that started it all.'},
+ 'CS':{name:'Collection Series',desc:'Curated selections for the dedicated collector.'},
+ 'BF':{name:'Barn Find',desc:'Discovered barrels. Rare, aged, and worth the hunt.'},
+};
+const VIN_GEN = {
+ 'G1':{name:'First Generation',desc:'The inaugural release of this series.'},
+ 'G2':{name:'Second Generation',desc:'The second chapter of this series.'},
+ 'G3':{name:'Third Generation',desc:'Refined with experience.'},
+};
+const VIN_GRAIN = {C:'Corn',R:'Rye',W:'Wheat',MB:'Malted Barley'};
+const VIN_BARRELS = {
+ 'TIB 26 FS G1 00001': { whiskey:'Founders Select', series:'FS', gen:'G1', barrel:'00001', subtitle:'Kentucky Straight Bourbon Whiskey', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png', proof:'117.8', age:'6 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'F26', mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}] },
+ 'TIB 26 CS G1 00002': { whiskey:'Collection Series', series:'CS', gen:'G1', barrel:'00001', subtitle:'High Rye Bourbon, Rum Cask Finish', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png', proof:'108.2', age:'6 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'F26', mashBill:[{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}] },
+ 'TIB 26 BF G1 00003': { whiskey:'Barn Find', series:'BF', gen:'G1', barrel:'00001', subtitle:'American Whiskey, Double Oak Finish', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png', proof:'PNDG', age:'11 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'PNDG', mashBill:[{k:'C',p:0},{k:'R',p:0},{k:'W',p:0},{k:'MB',p:0}] }
+};
+
+/* VIP page has no login; keep the result card identical to the logged-out (regular) view. */
+var _currentUser = null;
+function openModal(){ /* no-op in prototype (would open sign-in on the live site) */ }
+function garageSave(){ /* no-op in prototype */ }
+
+let vinIsExample = false;
+function vinFill(code){
+ var liveCodes = ['TIB 26 FS G1 00001','TIB 26 CS G1 00002','TIB 26 BF G1 00003'];
+ vinIsExample = liveCodes.indexOf(code) === -1;
+ document.getElementById('vin-input').value = code;
+ vinDecode();
+}
+function vinDecode(){
+ const raw = document.getElementById('vin-input').value.trim().toUpperCase().replace(/\s+/g,' ');
+ const panel = document.getElementById('vin-result');
+ panel.classList.remove('visible');
+ setTimeout(() => {
+  const barrel = VIN_BARRELS[raw];
+  const parts = raw.split(' ');
+  const parsed = parts.length === 5 ? {
+   brand: parts[0], year: parts[1], series: parts[2], gen: parts[3], barrel: parts[4],
+   brandInfo: VIN_BRANDS[parts[0]] || null, seriesInfo: VIN_SERIES[parts[2]] || null, genInfo: VIN_GEN[parts[3]] || null,
+  } : null;
+  if (barrel && parsed){ panel.innerHTML = vinBuildResult(barrel, parsed); }
+  else if (raw.length < 5){ panel.innerHTML = ''; }
+  else { panel.innerHTML = vinBuildError(raw, parsed); }
+  if (barrel){ setTimeout(() => panel.querySelectorAll('.vin-mash-seg[data-target]').forEach(s => s.style.width = s.dataset.target+'%'), 80); }
+  const wm = panel.querySelector('.vin-watermark');
+  if (wm) wm.remove();
+  if (vinIsExample && barrel){ const w=document.createElement('div'); w.className='vin-watermark'; w.textContent='Example Report'; panel.appendChild(w); }
+  panel.classList.add('visible');
+ }, 300);
+}
+function vinBuildResult(b, p){
+ const si = p.seriesInfo || {name:p.series,desc:''};
+ const gi = p.genInfo || {name:p.gen,desc:''};
+ const bn = p.brandInfo || p.brand;
+ const mashAllZero = b.mashBill.every(g => g.p === 0);
+ const mash = mashAllZero ? '<div class="vin-mash-seg" data-target="100" style="width:0%;background:#1A1917;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:.14em;">UNDISCLOSED</div>' : b.mashBill.map(g => {
+  const col = GRAIN_COLORS[g.k]||'background:#888;color:#fff';
+  return g.p === 0 ? '' : `<div class="vin-mash-seg" data-target="${g.p}" style="width:0%;${col}">${g.p+'%'}</div>`;
+ }).join('');
+ const legend = mashAllZero ? '' : b.mashBill.filter(g=>g.p>0).map(g=>{
+  const dots={C:'#C8952A',R:'#8B3A2A',W:'#8B7355',MB:'#3E3B35'};
+  return `<div class="vin-mash-legend-item"><div class="vin-mash-dot" style="background:${dots[g.k]||'#888'}"></div>${g.p}% ${VIN_GRAIN[g.k]||g.k}</div>`;
+ }).join('');
+ return `<div class="vin-result-card">
+ <div class="vin-result-header">
+  <div><div class="vin-result-tag">VIN-TAG<span class="lowercase-e">e</span>™ Verified · ${bn}</div><div class="vin-result-code-disp">${p.brand} ${p.year} ${p.series} ${p.gen} ${p.barrel}</div></div>
+  <div class="vin-result-badge">BARREL ${p.barrel}</div>
+ </div>
+ <div class="vin-result-title-bar">
+  <div class="vin-result-wname">${b.whiskey}${b.subtitle ? ' · ' + b.subtitle : ''}</div>
+  <div class="vin-result-series">Single Barrel · Barrel Strength</div>
+ </div>
+ <div class="vin-result-body">
+  <div class="vin-result-img-col">${b.img ? '<img class="vin-result-img" src="' + b.img + '" alt="' + b.whiskey + '" crossorigin="anonymous">' : ''}</div>
+  <div class="vin-result-data-col">
+   <div class="vin-stat-block"><div class="vin-stat-lbl">Proof</div><div class="vin-stat-val">${b.proof}</div></div>
+   <div class="vin-stat-block"><div class="vin-stat-lbl">Origin</div><div class="vin-stat-val">${b.origin}</div></div>
+   <div class="vin-stat-block"><div class="vin-stat-lbl">Age</div><div class="vin-stat-val">${b.age}</div></div>
+   <div class="vin-stat-block"><div class="vin-stat-lbl">Bot. Date</div><div class="vin-stat-val">${b.bottling||'—'}</div><div class="vin-stat-sub">${(function(code){if(!code||code==='PNDG')return 'Pending';var months={A:'Jan',B:'Feb',C:'Mar',D:'Apr',E:'May',F:'Jun',G:'Jul',H:'Aug',J:'Sep',K:'Oct',L:'Nov',M:'Dec'};var m=months[code[0]]||'';var y=code.slice(1);return m&&y?m+' 20'+y:'';})( b.bottling)}</div></div>
+   <div class="vin-stat-block"><div class="vin-stat-lbl">Series</div><div class="vin-stat-val">${si.name}</div></div>
+   <div class="vin-stat-block"><div class="vin-stat-lbl">Generation</div><div class="vin-stat-val">${gi.name}</div><div class="vin-stat-sub">${gi.desc||''}</div></div>
+  </div>
+ </div>
+ <div class="vin-mash-wrap"><div class="vin-mash-lbl">Mash Bill</div><div class="vin-mash-bar">${mash}</div>${mashAllZero ? '' : '<div class="vin-mash-legend">' + legend + '</div>'}</div>
+ <div class="vin-garage-cta">
+  <div class="vin-garage-text"><strong>Read the Barrel Story</strong>See the full provenance and tasting notes for this barrel in the archive below.</div>
+  <button class="vin-btn-garage" onclick="archiveDecodeJump('${p.series}')">Open Archive</button>
+ </div>
+</div>`;
+}
+function vinBuildError(code, p){
+ let hint = '';
+ if (p){
+  const parts = [];
+  if (p.brandInfo) parts.push(`Brand: <strong>${p.brandInfo}</strong>`);
+  if (p.seriesInfo) parts.push(`Series: <strong>${p.seriesInfo.name}</strong>`);
+  if (parts.length) hint = `<div style="margin-top:6px;font-size:9px;color:#888;line-height:1.8">${parts.join(' · ')}</div>`;
+ }
+ return `<div class="vin-error"><div class="vin-error-icon">⊘</div><div class="vin-error-text"><strong>Barrel Not Found</strong>"${code}" isn't in our system yet. Check your label and try again.${hint}</div></div>`;
+}
+document.getElementById('vin-input').addEventListener('keydown', e => { if(e.key==='Enter') vinDecode(); });
+document.getElementById('vin-input').addEventListener('input', function(e){
+ vinIsExample = false;
+ let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+ let f = '';
+ for (let i=0;i<v.length&&i<16;i++){ if (i===3||i===5||i===7||i===9) f+=' '; f+=v[i]; }
+ e.target.value = f;
+});
+let rtcActive = -1;
+function rtcAct(i){
+ const segs = document.querySelectorAll('#rtc-segs .seg-tile');
+ segs.forEach((s,idx) => { s.style.background = idx===i&&rtcActive!==i ? '#3E3B35' : '#2E2C28'; s.querySelector('.seg-val').style.color = idx===i&&rtcActive!==i ? '#E8B84B' : '#C8952A'; });
+ rtcActive = rtcActive===i ? -1 : i;
+}
+
+/* ── BOTTLE SHOWCASE (matches main site "Select A Release") ── */
+const BOTTLES = [
+ { id:0, series:'FS', seriesName:'Founders Select', gen:'G1', code:'TIB 26 FS G1 00001', barrel:'00001', name:'Kentucky Straight Bourbon Whiskey', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png', proof:'117.8', age:'6 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'F26', desc:'Founders Select 6 year single-barrel Kentucky straight bourbon is the expression that started it all. From the very first tasting, this mash bill stood apart. Balanced and inviting, this pour does not try to overpower, it draws you in. Layered, nuanced, and quietly confident, it opens light and builds into something warmer, deeper, and undeniably memorable.', mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}] },
+ { id:1, series:'CS', seriesName:'Collection Series', gen:'G1', code:'TIB 26 CS G1 00002', barrel:'00001', name:'High Rye Bourbon, Rum Cask Finish', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png', proof:'108.2', age:'6 Years', origin:'Kentucky', distiller:'Wilderness Trail', distDate:'5/24/2020', category:'Single Barrel', bottling:'F26', desc:'Collection Series 6 year single-barrel High Rye Bourbon finished in rum casks brings together structure and softness in a way that feels both familiar and unexpected. Built on a bold, rye-forward foundation, then rounded by time in a well-aged rum cask, this expression opens with restraint and evolves into layered warmth and sweet depth. It is balanced without losing its edge. A whiskey that holds its line while inviting you back for more.', mashBill:[{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}] },
+ { id:2, series:'BF', seriesName:'Barn Find', gen:'G1', code:'TIB 26 BF G1 00003', barrel:'00001', name:'Kentucky Straight Bourbon Whiskey', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png', proof:'PNDG', age:'11 Years', origin:'Kentucky', distiller:'Jim Beam', distDate:'N/A', category:'Single Barrel', bottling:'F26', desc:'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.', mashBill:[{k:'C',p:0},{k:'R',p:0},{k:'W',p:0},{k:'MB',p:0}] }
+];
+let activeBottle = null;
+function heroToRelease(id){ try{ document.getElementById('whiskey').scrollIntoView({behavior:'smooth'}); }catch(e){} }
+function openBottle(id){
+ if (activeBottle === id){ closeBottle(); return; }
+ activeBottle = id;
+ document.querySelectorAll('.bottle-card').forEach(c => c.classList.remove('active'));
+ var card=document.getElementById('bottle-card-'+id); if(card) card.classList.add('active');
+ const b = BOTTLES[id];
+ const mashAllZero = (b.mashBill||[]).every(g => g.p === 0);
+ const grainDots = {C:'#C8952A',R:'#8B3A2A',W:'#8B7355',MB:'#3E3B35'};
+ const mash = mashAllZero ? '' : b.mashBill.filter(g => g.p > 0).map(g => {
+  const col = GRAIN_COLORS[g.k] || 'background:#888;color:#fff';
+  return '<div style="width:'+g.p+'%;'+col+';height:100%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;overflow:hidden;">'+g.p+'%</div>';
+ }).join('');
+ const legend = mashAllZero ? '' : b.mashBill.filter(g => g.p > 0).map(g => {
+  return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--ink);margin-right:12px;margin-top:4px;"><span style="width:7px;height:7px;background:'+(grainDots[g.k]||'#888')+';display:inline-block;"></span>'+g.p+'% '+(VIN_GRAIN[g.k]||g.k)+'</span>';
+ }).join('');
+ // VIP: provenance is open (no members-only lock)
+ var provRows='';
+ function pr(l,v){ return v ? '<div class="prov-row"><span class="prov-row-label">'+l+'</span><span class="prov-row-val">'+fbEscape(v)+'</span></div>' : ''; }
+ provRows = pr('Original Distiller', b.distiller) + pr('Distilled', b.distDate) + pr('Category', b.category) + pr('Bottling', b.bottling);
+ var prov = '<div class="bottle-prov"><div class="prov-unlocked"><div class="prov-eyebrow">Barrel Provenance</div>'+provRows+'</div></div>';
+ document.getElementById('bottle-detail-inner').innerHTML = `
+ <div class="bottle-detail-img-col"><img class="bottle-detail-img" src="${b.img}" alt="${b.seriesName}"></div>
+ <div class="bottle-detail-info">
+  <div class="bottle-detail-badge">${b.series} · ${b.seriesName} · Barrel ${b.barrel}</div>
+  <div class="bottle-detail-name">${b.name}</div>
+  <div class="bottle-detail-series">${b.seriesName} · Single Barrel · Barrel Strength</div>
+  <div class="bottle-detail-stats">
+   <div class="detail-stat"><span class="detail-stat-val">${b.proof}</span><span class="detail-stat-lbl">Proof</span></div>
+   <div class="detail-stat"><span class="detail-stat-val">${b.age}</span><span class="detail-stat-lbl">Age</span></div>
+   <div class="detail-stat"><span class="detail-stat-val">${b.origin}</span><span class="detail-stat-lbl">Origin</span></div>
+   <div class="detail-stat"><span class="detail-stat-val">${b.gen}</span><span class="detail-stat-lbl">Generation</span></div>
+  </div>
+  <div class="bottle-detail-desc">${b.desc}</div>
+  <div style="margin-top:16px;background:var(--cream2);padding:10px 12px;">
+   <div style="font-size:8px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:8px;">Mash Bill</div>
+   ${mashAllZero ? '<div style="height:16px;background:#000;color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.18em;display:flex;align-items:center;justify-content:center;overflow:hidden;">UNDISCLOSED</div>' : '<div style="display:flex;height:16px;overflow:hidden;border:1px solid var(--cream3);">'+mash+'</div><div style="display:flex;flex-wrap:wrap;">'+legend+'</div>'}
+  </div>
+  ${prov}
+  <button class="btn-ghost" style="margin-top:22px;font-size:10px;padding:11px 18px;" onclick="archiveDecodeJump('${b.series}')">Read the Barrel Story</button>
+ </div>`;
+ document.getElementById('bottle-detail').classList.add('open');
+ setTimeout(() => {
+  var _rep = document.getElementById('bottle-detail');
+  if (_rep){ var _off = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64; window.scrollTo({ top: _rep.getBoundingClientRect().top + window.scrollY - _off - 14, behavior:'smooth' }); }
+ }, 120);
+}
+function closeBottle(){
+ activeBottle = null;
+ document.querySelectorAll('.bottle-card').forEach(c => c.classList.remove('active'));
+ document.getElementById('bottle-detail').classList.remove('open');
+}
+
+/* ── LABEL PHOTO → on-device OCR → VIN-TAGe ── */
+function pickLabel(){ document.getElementById('label-input').click(); }
+var _tessLoading=null;
+function loadTesseract(){
+ if(window.Tesseract) return Promise.resolve();
+ if(_tessLoading) return _tessLoading;
+ _tessLoading=new Promise(function(res,rej){ var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s); });
+ return _tessLoading;
+}
+function handleLabel(file){
+ if(!file) return;
+ var status=document.getElementById('vin-ocr-status');
+ status.className='vin-ocr-status'; status.textContent='Reading the label on your device…';
+ var url=URL.createObjectURL(file);
+ loadTesseract().then(function(){
+  return Tesseract.recognize(url,'eng',{tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '});
+ }).then(function(r){
+  URL.revokeObjectURL(url); // discard image reference; nothing is uploaded or stored
+  var text=(r&&r.data&&r.data.text)||'';
+  var code=extractVin(text);
+  if(code){ status.className='vin-ocr-status'; status.textContent='Read ✓  '+code; vinFill(code); }
+  else { status.className='vin-ocr-status err'; status.textContent='Couldn’t read the VIN-TAGe clearly. Frame just the code and retake, or type it above.'; }
+ }).catch(function(){
+  URL.revokeObjectURL(url);
+  status.className='vin-ocr-status err'; status.textContent='Label reader couldn’t load (needs an internet connection). You can still type the code above.';
+ });
+}
+function extractVin(text){
+ var t=(text||'').toUpperCase();
+ var m=t.match(/T\s*I\s*B\s*(\d\s*\d)\s*([A-Z]\s*[A-Z])\s*G\s*(\d)\s*(\d\s*\d\s*\d\s*\d\s*\d)/);
+ if(!m) return null;
+ return 'TIB '+m[1].replace(/\s/g,'')+' '+m[2].replace(/\s/g,'')+' G'+m[3]+' '+m[4].replace(/\s/g,'');
+}
+
+/* ── BARREL ARCHIVE (exact renderer from main site + sample data) ── */
+var _archiveStories = []; // populated live from the vip-archive function
+
+function archiveLoadList(){
+ var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+ if(d){ d.style.display='none'; d.innerHTML=''; }
+ listEl.style.display='';
+ var html='<div class="archive-grid">';
+ _archiveStories.forEach(function(s){
+  var galleryCover=(Array.isArray(s.gallery)&&s.gallery.length&&s.gallery[0]&&s.gallery[0].url)?s.gallery[0].url:'';
+  var renderCover=s.cover_url||SERIES_RENDER[s.series]||''; // per-series bottle render fallback
+  var cover=galleryCover||renderCover||'';
+  var renderCls=(!galleryCover&&renderCover)?' render':''; // bottle render → show contained on dark tile
+  var draft=s.status!=='published'?'<span class="archive-draft">Draft</span>':'';
+  var meta=[s.series,s.generation,s.barrel_no?('No. '+s.barrel_no):''].filter(Boolean).join(' · ');
+  html+='<div class="archive-card" onclick="archiveOpen(\''+s.id+'\')">'
+   +'<div class="archive-card-img'+renderCls+'">'+(cover?('<img src="'+safeUrl(cover)+'" alt="" loading="lazy">'):'<span class="archive-noimg">TIB</span>')+'</div>'
+   +'<div class="archive-card-body"><div class="archive-card-series">'+fbEscape(meta)+draft+'</div>'
+   +'<div class="archive-card-title">'+fbEscape(s.title||'Untitled')+'</div>'
+   +(s.vintage_code?('<div class="archive-card-code">'+fbEscape(s.vintage_code)+'</div>'):'')
+   +'</div></div>';
+ });
+ html+='</div>';
+ listEl.innerHTML=html;
+}
+function archiveOpen(id){
+ var s=null; for(var i=0;i<_archiveStories.length;i++){ if(_archiveStories[i].id===id){ s=_archiveStories[i]; break; } }
+ if(!s) return;
+ var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+ if(listEl) listEl.style.display='none';
+ d.innerHTML=archiveRenderStory(s); d.style.display='';
+ try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+}
+function archiveBack(){
+ var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+ if(d){ d.style.display='none'; d.innerHTML=''; }
+ if(listEl) listEl.style.display='';
+ try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+}
+function archiveRenderStory(s){
+ var meta=[s.series,s.generation,s.barrel_no?('No. '+s.barrel_no):''].filter(Boolean).join(' · ');
+ var h='<button class="archive-back" onclick="archiveBack()">&larr; Back to the archive</button>';
+ h+='<div class="archive-hero">';
+ if(meta) h+='<div class="archive-eyebrow">'+fbEscape(meta)+'</div>';
+ h+='<div class="archive-title">'+fbEscape(s.title||'')+'</div>';
+ if(s.vintage_code) h+='<div class="archive-code">'+fbEscape(s.vintage_code)+'</div>';
+ h+='<div class="archive-rule"></div>';
+ if(s.intro) h+='<p class="archive-intro">'+bsEscMulti(s.intro)+'</p>';
+ h+='</div>';
+ var _ctas='';
+ if(s.vintage_code){ var _c=String(s.vintage_code).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); _ctas+='<button class="archive-cta-btn ghost" onclick="archiveDecode(\''+_c+'\')">Decode this VIN-TAG<span class="lowercase-e">e</span> &#8594;</button>'; }
+ if(_ctas) h+='<div class="archive-cta">'+_ctas+'</div>';
+ var facts=bsFact('Discovered',s.discovered_date)+bsFact('Location',s.location)
+  +bsFact('Drilled for a taste', s.drilled?'Yes — thief pull, on site':'', true)
+  +bsFact('Mash bill known first',(s.mash_bill_known?'Yes':(s.blind?'No — tasted blind':'')),true);
+ if(facts||s.discovery_narrative){
+  h+='<div class="archive-sec"><div class="archive-sec-h">The discovery &amp; first taste</div>';
+  if(facts) h+='<div class="bs-facts">'+facts+'</div>';
+  if(s.discovery_narrative) h+='<p class="archive-body">'+bsEscMulti(s.discovery_narrative)+'</p>';
+  h+='</div>';
+ }
+ if(Array.isArray(s.provenance)&&s.provenance.length){
+  h+='<div class="archive-sec"><div class="archive-sec-h">Provenance — chain of custody</div><div class="archive-timeline">';
+  s.provenance.forEach(function(p){
+   if(!p||(!p.year&&!p.label&&!p.note)) return;
+   h+='<div class="archive-tl-item"><div class="archive-tl-year">'+fbEscape(p.year||'')+(p.label?(' · '+fbEscape(p.label)):'')+'</div>'+(p.note?('<div class="archive-tl-note">'+fbEscape(p.note)+'</div>'):'')+'</div>';
+  });
+  h+='</div></div>';
+ }
+ var specs=bsFact('Mash bill',s.mash_bill)+bsFact('Age',s.age)+bsFact('Proof',s.proof)+bsFact('Char',s.char_level)+bsFact('Warehouse',s.warehouse)+bsFact('Cooperage',s.cooperage);
+ if(specs) h+='<div class="archive-sec"><div class="archive-sec-h">The barrel</div><div class="bs-facts">'+specs+'</div></div>';
+ if(s.finished){
+  h+='<div class="archive-finish"><div class="archive-sec-h" style="color:var(--gold);margin-bottom:8px;">Secondary finishing</div>';
+  if(s.finish_narrative) h+='<p class="archive-body" style="margin-top:0;">'+bsEscMulti(s.finish_narrative)+'</p>';
+  h+='<div class="bs-facts" style="margin-top:12px;">'+bsFact('Technique',s.finish_technique)+bsFact('Cask',s.finish_cask)+bsFact('Duration',s.finish_duration)+'</div></div>';
+ }
+ if(Array.isArray(s.gallery)&&s.gallery.length){
+  h+='<div class="archive-sec"><div class="archive-sec-h">On-site — the day we tasted</div><div class="archive-gallery">';
+  s.gallery.forEach(function(g){ if(!g||!g.url) return; h+='<figure class="archive-fig"><img src="'+safeUrl(g.url)+'" alt="'+fbEscape(g.caption||'')+'" loading="lazy">'+(g.caption?('<figcaption>'+fbEscape(g.caption)+'</figcaption>'):'')+'</figure>'; });
+  h+='</div></div>';
+ }
+ var tn=bsFact('Nose',s.nose)+bsFact('Palate',s.palate)+bsFact('Finish',s.finish);
+ if(tn) h+='<div class="archive-sec"><div class="archive-sec-h">Tasting notes</div><div class="bs-facts">'+tn+'</div></div>';
+ return h;
+}
+function archiveDecode(code){
+ vinFill(code);
+ setTimeout(function(){ try{ document.getElementById('vintage').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} }, 60);
+}
+/* From a decoded report, jump to that series' archive story */
+function archiveDecodeJump(series){
+ for(var i=0;i<_archiveStories.length;i++){ if(_archiveStories[i].series===series){ archiveOpen(_archiveStories[i].id); return; } }
+ try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+}
+
+/* ── LIVE archive: pull published barrel stories from the vip-archive function ── */
+async function archiveLoadLive(){
+ var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
+ if(d){ d.style.display='none'; d.innerHTML=''; }
+ listEl.style.display='';
+ listEl.innerHTML='<p style="color:var(--cream3);font-size:13px;">Loading the barrel archive&hellip;</p>';
+ try{
+  var res=await _supabase.functions.invoke('vip-archive');
+  if(res.error) throw res.error;
+  var stories=(res.data&&res.data.stories)||[];
+  _archiveStories=stories;
+  if(!_archiveStories.length){ listEl.innerHTML='<p style="color:var(--cream3);font-size:13px;">No published barrel stories yet. Check back soon.</p>'; return; }
+  archiveLoadList();
+ }catch(e){
+  listEl.innerHTML='<p style="color:#E88A6A;font-size:13px;">The barrel archive couldn’t load right now. Please refresh.</p>';
+ }
+}
+archiveLoadLive();
+</script>
+</body>
+</html>
