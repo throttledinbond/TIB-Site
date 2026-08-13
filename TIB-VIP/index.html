@@ -48,8 +48,9 @@ button{font-family:var(--f);}
 .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.22;transition:opacity 1s;display:block;}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(26,25,23,.3) 0%, rgba(26,25,23,.1) 50%, rgba(26,25,23,.95) 100%);}
 .hero-inner{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,60px);min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:var(--nav-h);}
-.hero-bottles{display:flex;align-items:flex-end;justify-content:center;gap:0;pointer-events:none;opacity:.8;margin-bottom:clamp(16px,3vh,32px);position:relative;z-index:2;}
-.hero-bottle-img{height:clamp(256px,35vw,544px);width:auto;filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));pointer-events:auto;cursor:pointer;transition:filter .2s ease;}
+.hero-bottles{display:flex;align-items:flex-end;justify-content:center;gap:0;pointer-events:none;opacity:.8;margin-bottom:clamp(8px,1.5vh,18px);position:relative;z-index:2;}
+.hero-inner{padding-top:calc(var(--nav-h) + 8px);padding-bottom:20px;}
+.hero-bottle-img{height:clamp(205px,28vw,435px);width:auto;filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));pointer-events:auto;cursor:pointer;transition:filter .2s ease;}
 .hero-bottle-img:hover{filter:drop-shadow(0 16px 48px rgba(0,0,0,.7)) brightness(1.1);}
 .hero-bottle-img:nth-child(1){transform:rotate(-5deg) translateX(14px);z-index:1;position:relative;}
 .hero-bottle-img:nth-child(2){transform:scale(1.1);z-index:3;position:relative;}
