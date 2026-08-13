@@ -1966,10 +1966,11 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
      <!-- Scan / Upload Label (on-device OCR) -->
      <div class="vin-upload-wrap">
-      <button class="vin-upload-btn primary" onclick="scanStart()">&#128247;&nbsp; Scan Label with Camera</button>
+      <button class="vin-upload-btn primary scan-only" onclick="scanStart()">&#128247;&nbsp; Scan Label with Camera</button>
+      <button class="vin-upload-btn primary upload-only" onclick="pickLabel()">&#128247;&nbsp; Upload a Photo of the Label</button>
       <input type="file" id="label-input" accept="image/*" capture="environment" style="display:none" onchange="handleLabel(this.files[0])">
-      <div class="vin-upload-note">Scans automatically on your device &middot; photo is not uploaded or saved</div>
-      <div class="vin-upload-alt"><a onclick="pickLabel()">or upload a photo instead</a></div>
+      <div class="vin-upload-note">Processed on your device &middot; your photo is not uploaded or saved</div>
+      <div class="vin-upload-alt scan-only"><a onclick="pickLabel()">or upload a photo instead</a></div>
       <div class="vin-ocr-status" id="vin-ocr-status"></div>
      </div>
  </div>
@@ -6996,6 +6997,8 @@ function closeVideoModal() {
 .vin-upload-btn:hover{border-color:var(--gold);color:var(--gold-lt);}
 .vin-upload-btn.primary{background:var(--gold);color:var(--charcoal);border-color:var(--gold);}
 .vin-upload-btn.primary:hover{background:var(--gold-lt);border-color:var(--gold-lt);color:var(--charcoal);}
+.vin-upload-btn.upload-only{display:none;}
+@media(min-width:901px){.vin-upload-btn.scan-only{display:none;}.vin-upload-btn.upload-only{display:flex;}.vin-upload-alt.scan-only{display:none;}}
 .scan-modal{position:fixed;inset:0;z-index:999;background:rgba(10,10,9,.94);display:none;align-items:center;justify-content:center;padding:16px;}
 .scan-modal.open{display:flex;}
 .scan-box{position:relative;width:min(520px,96vw);background:var(--charcoal2);border:1px solid var(--charcoal4);border-top:2px solid var(--gold);overflow:hidden;}
