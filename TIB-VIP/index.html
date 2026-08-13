@@ -170,8 +170,8 @@ button{font-family:var(--f);}
 .scan-close:hover{color:var(--gold);}
 .scan-vidwrap{position:relative;background:#000;width:100%;aspect-ratio:3/4;max-height:58vh;overflow:hidden;}
 .scan-vidwrap video{width:100%;height:100%;object-fit:cover;display:block;}
-.scan-frame{position:absolute;left:8%;right:8%;top:41%;height:18%;border:2px solid var(--gold-lt);box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;}
-.scan-frame:before{content:"Align the VIN-TAGe code here";position:absolute;left:0;right:0;top:-22px;text-align:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);text-shadow:0 1px 3px rgba(0,0,0,.9);}
+.scan-frame{position:absolute;left:7%;right:7%;top:40%;height:15%;border:2px solid var(--gold-lt);box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;}
+.scan-frame:before{content:"Fill the box with the TIB … code line";position:absolute;left:0;right:0;top:-22px;text-align:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);text-shadow:0 1px 3px rgba(0,0,0,.9);}
 .scan-foot{padding:12px 14px;}
 .scan-status{font-size:12px;color:var(--gold-lt);min-height:16px;margin-bottom:10px;text-align:center;line-height:1.5;}
 .scan-status.err{color:#E88A6A;}
@@ -741,7 +741,7 @@ function bestMatch(ocrText){
   for(w=Math.max(4,L-1);w<=L+1;w++){ for(i=0;i+w<=t.length;i++){ d=_lev(t.substr(i,w),c); if(d<bestD){bestD=d;best=code;} } }
   d=_lev(t,c); if(d<bestD){bestD=d;best=code;}
  });
- return bestD<=2 ? best : null; // <=2 edits over a 14-char code
+ return bestD<=3 ? best : null; // <=3 edits over a 14-char code
 }
 
 /* File-upload path (fallback) */
@@ -770,12 +770,12 @@ async function scanStart(){
  var modal=document.getElementById('scan-modal'); modal.classList.add('open');
  setScanStatus('Starting camera…');
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ setScanStatus('This browser can’t open the camera. Use “Upload a Photo Instead.”',true); return; }
- try{ _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false}); }
+ try{ _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false}); }
  catch(e){ setScanStatus('Camera blocked. Allow camera access, or use “Upload a Photo Instead.”',true); return; }
  var v=document.getElementById('scan-video'); v.srcObject=_scanStream; try{ await v.play(); }catch(e){}
  try{
   await loadTesseract();
-  if(!_scanWorker){ setScanStatus('Loading scanner…'); _scanWorker=await Tesseract.createWorker('eng'); await _scanWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',tessedit_pageseg_mode:'7'}); }
+  if(!_scanWorker){ setScanStatus('Loading scanner…'); _scanWorker=await Tesseract.createWorker('eng'); await _scanWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:'6'}); }
  }catch(e){ setScanStatus('Scanner couldn’t load (needs internet). Use “Upload a Photo Instead.”',true); return; }
  setScanStatus('Center the VIN-TAGe code in the box…');
  if(_scanTimer) clearInterval(_scanTimer);
@@ -783,12 +783,18 @@ async function scanStart(){
 }
 function _frameCanvas(v){
  var vw=v.videoWidth,vh=v.videoHeight; if(!vw||!vh) return null;
- var cx=Math.round(vw*0.08),cw=Math.round(vw*0.84),cy=Math.round(vh*0.41),ch=Math.round(vh*0.18);
- var scale=Math.max(1,Math.round(1100/cw));
+ // Crop the framed band (matches the on-screen box: left/right 7%, top 40%, height 15%)
+ var cx=Math.round(vw*0.07),cw=Math.round(vw*0.86),cy=Math.round(vh*0.40),ch=Math.round(vh*0.15);
+ var scale=Math.max(2,Math.round(1600/cw)); // upscale the strip for OCR
  var cvs=document.createElement('canvas'); cvs.width=cw*scale; cvs.height=ch*scale;
- var ctx=cvs.getContext('2d'); ctx.drawImage(v,cx,cy,cw,ch,0,0,cvs.width,cvs.height);
- var img=ctx.getImageData(0,0,cvs.width,cvs.height),d=img.data,i,g;
- for(i=0;i<d.length;i+=4){ g=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2]; g=(g-128)*1.5+128; g=g<0?0:g>255?255:g; d[i]=d[i+1]=d[i+2]=g; }
+ var ctx=cvs.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+ ctx.drawImage(v,cx,cy,cw,ch,0,0,cvs.width,cvs.height);
+ var img=ctx.getImageData(0,0,cvs.width,cvs.height),d=img.data,i,g,mn=255,mx=0;
+ // grayscale + find min/max
+ for(i=0;i<d.length;i+=4){ g=(0.299*d[i]+0.587*d[i+1]+0.114*d[i+2])|0; d[i]=d[i+1]=d[i+2]=g; if(g<mn)mn=g; if(g>mx)mx=g; }
+ // contrast normalize to full range (helps Tesseract's own thresholding)
+ var rng=(mx-mn)||1;
+ for(i=0;i<d.length;i+=4){ g=((d[i]-mn)*255/rng)|0; d[i]=d[i+1]=d[i+2]=g; }
  ctx.putImageData(img,0,0); return cvs;
 }
 async function scanTick(manual){
@@ -799,9 +805,10 @@ async function scanTick(manual){
  if(manual) setScanStatus('Reading…');
  try{
   var r=await _scanWorker.recognize(cvs);
-  var code=bestMatch((r&&r.data&&r.data.text)||'');
+  var raw=(r&&r.data&&r.data.text)||'';
+  var code=bestMatch(raw);
   if(code){ setScanStatus('Read ✓  '+code); scanSuccess(code); }
-  else if(manual){ setScanStatus('Couldn’t read it. Hold steady, fill the box, avoid glare.',true); }
+  else if(manual){ var dbg=raw.replace(/\s+/g,' ').trim().slice(0,44); setScanStatus('Couldn’t match it. Read: “'+(dbg||'(nothing)')+'” — hold steady, fill the box, avoid glare.',true); }
  }catch(e){ if(manual) setScanStatus('Scan error — try again.',true); }
  finally{ _scanBusy=false; }
 }
