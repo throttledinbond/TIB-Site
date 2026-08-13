@@ -49,7 +49,7 @@ button{font-family:var(--f);}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(26,25,23,.3) 0%, rgba(26,25,23,.1) 50%, rgba(26,25,23,.95) 100%);}
 .hero-inner{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,60px);min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:var(--nav-h);}
 .hero-bottles{display:flex;align-items:flex-end;justify-content:center;gap:0;pointer-events:none;opacity:.8;margin-bottom:clamp(16px,3vh,32px);position:relative;z-index:2;}
-.hero-bottle-img{height:clamp(160px,22vw,340px);width:auto;filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));pointer-events:auto;cursor:pointer;transition:filter .2s ease;}
+.hero-bottle-img{height:clamp(320px,44vw,680px);width:auto;filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));pointer-events:auto;cursor:pointer;transition:filter .2s ease;}
 .hero-bottle-img:hover{filter:drop-shadow(0 16px 48px rgba(0,0,0,.7)) brightness(1.1);}
 .hero-bottle-img:nth-child(1){transform:rotate(-5deg) translateX(14px);z-index:1;position:relative;}
 .hero-bottle-img:nth-child(2){transform:scale(1.1);z-index:3;position:relative;}
@@ -62,7 +62,15 @@ button{font-family:var(--f);}
 .btn-primary:hover{background:var(--gold-lt);}
 .btn-ghost{font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;background:transparent;color:var(--cream);padding:14px 28px;border:1px solid var(--charcoal4);cursor:pointer;transition:border-color .2s,color .2s;white-space:nowrap;}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
-@media(max-width:700px){.hero-bottle-img{height:clamp(120px,30vw,190px);}.hero-bottles{margin-bottom:clamp(12px,2vh,20px);}.hero-headline{white-space:normal;}}
+@media(max-width:700px){.hero-bottle-img{height:clamp(240px,60vw,380px);}.hero-bottles{margin-bottom:clamp(12px,2vh,20px);}.hero-headline{white-space:normal;}}
+/* Hero bottles "invite" pulse — matches the main site */
+@keyframes bottle-invite{0%,100%{transform:translateY(0);filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));}40%{transform:translateY(-8px);filter:drop-shadow(0 22px 52px rgba(200,149,42,.25));}}
+@keyframes bottle-invite-2{0%,100%{transform:rotate(-5deg) translateX(14px) translateY(0);filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));}40%{transform:rotate(-5deg) translateX(14px) translateY(-8px);filter:drop-shadow(0 22px 52px rgba(200,149,42,.25));}}
+@keyframes bottle-invite-3{0%,100%{transform:rotate(5deg) translateX(-14px) translateY(0);filter:drop-shadow(0 16px 48px rgba(0,0,0,.7));}40%{transform:rotate(5deg) translateX(-14px) translateY(-8px);filter:drop-shadow(0 22px 52px rgba(200,149,42,.25));}}
+.hero-bottle-img.invite:nth-child(1){animation:bottle-invite-2 3s ease-in-out infinite;}
+.hero-bottle-img.invite:nth-child(2){animation:bottle-invite 3s ease-in-out infinite 0.3s;}
+.hero-bottle-img.invite:nth-child(3){animation:bottle-invite-3 3s ease-in-out infinite 0.6s;}
+@media(prefers-reduced-motion:reduce){.hero-bottle-img.invite{animation:none;}}
 
 /* WHISKEY / BOTTLE SHOWCASE (matches main site) */
 #whiskey{background-color:var(--charcoal);border-top:1px solid var(--charcoal4);}
@@ -701,9 +709,10 @@ function openBottle(id){
    ${mashAllZero ? '<div style="height:16px;background:#000;color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.18em;display:flex;align-items:center;justify-content:center;overflow:hidden;">UNDISCLOSED</div>' : '<div style="display:flex;height:16px;overflow:hidden;border:1px solid var(--cream3);">'+mash+'</div><div style="display:flex;flex-wrap:wrap;">'+legend+'</div>'}
   </div>
   ${prov}
-  <button class="btn-ghost" style="margin-top:22px;font-size:10px;padding:11px 18px;" onclick="archiveDecodeJump('${b.series}')">Read the Barrel Story</button>
+  <button class="btn-ghost" style="margin-top:22px;font-size:10px;padding:11px 18px;" onclick="showStoryForSeries('${b.series}',true)">Read the Barrel Story</button>
  </div>`;
  document.getElementById('bottle-detail').classList.add('open');
+ showStoryForSeries(b.series, false); // auto-display the matching barrel story below
  setTimeout(() => {
   var _rep = document.getElementById('bottle-detail');
   if (_rep){ var _off = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64; window.scrollTo({ top: _rep.getBoundingClientRect().top + window.scrollY - _off - 14, behavior:'smooth' }); }
@@ -909,13 +918,22 @@ function archiveLoadList(){
  html+='</div>';
  listEl.innerHTML=html;
 }
-function archiveOpen(id){
+function archiveOpen(id, scroll){
  var s=null; for(var i=0;i<_archiveStories.length;i++){ if(_archiveStories[i].id===id){ s=_archiveStories[i]; break; } }
  if(!s) return;
  var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
  if(listEl) listEl.style.display='none';
  d.innerHTML=archiveRenderStory(s); d.style.display='';
- try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+ if(scroll!==false){ try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} }
+}
+/* Auto-open the barrel story that matches a selected release (no need to hunt for it) */
+function showStoryForSeries(series, scroll){
+ var found=false;
+ if(Array.isArray(_archiveStories)){
+  for(var i=0;i<_archiveStories.length;i++){ if(_archiveStories[i].series===series){ archiveOpen(_archiveStories[i].id, false); found=true; break; } }
+ }
+ if(scroll){ try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} }
+ return found;
 }
 function archiveBack(){
  var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
@@ -996,6 +1014,7 @@ async function archiveLoadLive(){
   listEl.innerHTML='<p style="color:#E88A6A;font-size:13px;">The barrel archive couldn’t load right now. Please refresh.</p>';
  }
 }
+document.querySelectorAll('.hero-bottle-img').forEach(function(el){ el.classList.add('invite'); });
 archiveLoadLive();
 </script>
 <!-- Live camera label scanner -->
