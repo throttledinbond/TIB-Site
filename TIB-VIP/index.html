@@ -265,10 +265,15 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
 .proto-note{margin-top:8px;color:#8a857a;font-size:11px;max-width:64ch;margin-left:auto;margin-right:auto;line-height:1.6;}
 .tm{font-size:.62em;vertical-align:super;}
 
+.vin-ref-toggle{display:none;}
 @media(max-width:900px){
  .vintage-cols{grid-template-columns:minmax(0,1fr);}
  .vintage-decoder-col{position:static;min-width:0;order:-1;}
- .vintage-ref-col{min-width:0;}
+ .vintage-ref-col{min-width:0;display:none;}
+ .vintage-ref-col.open{display:flex;margin-top:8px;}
+ .vin-ref-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:8px;background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--gold);font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:13px 14px;cursor:pointer;text-align:left;}
+ .vin-ref-toggle .vin-ref-caret{flex-shrink:0;transition:transform .2s;font-size:9px;}
+ .vin-ref-toggle.open .vin-ref-caret{transform:rotate(180deg);}
 }
 </style>
 </head>
@@ -401,6 +406,7 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
      </div>
     </div>
     <div id="vin-result" style="position:relative;"></div>
+    <button class="vin-ref-toggle" onclick="toggleVinRef(this)">VIN-TAG<span class="lowercase-e">e</span> Code &amp; Data Plate Breakdown <span class="vin-ref-caret">&#9662;</span></button>
    </div>
 
    <!-- RIGHT: REFERENCE -->
@@ -432,7 +438,7 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
       <div class="series-row"><span class="s-code">G2</span><span class="s-name">Second Generation</span></div>
       <div class="series-row"><span class="s-code">G3</span><span class="s-name">Third Generation</span></div>
      </div>
-     <div class="ref-body-text">Each series release marks a new Generation. The Generation Code tracks the release history of each series over time.</div>
+     <div class="ref-body-text">The Generation Code tracks the release history of each series over time. A shift from G1 to G2 represents a new era, a subtle revolution.</div>
     </div>
     <div class="ref-divider"></div>
     <div class="ref-panel">
@@ -609,6 +615,7 @@ document.getElementById('vin-input').addEventListener('input', function(e){
  for (let i=0;i<v.length&&i<16;i++){ if (i===3||i===5||i===7||i===9) f+=' '; f+=v[i]; }
  e.target.value = f;
 });
+function toggleVinRef(btn){ document.querySelector('.vintage-ref-col').classList.toggle('open'); btn.classList.toggle('open'); }
 let rtcActive = -1;
 function rtcAct(i){
  const segs = document.querySelectorAll('#rtc-segs .seg-tile');
