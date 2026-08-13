@@ -169,6 +169,13 @@ button{font-family:var(--f);}
 .vin-upload-btn:hover{border-color:var(--gold);color:var(--gold-lt);}
 .vin-upload-btn.primary{background:var(--gold);color:var(--charcoal);border-color:var(--gold);}
 .vin-upload-btn.primary:hover{background:var(--gold-lt);border-color:var(--gold-lt);color:var(--charcoal);}
+/* Camera scan is mobile-only; desktop leads with Upload */
+.vin-upload-btn.upload-only{display:none;}
+@media(min-width:901px){
+ .vin-upload-btn.scan-only{display:none;}
+ .vin-upload-btn.upload-only{display:flex;}
+ .vin-upload-alt.scan-only{display:none;}
+}
 /* Live-camera label scanner */
 .scan-modal{position:fixed;inset:0;z-index:999;background:rgba(10,10,9,.94);display:none;align-items:center;justify-content:center;padding:16px;}
 .scan-modal.open{display:flex;}
@@ -449,10 +456,11 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
      </div>
      <!-- Scan / Upload Label (on-device OCR) -->
      <div class="vin-upload-wrap">
-      <button class="vin-upload-btn primary" onclick="scanStart()">&#128247;&nbsp; Scan Label with Camera</button>
+      <button class="vin-upload-btn primary scan-only" onclick="scanStart()">&#128247;&nbsp; Scan Label with Camera</button>
+      <button class="vin-upload-btn primary upload-only" onclick="pickLabel()">&#128247;&nbsp; Upload a Photo of the Label</button>
       <input type="file" id="label-input" accept="image/*" capture="environment" style="display:none" onchange="handleLabel(this.files[0])">
-      <div class="vin-upload-note">Scans automatically on your device &middot; photo is not uploaded or saved</div>
-      <div class="vin-upload-alt"><a onclick="pickLabel()">or upload a photo instead</a></div>
+      <div class="vin-upload-note">Processed on your device &middot; your photo is not uploaded or saved</div>
+      <div class="vin-upload-alt scan-only"><a onclick="pickLabel()">or upload a photo instead</a></div>
       <div class="vin-ocr-status" id="vin-ocr-status"></div>
      </div>
     </div>
@@ -598,7 +606,7 @@ function vinDecode(){
    brand: parts[0], year: parts[1], series: parts[2], gen: parts[3], barrel: parts[4],
    brandInfo: VIN_BRANDS[parts[0]] || null, seriesInfo: VIN_SERIES[parts[2]] || null, genInfo: VIN_GEN[parts[3]] || null,
   } : null;
-  if (barrel && parsed){ panel.innerHTML = vinBuildResult(barrel, parsed); }
+  if (barrel && parsed){ panel.innerHTML = vinBuildResult(barrel, parsed); syncArchiveToSeries(barrel.series); }
   else if (raw.length < 5){ panel.innerHTML = ''; }
   else { panel.innerHTML = vinBuildError(raw, parsed); }
   if (barrel){ setTimeout(() => panel.querySelectorAll('.vin-mash-seg[data-target]').forEach(s => s.style.width = s.dataset.target+'%'), 80); }
@@ -945,6 +953,11 @@ function showStoryForSeries(series, scroll){
  }
  if(scroll){ try{ document.getElementById('archive-sec').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} }
  return found;
+}
+/* Keep the Barrel Archive in sync with whatever was just decoded (scan/type/pill).
+   If the decoded series has no story, reset to the grid so no stale story lingers. */
+function syncArchiveToSeries(series){
+ if(!showStoryForSeries(series, false)){ try{ archiveBack(); }catch(e){} }
 }
 function archiveBack(){
  var listEl=document.getElementById('archive-list'), d=document.getElementById('archive-detail');
