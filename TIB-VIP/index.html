@@ -261,6 +261,16 @@ button{font-family:var(--f);}
 /* ══ BARREL ARCHIVE (matches main site) ══ */
 #archive-sec{background:var(--charcoal);border-top:1px solid var(--charcoal4);}
 .archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;}
+/* Phones: shrink archive cards so they sit side by side instead of stacking */
+@media(max-width:600px){
+ .archive-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
+ .archive-card-img.render img{padding:8px 8px 0;}
+ .archive-card-body{padding:9px 9px 11px;}
+ .archive-card-series{font-size:8px;letter-spacing:.08em;margin-bottom:3px;}
+ .archive-card-title{font-size:10.5px;line-height:1.25;}
+ .archive-card-code{font-size:8px;letter-spacing:.04em;margin-top:4px;}
+ .archive-draft{font-size:7px;padding:1px 4px;margin-left:5px;}
+}
 .archive-card{background:var(--charcoal3);border:1px solid var(--charcoal4);cursor:pointer;transition:border-color .15s;overflow:hidden;}
 .archive-card:hover{border-color:var(--gold);}
 .archive-card-img{aspect-ratio:4/3;background:linear-gradient(180deg,#33302B,#242220);display:flex;align-items:center;justify-content:center;overflow:hidden;}
