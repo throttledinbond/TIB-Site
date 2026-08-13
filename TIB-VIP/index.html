@@ -170,7 +170,7 @@ button{font-family:var(--f);}
 .scan-close:hover{color:var(--gold);}
 .scan-vidwrap{position:relative;background:#000;width:100%;aspect-ratio:3/4;max-height:58vh;overflow:hidden;}
 .scan-vidwrap video{width:100%;height:100%;object-fit:cover;display:block;}
-.scan-frame{position:absolute;left:6%;right:6%;top:35%;height:26%;border:2px solid var(--gold-lt);box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;transition:border-color .2s;}
+.scan-frame{position:absolute;left:5%;right:5%;top:40%;height:18%;border:2px solid var(--gold-lt);border-radius:14px;box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;transition:border-color .2s;}
 @keyframes scanpulse{0%,100%{border-color:rgba(232,184,75,.55);box-shadow:0 0 0 2000px rgba(0,0,0,.35),0 0 0 0 rgba(232,184,75,0);}50%{border-color:#F0D488;box-shadow:0 0 0 2000px rgba(0,0,0,.30),0 0 16px 2px rgba(232,184,75,.55);}}
 .scan-frame.scanning{animation:scanpulse 1.15s ease-in-out infinite;}
 .scan-frame.ok{animation:none;border-color:#7CC47F;box-shadow:0 0 0 2000px rgba(0,0,0,.5),0 0 20px 3px rgba(124,196,127,.65);}
@@ -811,20 +811,20 @@ async function scanStart(){
  var fr=_scanFrame(); if(fr){ fr.classList.remove('ok'); fr.classList.add('scanning'); }
  setScanStatus('Scanning… hold the VIN-TAGe section in the box');
  if(_scanTimer) clearInterval(_scanTimer);
- _scanTimer=setInterval(function(){ scanTick(false); }, 900);
+ _scanTimer=setInterval(function(){ scanTick(false); }, 350);
 }
-function _frameCanvas(v){
+/* Crop a fractional region of the video, sized to ~targetW px wide (downscales
+   big frames rather than upscaling — keeps OCR fast), grayscale + contrast-normalized. */
+function _cropCanvas(v,fx,fy,fw,fh,targetW){
  var vw=v.videoWidth,vh=v.videoHeight; if(!vw||!vh) return null;
- // Crop the framed band (matches the on-screen box: left/right 7%, top 40%, height 15%)
- var cx=Math.round(vw*0.06),cw=Math.round(vw*0.88),cy=Math.round(vh*0.35),ch=Math.round(vh*0.26);
- var scale=Math.max(2,Math.round(1600/cw)); // upscale the strip for OCR
- var cvs=document.createElement('canvas'); cvs.width=cw*scale; cvs.height=ch*scale;
+ var cx=Math.round(vw*fx),cw=Math.round(vw*fw),cy=Math.round(vh*fy),ch=Math.round(vh*fh);
+ var scale=targetW/cw; if(scale>1.5)scale=1.5; if(scale<0.25)scale=0.25;
+ var W=Math.max(48,Math.round(cw*scale)),H=Math.max(24,Math.round(ch*scale));
+ var cvs=document.createElement('canvas'); cvs.width=W; cvs.height=H;
  var ctx=cvs.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
- ctx.drawImage(v,cx,cy,cw,ch,0,0,cvs.width,cvs.height);
- var img=ctx.getImageData(0,0,cvs.width,cvs.height),d=img.data,i,g,mn=255,mx=0;
- // grayscale + find min/max
+ ctx.drawImage(v,cx,cy,cw,ch,0,0,W,H);
+ var img=ctx.getImageData(0,0,W,H),d=img.data,i,g,mn=255,mx=0;
  for(i=0;i<d.length;i+=4){ g=(0.299*d[i]+0.587*d[i+1]+0.114*d[i+2])|0; d[i]=d[i+1]=d[i+2]=g; if(g<mn)mn=g; if(g>mx)mx=g; }
- // contrast normalize to full range (helps Tesseract's own thresholding)
  var rng=(mx-mn)||1;
  for(i=0;i<d.length;i+=4){ g=((d[i]-mn)*255/rng)|0; d[i]=d[i+1]=d[i+2]=g; }
  ctx.putImageData(img,0,0); return cvs;
@@ -832,14 +832,22 @@ function _frameCanvas(v){
 async function scanTick(manual){
  if(_scanBusy || !_scanWorker || _scanDone) return;
  var v=document.getElementById('scan-video'); if(!v||!v.videoWidth) return;
- var cvs=_frameCanvas(v); if(!cvs) return;
  _scanBusy=true;
  try{
-  var r=await _scanWorker.recognize(cvs);
-  var raw=(r&&r.data&&r.data.text)||'';
-  var code=resolveRelease(raw);
+  // Fast pass: the narrow code line only (small image → quick OCR)
+  var c1=_cropCanvas(v,0.05,0.40,0.90,0.09,1000);
+  var raw1=''; if(c1){ var r1=await _scanWorker.recognize(c1); raw1=(r1&&r1.data&&r1.data.text)||''; }
+  var code=bestMatch(raw1);
+  var combined=raw1;
+  // Fallback: the whole VIN-TAGe section (data-plate cross-check) only if the code line missed
+  if(!code && !_scanDone){
+   var c2=_cropCanvas(v,0.05,0.40,0.90,0.18,1000);
+   var raw2=''; if(c2){ var r2=await _scanWorker.recognize(c2); raw2=(r2&&r2.data&&r2.data.text)||''; }
+   combined=(raw1+' '+raw2).trim();
+   code=resolveRelease(combined);
+  }
   if(code){ onDecoded(code); }
-  else if(manual){ var dbg=raw.replace(/\s+/g,' ').trim().slice(0,44); setScanStatus('Couldn’t match it yet. Read: “'+(dbg||'(nothing)')+'” — hold steady, fill the box, avoid glare.',true); }
+  else if(manual){ var dbg=combined.replace(/\s+/g,' ').trim().slice(0,44); setScanStatus('Couldn’t match it yet. Read: “'+(dbg||'(nothing)')+'” — hold steady, fill the box, avoid glare.',true); }
  }catch(e){ if(manual) setScanStatus('Scan error — try again.',true); }
  finally{ _scanBusy=false; }
 }
