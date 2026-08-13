@@ -787,15 +787,21 @@ a{color:inherit;text-decoration:none;}
 /* ══════════════════════════════════════
  RESPONSIVE
 ══════════════════════════════════════ */
+.vin-ref-toggle{display:none;}
 @media(max-width:900px){
  .whiskey-intro{grid-template-columns:1fr;gap:40px;}
- .bottle-grid{grid-template-columns:1fr;}
+ .bottle-grid{grid-template-columns:repeat(3,1fr);}
+ .bottle-card-img-wrap{height:clamp(150px,28vw,240px);}
  .bottle-detail-inner{grid-template-columns:1fr;}
  .bottle-detail-img-col{min-height:320px;}
  .story-grid{grid-template-columns:1fr;gap:40px;}
  .vintage-cols{grid-template-columns:minmax(0,1fr);}
  .vintage-decoder-col{position:static;min-width:0;order:-1;}
- .vintage-ref-col{min-width:0;}
+ .vintage-ref-col{min-width:0;display:none;}
+ .vintage-ref-col.open{display:flex;margin-top:8px;}
+ .vin-ref-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:8px;background:var(--charcoal3);border:1px solid var(--charcoal4);color:var(--gold);font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:13px 14px;cursor:pointer;text-align:left;}
+ .vin-ref-toggle .vin-ref-caret{flex-shrink:0;transition:transform .2s;font-size:9px;}
+ .vin-ref-toggle.open .vin-ref-caret{transform:rotate(180deg);}
  .inventory-inner{grid-template-columns:1fr;gap:40px;}
  .footer-top{grid-template-columns:1fr 1fr;gap:32px;}
  .nav-links{display:none;}
@@ -809,6 +815,19 @@ a{color:inherit;text-decoration:none;}
  .hero-ctas{flex-direction:column;align-items:flex-start;}
  .whiskey-intro-stat-grid{grid-template-columns:1fr 1fr;}
  .bottle-detail-stats{grid-template-columns:1fr 1fr;}
+ .bottle-grid{gap:1px;}
+ .bottle-card-img-wrap{height:clamp(118px,33vw,168px);padding:12px 6px 0;}
+ .bottle-card-info{padding:10px 8px 12px;}
+ .bottle-card-series{font-size:8px;letter-spacing:.1em;margin-bottom:4px;}
+ .bottle-card-name{font-size:10.5px;line-height:1.25;margin-bottom:6px;}
+ .bottle-card-stats{gap:4px;margin:6px 0 8px;}
+ .bc-stat{padding:5px 2px;}
+ .bc-stat-v{font-size:12px;}
+ .bc-stat-l{font-size:6px;letter-spacing:.08em;}
+ .bottle-card-code{font-size:8px;letter-spacing:.06em;}
+ .limited-pill{font-size:6px;padding:3px 5px;letter-spacing:.06em;margin-bottom:8px;}
+ .bottle-card-ribbon{font-size:6px;padding:3px 6px;top:8px;letter-spacing:.1em;}
+ .bf-sash{--bf-fs:9px;padding:6px 10px;}
  .story-photos{grid-template-columns:1fr 1fr;gap:6px;}
  .footer-top{grid-template-columns:1fr;}
  .email-row{flex-direction:column;}
@@ -1947,6 +1966,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
  </div>
  <div id="vin-result" style="position:relative;"></div>
+ <button class="vin-ref-toggle" onclick="toggleVinRef(this)">VIN-TAG<span class="lowercase-e">e</span> Code &amp; Data Plate Breakdown <span class="vin-ref-caret">&#9662;</span></button>
  </div>
 
  <!-- RIGHT: REFERENCE -->
@@ -1983,7 +2003,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="series-row"><span class="s-code">G2</span><span class="s-name">Second Generation</span></div>
  <div class="series-row"><span class="s-code">G3</span><span class="s-name">Third Generation</span></div>
  </div>
- <div class="ref-body-text">Each series release marks a new Generation. The Generation Code tracks the release history of each series over time.</div>
+ <div class="ref-body-text">The Generation Code tracks the release history of each series over time. A shift from G1 to G2 represents a new era, a subtle revolution.</div>
  </div>
 
  <div class="ref-divider"></div>
@@ -3479,6 +3499,9 @@ document.getElementById('vin-input').addEventListener('input', function(e) {
  }
  e.target.value = f;
 });
+
+// ── Mobile: expand/collapse the VIN-TAGe code & data plate reference ──
+function toggleVinRef(btn){ document.querySelector('.vintage-ref-col').classList.toggle('open'); btn.classList.toggle('open'); }
 
 // ── RTC SEGMENT INTERACTION ──
 let rtcActive = -1;

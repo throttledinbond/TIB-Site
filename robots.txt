@@ -1,49 +1,42 @@
 # Throttled In Bond robots.txt
 # Public content is open to search engines and reputable AI crawlers.
-# Member-only areas AND the unlisted Industry VIP page are excluded; Google Ads crawler always has full access.
+# Member-only areas are excluded; Google Ads crawler always has full access.
 
 User-agent: *
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
-# Reputable AI crawlers — explicitly welcome (same exclusions)
+# Reputable AI crawlers — explicitly welcome (same member-area exclusions)
 User-agent: GPTBot
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
 User-agent: OAI-SearchBot
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
 User-agent: ChatGPT-User
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
 User-agent: ClaudeBot
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
 User-agent: PerplexityBot
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
 User-agent: Google-Extended
 Disallow: /garage
 Disallow: /collection
 Disallow: /archive
-Disallow: /TIB-VIP/
 
 # Google Ads landing-page crawler — full access
 User-agent: AdsBot-Google
