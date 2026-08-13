@@ -170,8 +170,13 @@ button{font-family:var(--f);}
 .scan-close:hover{color:var(--gold);}
 .scan-vidwrap{position:relative;background:#000;width:100%;aspect-ratio:3/4;max-height:58vh;overflow:hidden;}
 .scan-vidwrap video{width:100%;height:100%;object-fit:cover;display:block;}
-.scan-frame{position:absolute;left:7%;right:7%;top:40%;height:15%;border:2px solid var(--gold-lt);box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;}
-.scan-frame:before{content:"Fill the box with the TIB … code line";position:absolute;left:0;right:0;top:-22px;text-align:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);text-shadow:0 1px 3px rgba(0,0,0,.9);}
+.scan-frame{position:absolute;left:6%;right:6%;top:35%;height:26%;border:2px solid var(--gold-lt);box-shadow:0 0 0 2000px rgba(0,0,0,.35);pointer-events:none;transition:border-color .2s;}
+@keyframes scanpulse{0%,100%{border-color:rgba(232,184,75,.55);box-shadow:0 0 0 2000px rgba(0,0,0,.35),0 0 0 0 rgba(232,184,75,0);}50%{border-color:#F0D488;box-shadow:0 0 0 2000px rgba(0,0,0,.30),0 0 16px 2px rgba(232,184,75,.55);}}
+.scan-frame.scanning{animation:scanpulse 1.15s ease-in-out infinite;}
+.scan-frame.ok{animation:none;border-color:#7CC47F;box-shadow:0 0 0 2000px rgba(0,0,0,.5),0 0 20px 3px rgba(124,196,127,.65);}
+.scan-status.ok{color:#8FD891;font-weight:600;}
+.scan-frame:before{content:"Fill the box with the VIN-TAGe section";position:absolute;left:0;right:0;top:-22px;text-align:center;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-lt);text-shadow:0 1px 3px rgba(0,0,0,.9);}
+.scan-torch{display:none;}
 .scan-foot{padding:12px 14px;}
 .scan-status{font-size:12px;color:var(--gold-lt);min-height:16px;margin-bottom:10px;text-align:center;line-height:1.5;}
 .scan-status.err{color:#E88A6A;}
@@ -182,6 +187,9 @@ button{font-family:var(--f);}
 .scan-btn.ghost:hover{background:transparent;color:var(--gold-lt);border-color:var(--gold-lt);}
 .scan-note{font-size:9px;color:#9A9186;text-transform:uppercase;letter-spacing:.08em;text-align:center;margin-top:10px;}
 .vin-upload-note{font-size:9px;letter-spacing:.08em;color:#9A9186;margin-top:8px;line-height:1.5;text-transform:uppercase;}
+.vin-upload-alt{text-align:center;margin-top:9px;}
+.vin-upload-alt a{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#9A9186;cursor:pointer;border-bottom:1px dotted #6b6459;}
+.vin-upload-alt a:hover{color:var(--gold);border-bottom-color:var(--gold-dk);}
 .vin-ocr-status{font-size:10px;letter-spacing:.06em;color:var(--gold-lt);margin-top:10px;min-height:14px;line-height:1.5;}
 .vin-ocr-status.err{color:#E88A6A;}
 
@@ -423,9 +431,9 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
      <!-- Scan / Upload Label (on-device OCR) -->
      <div class="vin-upload-wrap">
       <button class="vin-upload-btn primary" onclick="scanStart()">&#128247;&nbsp; Scan Label with Camera</button>
-      <button class="vin-upload-btn" onclick="pickLabel()" style="margin-top:8px;">Upload a Photo Instead</button>
       <input type="file" id="label-input" accept="image/*" capture="environment" style="display:none" onchange="handleLabel(this.files[0])">
-      <div class="vin-upload-note">Reads the VIN-TAGe on your device &middot; photo is not uploaded or saved</div>
+      <div class="vin-upload-note">Scans automatically on your device &middot; photo is not uploaded or saved</div>
+      <div class="vin-upload-alt"><a onclick="pickLabel()">or upload a photo instead</a></div>
       <div class="vin-ocr-status" id="vin-ocr-status"></div>
      </div>
     </div>
@@ -744,6 +752,26 @@ function bestMatch(ocrText){
  return bestD<=3 ? best : null; // <=3 edits over a 14-char code
 }
 
+/* Second signal: the data plate. Proof + mash bill are unique per release, so we
+   can resolve the bottle even when the code line is glared/misread. */
+function _proofDigits(p){ return String(p||'').replace(/[^0-9]/g,''); }
+function _sig(code){
+ var b=VIN_BARRELS[code], toks=[], pf=_proofDigits(b.proof);
+ if(pf.length>=3) toks.push({t:scanCanon(pf),w:2});
+ (b.mashBill||[]).forEach(function(g){ if(g.p>0) toks.push({t:scanCanon(g.k+g.p),w:1}); });
+ return toks;
+}
+function resolveRelease(text){
+ var code=bestMatch(text); if(code) return code;              // path 1: the VIN-TAGe code
+ var t=scanCanon(text); if(t.length<4) return null;           // path 2: data-plate signature
+ var codes=Object.keys(VIN_BARRELS), best=null, bestS=0, second=0;
+ codes.forEach(function(c){
+  var s=0; _sig(c).forEach(function(o){ if(o.t && t.indexOf(o.t)>=0) s+=o.w; });
+  if(s>bestS){ second=bestS; bestS=s; best=c; } else if(s>second){ second=s; }
+ });
+ return (bestS>=2 && bestS>second) ? best : null;
+}
+
 /* File-upload path (fallback) */
 function handleLabel(file){
  if(!file) return;
@@ -754,7 +782,7 @@ function handleLabel(file){
   return Tesseract.recognize(url,'eng',{tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '});
  }).then(function(r){
   URL.revokeObjectURL(url); // discard image reference; nothing is uploaded or stored
-  var code=bestMatch((r&&r.data&&r.data.text)||'');
+  var code=resolveRelease((r&&r.data&&r.data.text)||'');
   if(code){ status.className='vin-ocr-status'; status.textContent='Read ✓  '+code; vinFill(code); }
   else { status.className='vin-ocr-status err'; status.textContent='Couldn’t read the VIN-TAGe clearly. Try the camera scan, fill the frame with just the code, and avoid glare — or type it above.'; }
  }).catch(function(){
@@ -764,7 +792,8 @@ function handleLabel(file){
 }
 
 /* Live-camera scanner: continuous OCR of the framed band; auto-fills on a confident match. */
-var _scanStream=null,_scanTimer=null,_scanBusy=false,_scanWorker=null;
+var _scanStream=null,_scanTimer=null,_scanBusy=false,_scanWorker=null,_torchTrack=null,_torchOn=false,_scanDone=false;
+function _scanFrame(){ return document.querySelector('.scan-frame'); }
 function setScanStatus(t,err){ var e=document.getElementById('scan-status'); if(e){ e.className='scan-status'+(err?' err':''); e.textContent=t; } }
 async function scanStart(){
  var modal=document.getElementById('scan-modal'); modal.classList.add('open');
@@ -773,18 +802,21 @@ async function scanStart(){
  try{ _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false}); }
  catch(e){ setScanStatus('Camera blocked. Allow camera access, or use “Upload a Photo Instead.”',true); return; }
  var v=document.getElementById('scan-video'); v.srcObject=_scanStream; try{ await v.play(); }catch(e){}
+ try{ _torchTrack=_scanStream.getVideoTracks()[0]; var caps=(_torchTrack&&_torchTrack.getCapabilities)?_torchTrack.getCapabilities():{}; var tb=document.getElementById('scan-torch'); if(tb) tb.style.display=(caps&&caps.torch)?'block':'none'; _torchOn=false; }catch(e){}
  try{
   await loadTesseract();
   if(!_scanWorker){ setScanStatus('Loading scanner…'); _scanWorker=await Tesseract.createWorker('eng'); await _scanWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:'6'}); }
  }catch(e){ setScanStatus('Scanner couldn’t load (needs internet). Use “Upload a Photo Instead.”',true); return; }
- setScanStatus('Center the VIN-TAGe code in the box…');
+ _scanDone=false;
+ var fr=_scanFrame(); if(fr){ fr.classList.remove('ok'); fr.classList.add('scanning'); }
+ setScanStatus('Scanning… hold the VIN-TAGe section in the box');
  if(_scanTimer) clearInterval(_scanTimer);
  _scanTimer=setInterval(function(){ scanTick(false); }, 900);
 }
 function _frameCanvas(v){
  var vw=v.videoWidth,vh=v.videoHeight; if(!vw||!vh) return null;
  // Crop the framed band (matches the on-screen box: left/right 7%, top 40%, height 15%)
- var cx=Math.round(vw*0.07),cw=Math.round(vw*0.86),cy=Math.round(vh*0.40),ch=Math.round(vh*0.15);
+ var cx=Math.round(vw*0.06),cw=Math.round(vw*0.88),cy=Math.round(vh*0.35),ch=Math.round(vh*0.26);
  var scale=Math.max(2,Math.round(1600/cw)); // upscale the strip for OCR
  var cvs=document.createElement('canvas'); cvs.width=cw*scale; cvs.height=ch*scale;
  var ctx=cvs.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
@@ -798,24 +830,48 @@ function _frameCanvas(v){
  ctx.putImageData(img,0,0); return cvs;
 }
 async function scanTick(manual){
- if(_scanBusy || !_scanWorker) return;
+ if(_scanBusy || !_scanWorker || _scanDone) return;
  var v=document.getElementById('scan-video'); if(!v||!v.videoWidth) return;
  var cvs=_frameCanvas(v); if(!cvs) return;
  _scanBusy=true;
- if(manual) setScanStatus('Reading…');
  try{
   var r=await _scanWorker.recognize(cvs);
   var raw=(r&&r.data&&r.data.text)||'';
-  var code=bestMatch(raw);
-  if(code){ setScanStatus('Read ✓  '+code); scanSuccess(code); }
-  else if(manual){ var dbg=raw.replace(/\s+/g,' ').trim().slice(0,44); setScanStatus('Couldn’t match it. Read: “'+(dbg||'(nothing)')+'” — hold steady, fill the box, avoid glare.',true); }
+  var code=resolveRelease(raw);
+  if(code){ onDecoded(code); }
+  else if(manual){ var dbg=raw.replace(/\s+/g,' ').trim().slice(0,44); setScanStatus('Couldn’t match it yet. Read: “'+(dbg||'(nothing)')+'” — hold steady, fill the box, avoid glare.',true); }
  }catch(e){ if(manual) setScanStatus('Scan error — try again.',true); }
  finally{ _scanBusy=false; }
 }
-function scanSuccess(code){ var st=document.getElementById('vin-ocr-status'); scanStop(); if(st){ st.className='vin-ocr-status'; st.textContent='Read ✓  '+code; } vinFill(code); }
-function scanStop(){
+/* Success beat: freeze scanning, flash "Decoded", then hand off to the report. */
+function onDecoded(code){
+ if(_scanDone) return; _scanDone=true;
  if(_scanTimer){ clearInterval(_scanTimer); _scanTimer=null; }
  if(_scanStream){ _scanStream.getTracks().forEach(function(t){ t.stop(); }); _scanStream=null; }
+ var fr=_scanFrame(); if(fr){ fr.classList.remove('scanning'); fr.classList.add('ok'); }
+ var st=document.getElementById('scan-status'); if(st){ st.className='scan-status ok'; st.textContent='Decoded ✓  '+code; }
+ setTimeout(function(){ finalizeScan(code); }, 850);
+}
+function finalizeScan(code){
+ var modal=document.getElementById('scan-modal'); if(modal) modal.classList.remove('open');
+ var fr=_scanFrame(); if(fr) fr.classList.remove('ok');
+ var v=document.getElementById('scan-video'); if(v) v.srcObject=null;
+ _torchTrack=null; _torchOn=false; var tb=document.getElementById('scan-torch'); if(tb){ tb.style.display='none'; tb.textContent='Light'; }
+ var os=document.getElementById('vin-ocr-status'); if(os){ os.className='vin-ocr-status'; os.textContent='Decoded ✓  '+code; }
+ vinFill(code);
+}
+function toggleTorch(){
+ if(!_torchTrack) return; _torchOn=!_torchOn;
+ try{ _torchTrack.applyConstraints({advanced:[{torch:_torchOn}]}); }catch(e){}
+ var tb=document.getElementById('scan-torch'); if(tb) tb.textContent=_torchOn?'Light On':'Light';
+}
+function scanStop(){
+ _scanDone=true;
+ if(_scanTimer){ clearInterval(_scanTimer); _scanTimer=null; }
+ if(_scanStream){ _scanStream.getTracks().forEach(function(t){ t.stop(); }); _scanStream=null; }
+ _torchTrack=null; _torchOn=false;
+ var tb=document.getElementById('scan-torch'); if(tb){ tb.style.display='none'; tb.textContent='Light'; }
+ var fr=_scanFrame(); if(fr){ fr.classList.remove('scanning'); fr.classList.remove('ok'); }
  var v=document.getElementById('scan-video'); if(v) v.srcObject=null;
  var modal=document.getElementById('scan-modal'); if(modal) modal.classList.remove('open');
 }
@@ -949,6 +1005,7 @@ archiveLoadLive();
    <div class="scan-status" id="scan-status">Starting camera&hellip;</div>
    <div class="scan-actions">
     <button class="scan-btn" onclick="scanTick(true)">Capture Now</button>
+    <button class="scan-btn ghost scan-torch" id="scan-torch" onclick="toggleTorch()">Light</button>
     <button class="scan-btn ghost" onclick="scanStop()">Cancel</button>
    </div>
    <div class="scan-note">Runs on your device &middot; the photo is not uploaded or saved</div>
