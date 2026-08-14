@@ -2885,16 +2885,18 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
 .faq-a p{font-size:14px;line-height:1.7;color:var(--cream3);margin:0;padding:0 20px 18px;max-width:72ch;}
 .faq-item.open .faq-a{max-height:640px;}
 </style>
-<section id="faq" class="section" style="min-height:auto;">
- <div class="section-inner">
-  <div style="text-align:center;margin-bottom:40px;">
-   <div class="eyebrow">Answers</div>
-   <h2 class="display-sm">Frequently Asked Questions</h2>
-   <div class="gold-line" style="margin:16px auto;"></div>
+<!-- FAQ opens as a modal from the footer Brand link -->
+<div class="modal-overlay" id="faq-modal">
+ <div class="modal-bg" onclick="closeModal('faq-modal')"></div>
+ <div class="modal-box modal-box-wide">
+  <button class="modal-close-x" onclick="closeModal('faq-modal')">&times;</button>
+  <div class="pt-wrap">
+   <div class="modal-eyebrow">Answers</div>
+   <h2 class="modal-title">Frequently Asked Questions</h2>
+   <div class="faq-list" id="faq-list" style="margin-top:20px;"><p style="color:var(--cream3);font-size:13px;text-align:center;">Loading&hellip;</p></div>
   </div>
-  <div class="faq-list" id="faq-list"><p style="color:var(--cream3);font-size:13px;text-align:center;">Loading&hellip;</p></div>
  </div>
-</section>
+</div>
 <script>
 function faqToggle(b){var i=b.closest('.faq-item');if(i)i.classList.toggle('open');}
 async function faqLoad(){
@@ -2927,7 +2929,6 @@ faqLoad();
  <span class="footer-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
  <a class="footer-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Blog</a>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
- <span class="footer-link" onclick="navTo('faq')">FAQ</span>
  </div>
  </div>
  <div>
@@ -2947,6 +2948,7 @@ faqLoad();
  <span class="footer-link" onclick="openPartners()">Liquor Stores &amp; Bar Managers</span>
  <span class="footer-link" onclick="openPartners()">Trade &amp; Partners</span>
  <span class="footer-link" onclick="openCreators()">Creators &amp; Media</span>
+ <span class="footer-link" onclick="faqLoad();openModal('faq-modal')">FAQ</span>
  </div>
  </div>
  <div>
