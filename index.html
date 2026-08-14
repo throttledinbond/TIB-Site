@@ -2883,6 +2883,8 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
 .faq-item.open .faq-ic{transform:rotate(45deg);}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
 .faq-a p{font-size:14px;line-height:1.7;color:var(--cream3);margin:0;padding:0 20px 18px;max-width:72ch;}
+.faq-link{color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);transition:color .15s,border-color .15s;}
+.faq-link:hover{color:var(--gold-lt);border-bottom-color:var(--gold);}
 .faq-item.open .faq-a{max-height:640px;}
 </style>
 <!-- FAQ opens as a modal from the footer Brand link -->
@@ -2899,6 +2901,42 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
 </div>
 <script>
 function faqToggle(b){var i=b.closest('.faq-item');if(i)i.classList.toggle('open');}
+/* Turn named references in an answer into links that close the modal and jump to the right place.
+   Runs on the already-escaped text, links each destination at most once per answer. */
+function faqLinkAct(key){
+ return {
+  vintage:"closeModal('faq-modal');navTo('vintage')",
+  inventory:"closeModal('faq-modal');navTo('inventory')",
+  garage:"closeModal('faq-modal');authNavClick()",
+  archive:"closeModal('faq-modal');garageGoto('archive')",
+  map:"closeModal('faq-modal');openMapModal()",
+  buy:"closeModal('faq-modal');navTo('whiskey')",
+  shop:"closeModal('faq-modal');window.open('https://shop.throttledinbond.com','_blank')"
+ }[key];
+}
+function faqLinkify(escaped){
+ var LINKS=[
+  ['VIN-TAGe™ Decoder','vintage'],['VIN-TAGe™ decoder','vintage'],['the decoder','vintage'],
+  ['The Barrel Inventory','inventory'],['Barrel Inventory','inventory'],['Join it','inventory'],
+  ['The Barrel Archive','archive'],['Barrel Archive','archive'],
+  ['The Garage','garage'],
+  ['Availability Map','map'],
+  ['Buy button','buy'],
+  ['shop.throttledinbond.com','shop']
+ ];
+ var used={}, store=[];
+ LINKS.forEach(function(p){
+  var phrase=p[0], key=p[1]; if(used[key]) return;
+  var idx=escaped.indexOf(phrase); if(idx<0) return;
+  var act=faqLinkAct(key); if(!act) return;
+  used[key]=1;
+  var tok='@@FAQLNK'+store.length+'@@';
+  store.push('<span class="faq-link" onclick="'+act+'">'+phrase+'</span>');
+  escaped=escaped.slice(0,idx)+tok+escaped.slice(idx+phrase.length);
+ });
+ store.forEach(function(html,i){ escaped=escaped.split('@@FAQLNK'+i+'@@').join(html); });
+ return escaped;
+}
 async function faqLoad(){
  var el=document.getElementById('faq-list'); if(!el) return;
  try{
@@ -2906,7 +2944,7 @@ async function faqLoad(){
   if(res.error) throw res.error;
   var rows=res.data||[];
   if(!rows.length){ el.innerHTML='<p style="color:var(--cream3);font-size:13px;text-align:center;">No questions yet.</p>'; return; }
-  el.innerHTML=rows.map(function(f){ return '<div class="faq-item"><button class="faq-q" onclick="faqToggle(this)"><span>'+fbEscape(f.question||'')+'</span><span class="faq-ic">+</span></button><div class="faq-a"><p>'+fbEscape(f.answer||'')+'</p></div></div>'; }).join('');
+  el.innerHTML=rows.map(function(f){ return '<div class="faq-item"><button class="faq-q" onclick="faqToggle(this)"><span>'+fbEscape(f.question||'')+'</span><span class="faq-ic">+</span></button><div class="faq-a"><p>'+faqLinkify(fbEscape(f.answer||''))+'</p></div></div>'; }).join('');
  }catch(e){ el.innerHTML='<p style="color:var(--cream3);font-size:13px;text-align:center;">FAQs are unavailable right now.</p>'; }
 }
 faqLoad();
