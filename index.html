@@ -2221,7 +2221,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 
       <!-- Admin-only launcher: Corporate Gifting Case Builder (in testing) -->
       <div style="margin-bottom:28px;">
-        <button class="btn-ghost" onclick="openGifting()">Open Corporate Gifting Case Builder →</button>
+        <button class="btn-ghost" onclick="openGifting()">Open Private Reserve Builder →</button>
         <span style="font-size:11px;color:var(--cream3);margin-left:10px;">Admin testing — not public yet</span>
       </div>
 
@@ -2784,9 +2784,9 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
 <section id="gifting" class="section" style="display:none;min-height:auto;">
   <div class="section-inner">
     <span class="gift-admin-flag">Admin Testing &middot; Not Public</span>
-    <div class="eyebrow" style="margin-bottom:10px;">Corporate Gifting</div>
-    <h2 class="display-sm" style="margin-bottom:14px;">Case Builder</h2>
-    <p class="body-copy" style="margin-bottom:6px;">Give the gift of American Muscle. TIB Private Reserve orders for corporate clients, events, and branded occasions.</p>
+    <div class="eyebrow" style="margin-bottom:10px;">Custom Orders</div>
+    <h2 class="display-sm" style="margin-bottom:14px;">Private Reserve</h2>
+    <p class="body-copy" style="margin-bottom:6px;">Configure your Private Reserve order today. The perfect gifting opportunity for corporate teams, client appreciation gifts, and holiday surprises. Co-branded options also available.</p>
 
     <!-- Bypass link -->
     <div><span class="gift-bypass" onclick="giftBypass()">Already know what you want? Skip the builder and submit an inquiry directly →</span></div>
@@ -2806,16 +2806,16 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
     <div class="gift-section-label">Your Tier</div>
     <div class="gift-tiers">
       <button type="button" class="gift-tier active" data-tier="t1" onclick="giftSelectTier('t1')">
-        <span class="gift-tier-name">Standard Case</span>
-        <span class="gift-tier-sub">Tier 1 &middot; Min 6 bottles &middot; No co-branding &middot; Buy on Bourbon Outfitter</span>
+        <span class="gift-tier-name">Standard Case Order</span>
+        <span class="gift-tier-sub">Min 6 bottles &middot; Standard packaging</span>
       </button>
       <button type="button" class="gift-tier" data-tier="t2" onclick="giftSelectTier('t2')">
-        <span class="gift-tier-name">Branded Case</span>
-        <span class="gift-tier-sub">Tier 2 &middot; Min 6 bottles &middot; Co-branded sticker &middot; Inquiry</span>
+        <span class="gift-tier-name">Private Reserve</span>
+        <span class="gift-tier-sub">Min 6 bottles &middot; Private Reserve sticker applied</span>
       </button>
       <button type="button" class="gift-tier" data-tier="t3" onclick="giftSelectTier('t3')">
-        <span class="gift-tier-name">Signature Selection</span>
-        <span class="gift-tier-sub">Tier 3 &middot; Min 12 bottles &middot; White-glove &middot; Inquiry</span>
+        <span class="gift-tier-name">Signature Reserve (Co-Branded)</span>
+        <span class="gift-tier-sub">Min 12 bottles &middot; Co-branded with your logo</span>
       </button>
     </div>
 
@@ -4008,9 +4008,9 @@ var GIFT_IMG = {
 };
 var GIFT_PENDING = { FS: false, CS: false, BF: true }; // Barn Find pending bottling
 var GIFT_TIERS = {
-  t1: { label: 'Tier 1 — Standard Case', min: 6,  route: 'bo' },
-  t2: { label: 'Tier 2 — Branded Case',  min: 6,  route: 'inquiry' },
-  t3: { label: 'Tier 3 — Signature Selection', min: 12, route: 'inquiry' }
+  t1: { label: 'Standard Case Order', min: 6,  route: 'bo',      markup: 0 },
+  t2: { label: 'Private Reserve',     min: 6,  route: 'inquiry', markup: 0.20 },
+  t3: { label: 'Signature Reserve (Co-Branded)', min: 12, route: 'inquiry', markup: 0.30 }
 };
 var _giftQty = { FS: 0, CS: 0, BF: 0 };
 var _giftTier = 't1';
@@ -4079,31 +4079,24 @@ function giftRender(){
     ['FS','CS','BF'].forEach(function(s){
       html += '<div class="cart-row">' +
         '<img class="cart-row-img" src="' + GIFT_IMG[s] + '" alt="' + GIFT_NAMES[s] + '" crossorigin="anonymous">' +
-        '<div class="cart-row-info"><div class="cart-row-name">' + GIFT_NAMES[s] + (GIFT_PENDING[s] ? '<span class="gift-pending">Pending Bottling</span>' : '') + '</div>' +
-        '<div class="cart-row-price">$' + GIFT_PRICES[s].toFixed(2) + ' each</div></div>' +
+        '<div class="cart-row-info"><div class="cart-row-name">' + GIFT_NAMES[s] + (GIFT_PENDING[s] ? '<span class="gift-pending">Pending Bottling</span>' : '') + '</div></div>' +
         '<div class="cart-stepper"><button class="cart-step-btn" onclick="giftAdjust(\'' + s + '\',-1)">&minus;</button>' +
         '<span class="cart-qty" id="gift-qty-' + s + '">' + (_giftQty[s]||0) + '</span>' +
         '<button class="cart-step-btn" onclick="giftAdjust(\'' + s + '\',1)">+</button></div></div>';
     });
     grid.innerHTML = html;
   }
-  // Running total
+  // Running total — cases + estimated cost (tier markup applied silently)
   var n = giftTotalBottles(), sub = giftSubtotal();
+  var cases = n / 6;
+  var casesStr = (cases % 1 === 0) ? String(cases) : cases.toFixed(1);
+  var est = sub * (1 + (tier.markup || 0));
   var sumEl = document.getElementById('gift-summary');
   if (sumEl){
-    var isCustom = (tier.route === 'inquiry'); // Tier 2 / Tier 3 orders get a BO-set premium on a custom product
-    if (isCustom){
-      sumEl.innerHTML =
-        '<div class="gift-summary-row"><span>' + n + ' bottle' + (n===1?'':'s') + ' selected</span><span></span></div>' +
-        '<div class="gift-summary-row"><span>Estimated bottle cost</span><span>$' + sub.toFixed(2) + '</span></div>' +
-        '<div class="gift-summary-row"><span>Co-branding and handling</span><span>Set by Bourbon Outfitter</span></div>' +
-        '<div class="gift-fee-note">Bottle cost estimated at Bourbon Outfitter retail. Co-branding and handling on custom orders are set and confirmed by Bourbon Outfitter; your final total is provided before purchase.</div>';
-    } else {
-      sumEl.innerHTML =
-        '<div class="gift-summary-row"><span>' + n + ' bottle' + (n===1?'':'s') + ' selected</span><span></span></div>' +
-        '<div class="gift-summary-row total"><span>Estimated bottle subtotal</span><span>$' + sub.toFixed(2) + '</span></div>' +
-        '<div class="gift-fee-note">Estimated at Bourbon Outfitter retail pricing. Final pricing is set and confirmed by Bourbon Outfitter.</div>';
-    }
+    sumEl.innerHTML =
+      '<div class="gift-summary-row"><span>' + casesStr + ' case' + (cases===1?'':'s') + ' selected</span><span></span></div>' +
+      '<div class="gift-summary-row total"><span>Estimated cost</span><span>$' + est.toFixed(2) + '</span></div>' +
+      '<div class="gift-fee-note">Estimated cost subject to review and change upon review by Throttled In Bond team. Your final total will be provided before purchase. All sales will be facilitated by licensed retail partner.</div>';
   }
   // Gate message + action button
   var gateEl = document.getElementById('gift-gate-msg');
