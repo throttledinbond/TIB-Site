@@ -2811,11 +2811,11 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
       </button>
       <button type="button" class="gift-tier" data-tier="t2" onclick="giftSelectTier('t2')">
         <span class="gift-tier-name">Private Reserve</span>
-        <span class="gift-tier-sub">Min 6 bottles &middot; Private Reserve sticker applied</span>
+        <span class="gift-tier-sub">Min 6 bottles &middot; Includes Private Sticker Label</span>
       </button>
       <button type="button" class="gift-tier" data-tier="t3" onclick="giftSelectTier('t3')">
         <span class="gift-tier-name">Signature Reserve (Co-Branded)</span>
-        <span class="gift-tier-sub">Min 12 bottles &middot; Co-branded with your logo</span>
+        <span class="gift-tier-sub">Min 12 bottles &middot; Co-Branded Private Reserve Label</span>
       </button>
     </div>
 
@@ -4096,7 +4096,7 @@ function giftRender(){
     sumEl.innerHTML =
       '<div class="gift-summary-row"><span>' + casesStr + ' case' + (cases===1?'':'s') + ' selected</span><span></span></div>' +
       '<div class="gift-summary-row total"><span>Estimated cost</span><span>$' + est.toFixed(2) + '</span></div>' +
-      '<div class="gift-fee-note">Estimated cost subject to review and change upon review by Throttled In Bond team. Your final total will be provided before purchase. All sales will be facilitated by licensed retail partner.</div>';
+      '<div class="gift-fee-note">Estimated cost subject to change upon review by Throttled In Bond&trade; team. Your final total will be provided before purchase. All sales will be facilitated by licensed retail partner.</div>';
   }
   // Gate message + action button
   var gateEl = document.getElementById('gift-gate-msg');
