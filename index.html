@@ -489,6 +489,80 @@ a{color:inherit;text-decoration:none;}
 .hero-ribbon span{font-size:clamp(10px,2.6vw,18px);font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
 @media(max-width:520px){.hero-ribbon{padding:9px 26px;gap:8px;}.hero-ribbon span{letter-spacing:.04em;}.hero-ribbon img{height:14px;}}
 
+/* ===================================================================
+   COMBINED HERO — "Whiskey as Hero" (left copy + right Select A Release
+   over the car). All rules scoped to #home / hw- so nothing site-wide
+   (.btn-primary, .bottle-card elsewhere, etc.) is affected.
+=================================================================== */
+#home{position:relative;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;background:var(--charcoal);}
+#home .hero-bg{position:absolute;inset:0;overflow:hidden;}
+#home .hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 40%;opacity:.42;}
+#home .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,25,23,.42) 0%,rgba(26,25,23,.12) 45%,rgba(26,25,23,.9) 100%);}
+.hw-grid{flex:1;position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:calc(var(--nav-h) + 30px) clamp(20px,5vw,56px) 44px;display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.7fr);gap:24px clamp(28px,4vw,56px);align-items:stretch;align-content:center;}
+.hw-head{grid-column:1 / -1;}
+.hw-slogan{text-align:left;font-size:clamp(26px,2.9vw,44px);font-weight:700;letter-spacing:-.01em;line-height:1.05;text-transform:uppercase;color:var(--cream);text-shadow:0 2px 18px rgba(0,0,0,.7);}
+.hw-slogan .tm{font-size:.38em;vertical-align:top;line-height:1;}
+.hw-subrow{margin-top:10px;font-size:clamp(10px,1.2vw,12px);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 4px rgba(0,0,0,.85);}
+.hw-copy{text-align:left;display:flex;flex-direction:column;align-items:flex-start;height:100%;}
+.hw-headline{font-size:clamp(26px,2.9vw,44px);font-weight:700;line-height:1.04;letter-spacing:-.01em;color:var(--cream);text-shadow:0 2px 22px rgba(0,0,0,.7);margin-top:16px;margin-bottom:16px;}
+.hw-headline .gold{color:var(--gold-lt);}
+.hw-sub{font-size:clamp(14px,1.4vw,16px);line-height:1.6;color:var(--cream3);text-shadow:0 1px 8px rgba(0,0,0,.85);margin-bottom:26px;max-width:40ch;}
+.hw-actions{margin-top:auto;width:100%;}
+.hw-ctas{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start;align-items:stretch;}
+.hw-cta-primary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--gold);color:var(--charcoal);padding:11px 26px;border:none;transition:background .15s;white-space:nowrap;cursor:pointer;}
+.hw-cta-primary:hover{background:var(--gold-lt);}
+.hw-cta-main{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;}
+.hw-cta-sub{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
+#home .btn-ghost{display:flex;align-items:center;justify-content:center;background:rgba(20,19,17,.4);color:var(--cream);border:1px solid var(--cream3);padding:14px 22px;}
+#home .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.hw-availrow{margin-top:14px;}
+.hw-availlink{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;}
+/* Hero release cards — transparent, see-through bottles, pulsing, over the car */
+#home .bottle-grid{grid-template-columns:repeat(3,1fr);gap:10px;}
+#home .bottle-card{background:transparent;overflow:visible;border:none;}
+#home .bottle-card:hover{background:transparent;transform:translateY(-2px);}
+#home .bottle-card.active{background:transparent;outline:none;}
+#home .bottle-card-img-wrap{height:clamp(240px,26vw,380px);padding:18px 8px 0;overflow:visible;background:transparent;}
+#home .bottle-card-img{opacity:.8;filter:drop-shadow(0 18px 34px rgba(0,0,0,.6));transition:none;animation:hwpulse 3s ease-in-out infinite;}
+@keyframes hwpulse{0%,100%{transform:translateY(0);filter:drop-shadow(0 18px 34px rgba(0,0,0,.6));}45%{transform:translateY(-9px);filter:drop-shadow(0 24px 42px rgba(200,149,42,.28));}}
+#home .bottle-card:nth-child(1) .bottle-card-img{animation-delay:0s;}
+#home .bottle-card:nth-child(2) .bottle-card-img{animation-delay:.3s;}
+#home .bottle-card:nth-child(3) .bottle-card-img{animation-delay:.6s;}
+#home .bottle-card:hover .bottle-card-img,#home .bottle-card.active .bottle-card-img{animation-play-state:paused;transform:translateY(-9px);}
+@media(prefers-reduced-motion:reduce){#home .bottle-card-img{animation:none;}}
+#home .bottle-card-info{padding:14px 10px 6px;text-align:center;text-shadow:0 1px 7px rgba(0,0,0,.92),0 0 2px rgba(0,0,0,.9);}
+#home .bottle-card-name{font-size:clamp(12px,1vw,14px);}
+#home .bottle-card-stats{justify-content:center;}
+#home .bc-stat{background:transparent;border:1px solid var(--gold-dk);max-width:80px;backdrop-filter:blur(1px);}
+#home .bc-stat-v{font-size:14px;}
+#home .limited-pill{margin-top:4px;}
+#home .bottle-card-ribbon{top:14px;}
+/* New horizontal notched ribbon on Barn Find (replaces the diagonal sash, in-hero only) */
+#home .bf-sash{position:absolute;left:10%;width:80%;top:40%;box-sizing:border-box;background:var(--rust);box-shadow:0 4px 14px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 26px;z-index:6;pointer-events:none;transform:none;--bf-fs:clamp(7px,0.9vw,10px);clip-path:polygon(0 0,100% 0,calc(100% - 12px) 50%,100% 100%,0 100%,12px 50%);animation:hwpulse-plain 3s ease-in-out infinite .6s;}
+@keyframes hwpulse-plain{0%,100%{transform:translateY(0);}45%{transform:translateY(-9px);}}
+#home .bf-sash-logo{height:var(--bf-fs);width:auto;flex-shrink:0;}
+#home .bf-sash-txt{font-size:var(--bf-fs);font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
+/* Report strip below the hero */
+.hw-report-wrap{position:relative;z-index:2;background:var(--charcoal2);}
+.hw-report-inner{max-width:1200px;margin:0 auto;}
+/* Report LEFT column now holds context copy (paragraph) instead of a bottle image */
+.bd-context{background:var(--charcoal3);min-height:480px;padding:40px 34px;display:flex;flex-direction:column;justify-content:flex-start;}
+.bd-context-eyebrow{font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.bd-context-name{font-size:clamp(17px,1.6vw,22px);font-weight:700;color:var(--cream);letter-spacing:-.01em;line-height:1.2;margin-bottom:6px;}
+.bd-context-copy{font-size:clamp(13px,1.05vw,15px);line-height:1.7;color:var(--cream3);margin-top:14px;}
+@media(max-width:900px){
+ #home{min-height:auto;}
+ .hw-grid{grid-template-columns:1fr;gap:26px;padding-top:calc(var(--nav-h) + 26px);}
+ .hw-sub{max-width:none;}
+ #home .bottle-card-img-wrap{height:clamp(120px,33vw,168px);padding:12px 6px 0;}
+ #home .bottle-card-info{padding:10px 8px 12px;}
+ #home .bottle-card-name{font-size:10.5px;}
+ #home .bc-stat-v{font-size:12px;}
+ #home .bottle-card-code{font-size:8px;}
+ #home .bottle-card-ribbon{font-size:6px;padding:3px 6px;}
+ .bd-context{min-height:auto;padding:26px 22px;}
+}
+
 /* Bottle detail panel */
 #bottle-detail{
  background:var(--charcoal2);
@@ -545,6 +619,10 @@ a{color:inherit;text-decoration:none;}
  transition:color .2s;
 }
 .bottle-detail-close:hover{color:var(--gold);}
+/* Buy + Wish List — inside the About The Whiskey box, anchored to its bottom */
+.bd-context-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:28px;}
+.bd-wish-btn{font-size:10px;padding:14px 18px;}
+@media(max-width:900px){.bd-context-actions{margin-top:20px;padding-top:0;}}
 
 .whiskey-cta-row{display:flex;gap:12px;margin-top:48px;}
 
@@ -1645,7 +1723,8 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
 <!-- ══════════════════════════════════════
  SECTION 1, HOME
 ══════════════════════════════════════ -->
-<section id="home" class="section" style="min-height:100vh;justify-content:flex-end;">
+<section id="home">
+ <span id="whiskey" aria-hidden="true" style="position:absolute;top:0;left:0;width:1px;height:1px;"></span>
  <div class="hero-bg">
  <picture>
   <source srcset="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/hero-car-1920.webp" type="image/webp">
@@ -1654,178 +1733,93 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  </div>
  <div class="hero-overlay"></div>
 
- <!-- Inaugural release announcement ribbon (overlay) -->
- <div class="hero-ribbon" onclick="navTo('whiskey')" role="button" tabindex="0" title="View the releases">
- <img src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous">
- <span>Inaugural Release Available Now!</span>
- </div>
+ <div class="hw-grid">
 
- <div class="hero-inner">
+  <!-- Slogan + one-line descriptor across the top of both columns -->
+  <div class="hw-head">
+   <div class="hw-slogan">The Spirit of American Muscle<span class="tm">™</span></div>
+   <div class="hw-subrow">Allocated - Single-Barrel - Bottled at Barrel Strength</div>
+  </div>
 
- <!-- Bottles above slogan, centered -->
- <div class="hero-bottles reveal">
- <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" title="Founders Select — view details" onclick="heroToRelease(0)" crossorigin="anonymous">
- <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" title="Barn Find — view details" onclick="heroToRelease(2)" crossorigin="anonymous">
- <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" title="Collection Series — view details" onclick="heroToRelease(1)" crossorigin="anonymous">
- </div>
+  <!-- LEFT: concise copy -->
+  <div class="hw-copy">
+   <h1 class="hw-headline">Barrel&#8209;Strength<br><span class="gold">Bourbon</span></h1>
+   <p class="hw-sub">Hand selected, VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span> coded, every bottle carries its own story.</p>
+   <div class="hw-actions">
+    <div class="hw-ctas">
+     <button class="hw-cta-primary" onclick="openCartBuilder()"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Ships to 42 states</span></button>
+     <button class="btn-ghost" onclick="navTo('vintage')">Decode VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
+    </div>
+    <div class="hw-availrow"><span class="hw-availlink" onclick="openMapModal()">Click For Availability Map</span></div>
+   </div>
+  </div>
 
- <h1 class="hero-headline reveal reveal-delay-1" style="color:var(--cream);">THE SPIRIT OF AMERICAN MUSCLE<span class="tm">™</span></h1>
+  <!-- RIGHT: Select A Release (moved up into the hero) -->
+  <div class="hw-releases">
+   <div class="bottle-grid">
 
- <p class="hero-tagline reveal reveal-delay-2">Single Barrel &nbsp;·&nbsp; Barrel Strength</p>
+    <div class="bottle-card" onclick="openBottle(0)" id="bottle-card-0">
+    <div class="bottle-card-ribbon">Founders Select</div>
+    <div class="bottle-card-img-wrap">
+    <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" loading="lazy" crossorigin="anonymous">
+    </div>
+    <div class="bottle-card-info">
+    <div class="bottle-card-series">FS · Founders Select</div>
+    <div class="bottle-card-name">Kentucky Straight<br>Bourbon Whiskey</div>
+    <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">117.8</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+    <div class="bottle-card-code">TIB 26 FS G1 00001</div>
+    <div class="limited-pill">Limited Single-Barrel Release</div>
+    </div>
+    </div>
 
- <div class="hero-ctas reveal reveal-delay-3">
- <button class="btn-primary" onclick="navTo('whiskey')">Explore the Release</button>
- <button class="btn-ghost" onclick="navTo('story')">Our Story</button>
- </div>
+    <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
+    <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
+    <div class="bottle-card-img-wrap">
+    <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous">
+    </div>
+    <div class="bottle-card-info">
+    <div class="bottle-card-series">CS · Collection Series</div>
+    <div class="bottle-card-name">High Rye Bourbon<br>Rum Cask Finish</div>
+    <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+    <div class="bottle-card-code">TIB 26 CS G1 00002</div>
+    <div class="limited-pill">Limited Single-Barrel Release</div>
+    </div>
+    </div>
 
- <div class="hero-scroll">
- <span>Scroll</span>
- <div class="scroll-line"></div>
- </div>
- </div>
+    <div class="bottle-card" onclick="openBottle(2)" id="bottle-card-2">
+    <div class="bottle-card-ribbon" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--gold);">Barn Find</div>
+    <div class="bottle-card-img-wrap">
+    <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" loading="lazy" crossorigin="anonymous">
+    <div class="bf-sash">
+    <img class="bf-sash-logo" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous">
+    <span class="bf-sash-txt">Coming Fall 2026</span>
+    </div>
+    </div>
+    <div class="bottle-card-info">
+    <div class="bottle-card-series">BF · Barn Find</div>
+    <div class="bottle-card-name">Kentucky Straight<br>Bourbon Whiskey</div>
+    <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">Pending</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">11 Yr</span><span class="bc-stat-l">Age</span></div></div>
+    <div class="bottle-card-code">TIB 26 BF G1 00003</div>
+    <div class="limited-pill" id="bf-limited-pill" style="display:none;">Limited Vintage Release</div>
+    </div>
+    </div>
 
- <!-- Ticker -->
- <div class="ticker-wrap">
- <div class="ticker-track" id="ticker">
- <span class="ticker-item">THE SPIRIT OF AMERICAN MUSCLE<span class="tm">™</span></span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">BARREL PROOF</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">SINGLE BARREL</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">THROTTLED IN BOND<span class="tm">™</span></span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">HERITAGE</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">CHARACTER</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">AGED TO PERFECTION</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">HIGH OCTANE</span>
- <span class="ticker-item">·</span>
- <!-- duplicate for seamless loop -->
- <span class="ticker-item">THE SPIRIT OF AMERICAN MUSCLE<span class="tm">™</span></span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">BARREL PROOF</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">SINGLE BARREL</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">THROTTLED IN BOND<span class="tm">™</span></span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">HERITAGE</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">CHARACTER</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">AGED TO PERFECTION</span>
- <span class="ticker-item">·</span>
- <span class="ticker-item">HIGH OCTANE</span>
- <span class="ticker-item">·</span>
- </div>
+   </div>
+  </div>
  </div>
 </section>
 
-<!-- ══════════════════════════════════════
- SECTION 2, WHISKEY
-══════════════════════════════════════ -->
-<section id="whiskey" class="section" style="min-height:auto;">
- <div class="section-inner">
+<!-- Bottle report — opens directly below the hero when a release is selected -->
+<div class="hw-report-wrap">
+ <div class="hw-report-inner">
+  <div id="bottle-detail" style="position:relative;">
+   <div class="bottle-detail-inner" id="bottle-detail-inner"></div>
+   <button class="bottle-detail-close" onclick="closeBottle()">✕</button>
+  </div>
+ </div>
+</div>
 
- <div class="whiskey-two-col">
-
- <!-- LEFT: The Whiskey title + paragraph -->
- <div class="whiskey-copy-col">
- <div class="eyebrow reveal">First Generation &nbsp;·&nbsp; G1 &nbsp;·&nbsp; 2026</div>
- <h2 class="display-sm reveal reveal-delay-1" style="margin-top:6px;white-space:nowrap;">The Whiskey</h2>
- <div class="gold-line reveal reveal-delay-2" style="margin:20px 0;"></div>
- <p class="body-copy reveal reveal-delay-2" style="font-size:clamp(14px,1.15vw,16px);">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
- <p class="body-copy reveal reveal-delay-3" style="margin-top:16px;font-size:clamp(14px,1.15vw,16px);">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
- <div class="whiskey-cta-row reveal reveal-delay-3" style="margin-top:28px;flex-wrap:wrap;">
- <button class="btn-primary" onclick="openCartBuilder()">Buy on Bourbon Outfitter</button>
- <button class="btn-ghost" onclick="navTo('vintage')">Decode VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
- </div>
- <div class="reveal reveal-delay-3" style="margin-top:12px;">
-   <span onclick="openMapModal()" style="font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;">Click For Availability Map</span>
- </div>
- <div class="retail-disclosure js-retail-disclosure reveal reveal-delay-3" style="margin-top:18px;max-width:520px;"></div>
- </div>
-
- <!-- RIGHT: Select A Release -->
- <div class="whiskey-releases-col reveal reveal-delay-1">
- <div class="bottles-eyebrow-row">
- <div class="eyebrow">Select A Release</div>
- <div style="font-size:11px;font-weight:400;color:var(--charcoal4);letter-spacing:.08em;">Click a bottle to see details</div>
- </div>
- <div class="bottle-grid">
-
- <div class="bottle-card" onclick="openBottle(0)" id="bottle-card-0">
- <div class="bottle-card-ribbon">Founders Select</div>
- <div class="bottle-card-img-wrap">
- <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" loading="lazy" crossorigin="anonymous">
- </div>
- <div class="bottle-card-info">
- <div class="bottle-card-series">FS · Founders Select</div>
- <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
- <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">117.8</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
- <div class="bottle-card-code">TIB 26 FS G1 00001</div>
- <div class="limited-pill">Limited Single-Barrel Release</div>
- </div>
- </div>
-
- <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
- <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
- <div class="bottle-card-img-wrap">
- <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous">
- </div>
- <div class="bottle-card-info">
- <div class="bottle-card-series">CS · Collection Series</div>
- <div class="bottle-card-name">High Rye Bourbon, Rum Cask Finish</div>
- <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
- <div class="bottle-card-code">TIB 26 CS G1 00002</div>
- <div class="limited-pill">Limited Single-Barrel Release</div>
- </div>
- </div>
-
- <div class="bottle-card" onclick="openBottle(2)" id="bottle-card-2">
- <div class="bottle-card-ribbon" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--gold);">Barn Find</div>
- <div class="bottle-card-img-wrap">
- <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" loading="lazy" crossorigin="anonymous">
- <div class="bf-sash">
- <img class="bf-sash-logo" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous">
- <span class="bf-sash-txt">Coming Fall 2026</span>
- </div>
- </div>
- <div class="bottle-card-info">
- <div class="bottle-card-series">BF · Barn Find</div>
- <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
- <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">Pending</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">11 Yr</span><span class="bc-stat-l">Age</span></div></div>
- <div class="bottle-card-code">TIB 26 BF G1 00003</div>
- <div class="limited-pill" id="bf-limited-pill" style="display:none;">Limited Vintage Release</div>
- </div>
- </div>
-
- </div>
- </div>
- </div>
-
- <!-- Case shipping promo — shows only when promo active + bottles live; auto-hides after end date -->
- <div class="case-ship-promo whiskey-ship-promo reveal" style="display:none;">
- <span class="csp-badge">Limited Time</span>
- <div class="csp-text">
- <span class="csp-head">Bourbon Outfitter: $10 Shipping On 6 Bottles.</span>
- <span class="csp-detail">Add 6 bottles and Bourbon Outfitter drops shipping to a flat $10, applied automatically at their checkout. Through Sept 5.</span>
- </div>
- </div>
-
- <!-- Full-width report — appears below both columns when a release is selected -->
- <div id="bottle-detail" style="position:relative;">
- <div class="bottle-detail-inner" id="bottle-detail-inner"></div>
- <button class="btn-ghost" style="font-size:10px;padding:10px 16px;" onclick="garageAddWishList(activeBottle)">&#9733; Add to Wish List</button>
- <button class="bottle-detail-close" onclick="closeBottle()">✕</button>
- </div>
-
-
- </div>
-</section>
+<!-- SECTION 2 (WHISKEY) merged into the hero above (#home) on _145. -->
 
 <!-- ══════════════════════════════════════
  SECTION: THE LABEL
@@ -3362,12 +3356,15 @@ function openBottle(id) {
  }).join('');
 
  var buyBtn = boLive(b.series)
-   ? '<button class="btn-primary" onclick="openCartBuilder(\'' + b.series + '\')" style="margin-top:22px;">Buy on Bourbon Outfitter</button>'
-   : '<div style="margin-top:22px;font-size:12px;color:var(--cream3);">Not yet available. <span onclick="navTo(\'inventory\')" style="color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);">Join The Barrel Inventory</span></div>';
+   ? '<button class="hw-cta-primary" onclick="openCartBuilder(\'' + b.series + '\')"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Ships to 42 states</span></button>'
+   : '<div style="font-size:12px;color:var(--cream3);">Not yet available. <span onclick="navTo(\'inventory\')" style="color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);">Join The Barrel Inventory</span></div>';
 
  document.getElementById('bottle-detail-inner').innerHTML = `
- <div class="bottle-detail-img-col">
- <img class="bottle-detail-img" src="${b.img}" alt="${b.seriesName}">
+ <div class="bottle-detail-img-col bd-context">
+ <div class="bd-context-eyebrow">About The Whiskey</div>
+ <p class="bd-context-copy">Each single-barrel expression is hand selected by the founders, chosen for its character, complexity, and story. Nothing added, nothing removed.</p>
+ <p class="bd-context-copy">Bottled at barrel-strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
+ <div class="bd-context-actions" id="bottle-detail-actions"></div>
  </div>
  <div class="bottle-detail-info">
  <div class="bottle-detail-badge">${b.series} · ${b.seriesName} · Barrel ${b.barrel}</div>
@@ -3387,8 +3384,11 @@ function openBottle(id) {
    : '<div style="display:flex;height:16px;overflow:hidden;border:1px solid var(--cream3);">' + mash + '</div><div style="display:flex;flex-wrap:wrap;">' + legend + '</div>'}
  </div>
  <div class="bottle-prov" id="bottle-prov-${id}"></div>
- ${buyBtn}
  </div>`;
+
+ // Buy + wishlist live together in an action row below the report
+ var _acts = document.getElementById('bottle-detail-actions');
+ if (_acts) _acts.innerHTML = buyBtn + '<button class="btn-ghost bd-wish-btn" onclick="garageAddWishList(activeBottle)">&#9733; Add to Wish List</button>';
 
  document.getElementById('bottle-detail').classList.add('open');
  loadBottleProvenance(b.code, id);
@@ -3426,7 +3426,7 @@ async function loadBottleProvenance(code, id) {
     el.innerHTML = '<div class="prov-locked">' +
       '<div class="prov-eyebrow">Members Only &#128274;</div>' +
       '<div class="prov-lock-title">Unlock Full Barrel Provenance</div>' +
-      '<p class="prov-lock-desc">Members get the full story behind this barrel &mdash; original distiller, lot number, dump &amp; bottling dates, and expression notes.</p>' +
+      '<p class="prov-lock-desc">Members get the full barrel story. Original distiller, lot number, dump and bottling dates, and expression notes.</p>' +
       '<button class="btn-primary" onclick="authSwitchTab(\'signup\');openModal(\'auth-modal\')">Join Free to Unlock</button>' +
       '<div class="prov-signin" onclick="authSwitchTab(\'signin\');openModal(\'auth-modal\')">Already a member? Sign in</div>' +
     '</div>';
