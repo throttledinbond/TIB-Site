@@ -2636,6 +2636,16 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
 .pt-form textarea{grid-column:1/-1;resize:vertical;}
 .pt-form input:focus,.pt-form select:focus,.pt-form textarea:focus{border-color:var(--gold);}
 .pt-form input::placeholder,.pt-form textarea::placeholder{color:#8A8178;}
+/* Multi-handle socials block on the Creators/Media form */
+.cr-socials{grid-column:1/-1;text-align:left;}
+.cr-socials-label{font-size:11px;color:var(--cream3);letter-spacing:.04em;margin-bottom:6px;}
+.cr-social-row{display:flex;gap:8px;margin-bottom:8px;}
+.cr-social-row .cr-social-platform{flex:0 0 42%;min-width:0;}
+.cr-social-row .cr-social-handle{flex:1;min-width:0;}
+.cr-social-remove{flex:0 0 auto;width:34px;background:var(--charcoal2);border:1px solid var(--charcoal4);color:var(--cream3);font-size:16px;line-height:1;cursor:pointer;}
+.cr-social-remove:hover{border-color:var(--rust);color:#E7B9AB;}
+.cr-add-btn{grid-column:1/-1;justify-self:start;background:transparent;border:1px dashed var(--gold-dk);color:var(--gold);font-family:var(--f);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;cursor:pointer;margin-top:2px;}
+.cr-add-btn:hover{border-color:var(--gold);border-style:solid;}
 </style>
 <div class="modal-overlay" id="partners-modal">
   <div class="modal-bg" onclick="closeModal('partners-modal')"></div>
@@ -2725,9 +2735,18 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
         <input id="cr-name" placeholder="Name">
         <input id="cr-email" type="email" placeholder="Email">
         <select id="cr-type"><option value="">I am a &middot; select&hellip;</option><option>Podcaster</option><option>Blogger</option><option>Influencer / Content Creator</option><option>Brand Ambassador</option><option>Press / Media</option><option>Other</option></select>
-        <select id="cr-platform"><option value="">Primary platform &middot; select&hellip;</option><option>Instagram</option><option>YouTube</option><option>TikTok</option><option>Podcast</option><option>Blog / Website</option><option>X (Twitter)</option><option>Facebook</option><option>Other</option></select>
-        <input id="cr-handle" placeholder="Handle or profile URL">
         <select id="cr-audience"><option value="">Audience size &middot; select&hellip;</option><option>Under 1K</option><option>1K to 10K</option><option>10K to 50K</option><option>50K to 250K</option><option>250K+</option></select>
+        <div class="cr-socials">
+          <div class="cr-socials-label">Your social handles &mdash; add as many as you like</div>
+          <div id="cr-socials-rows">
+            <div class="cr-social-row">
+              <select class="cr-social-platform"><option value="">Platform&hellip;</option><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>X (Twitter)</option><option>Facebook</option><option>Threads</option><option>Twitch</option><option>Podcast</option><option>Blog / Website</option><option>Other</option></select>
+              <input class="cr-social-handle" placeholder="Handle or profile URL">
+              <button type="button" class="cr-social-remove" onclick="crRemoveSocial(this)" aria-label="Remove">&times;</button>
+            </div>
+          </div>
+          <button type="button" class="cr-add-btn" onclick="crAddSocial()">+ Add another handle</button>
+        </div>
         <input id="cr-links" placeholder="Links to your work (comma separated)" style="grid-column:1/-1;">
         <textarea id="cr-message" rows="3" placeholder="How would you like to collaborate?"></textarea>
       </div>
@@ -5943,18 +5962,32 @@ function openCreators(){
   var mm=document.getElementById('mobile-menu'); if(mm) mm.classList.remove('open');
   openModal('creators-modal');
 }
+// Multi-handle socials: submitters can add as many platform+handle rows as they like.
+var CR_SOCIAL_PLATFORMS=['Instagram','TikTok','YouTube','X (Twitter)','Facebook','Threads','Twitch','Podcast','Blog / Website','Other'];
+function crSocialRowHtml(){
+  var opts='<option value="">Platform&hellip;</option>'+CR_SOCIAL_PLATFORMS.map(function(p){return '<option>'+p+'</option>';}).join('');
+  return '<div class="cr-social-row"><select class="cr-social-platform">'+opts+'</select>'+
+    '<input class="cr-social-handle" placeholder="Handle or profile URL">'+
+    '<button type="button" class="cr-social-remove" onclick="crRemoveSocial(this)" aria-label="Remove">&times;</button></div>';
+}
+function crAddSocial(){ var c=document.getElementById('cr-socials-rows'); if(c) c.insertAdjacentHTML('beforeend', crSocialRowHtml()); }
+function crRemoveSocial(btn){ var c=document.getElementById('cr-socials-rows'); if(!c) return; var row=btn.closest('.cr-social-row'); if(!row) return; if(c.querySelectorAll('.cr-social-row').length>1){ row.remove(); } else { var p=row.querySelector('.cr-social-platform'), h=row.querySelector('.cr-social-handle'); if(p)p.value=''; if(h)h.value=''; } }
+function crCollectSocials(){ var out=[]; document.querySelectorAll('#cr-socials-rows .cr-social-row').forEach(function(r){ var p=r.querySelector('.cr-social-platform'), h=r.querySelector('.cr-social-handle'); var pv=p?p.value.trim():''; var hv=h?h.value.trim():''; if(hv){ out.push({platform:pv||'Other', handle:hv}); } }); return out; }
+function crResetSocials(){ var c=document.getElementById('cr-socials-rows'); if(c) c.innerHTML=crSocialRowHtml(); }
 async function creatorsSubmit(){
   var msg=document.getElementById('cr-msg');
-  var name=crVal('cr-name'), email=crVal('cr-email'), ctype=crVal('cr-type'), platform=crVal('cr-platform'),
-      handle=crVal('cr-handle'), audience=crVal('cr-audience'), links=crVal('cr-links'), message=crVal('cr-message');
+  var name=crVal('cr-name'), email=crVal('cr-email'), ctype=crVal('cr-type'),
+      audience=crVal('cr-audience'), links=crVal('cr-links'), message=crVal('cr-message');
+  var socials=crCollectSocials();
   if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Please add a valid email so we can reach you.'; } return; }
   if(!name && !message){ if(msg){ msg.style.color='var(--rust)'; msg.textContent='Add your name and a short note so we know who you are.'; } return; }
   var btn=document.getElementById('cr-submit'); if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
-  try{ await _supabase.functions.invoke('brevo-proxy',{ body:{ action:'creator_inquiry', name:name, email:email, creator_type:ctype, platform:platform, handle:handle, audience_size:audience, links:links, message:message } }); }catch(e){}
+  try{ await _supabase.functions.invoke('brevo-proxy',{ body:{ action:'creator_inquiry', name:name, email:email, creator_type:ctype, audience_size:audience, links:links, message:message, socials:socials } }); }catch(e){}
   if(btn){ btn.disabled=false; btn.textContent='Send Inquiry'; }
   if(msg){ msg.style.color='var(--gold)'; msg.textContent='Thank you. We will be in touch shortly.'; }
-  ['cr-name','cr-email','cr-handle','cr-links','cr-message'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
-  ['cr-type','cr-platform','cr-audience'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+  ['cr-name','cr-email','cr-links','cr-message'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+  ['cr-type','cr-audience'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; });
+  crResetSocials();
 }
 async function adminLoadCreatorInquiries(){
   var el=document.getElementById('admin-creators-list'); if(!el) return;
