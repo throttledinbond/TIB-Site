@@ -3941,8 +3941,8 @@ window.addEventListener('load', applyCaseShipPromo);
 // ── CART BUILDER (pick quantities → Bourbon Outfitter cart permalink) ──
 var _cartQty = { FS: 0, CS: 0, BF: 0 };
 // Estimated shipping shown in the cart-builder. standard = under 6 bottles; caseFlat = 6+ during the promo.
-// standard matches Bourbon Outfitter's published rate ($30 for 1-6 bottles); caseFlat is BO's $10 6-bottle offer.
-var CART_SHIPPING = { standard: 30.00, caseFlat: 10.00 };
+// standard matches Bourbon Outfitter's published rate ($29.99 for 1-6 bottles); caseFlat is BO's $10 6-bottle offer.
+var CART_SHIPPING = { standard: 29.99, caseFlat: 10.00 };
 function cartVariant(s){ return (RETAIL.variants && RETAIL.variants[s]) ? RETAIL.variants[s] : ''; }
 function cartPrice(s){ return (RETAIL.prices && RETAIL.prices[s]) ? Number(RETAIL.prices[s]) : 0; }
 function openCartBuilder(preSeries){ _cartQty = { FS:0, CS:0, BF:0 }; if (preSeries && boLive(preSeries) && cartVariant(preSeries)) _cartQty[preSeries] = 1; cartRender(); openModal('cart-modal'); }
