@@ -2880,7 +2880,7 @@ function dismissShopPrompt(){ var p=document.getElementById('shop-prompt'); if(p
         </div>
         <div class="gift-field"><label>Additional Notes</label><textarea id="gift-f-notes" rows="3" placeholder="Special requests, timing, budget, etc."></textarea></div>
         <div style="margin-top:8px;"><button class="btn-primary" id="gift-submit" onclick="giftSubmit()">Submit Inquiry</button> <span id="gift-msg" style="font-size:12px;margin-left:8px;"></span></div>
-        <p style="font-size:11px;color:var(--cream3);line-height:1.5;margin-top:14px;">All bottle purchases and any custom-order pricing are set and collected directly by Bourbon Outfitter, a licensed retailer. Throttled In Bond Spirits, LLC does not sell alcohol or collect payment.</p>
+        <p style="font-size:11px;color:var(--cream3);line-height:1.5;margin-top:14px;">All bottle purchases and any custom-order pricing are set and collected directly by Bourbon Outfitter, a licensed retailer.</p>
       </div>
     </div>
   </div>
@@ -3881,7 +3881,7 @@ var RETAIL = {
 // disclosure and CTAs read one variable, not a hardcoded name in multiple places.
 var RETAILER = { name: 'Bourbon Outfitter' };
 function renderRetailerDisclosures(){
-  var txt = 'Sold and shipped by ' + RETAILER.name + ', a licensed retailer. Throttled In Bond Spirits, LLC does not sell alcohol directly to consumers.';
+  var txt = 'Sold and shipped by ' + RETAILER.name + ', a licensed retailer.';
   var els = document.querySelectorAll('.js-retail-disclosure');
   for (var i=0;i<els.length;i++){ els[i].textContent = txt; }
 }
