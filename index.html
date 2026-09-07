@@ -3689,23 +3689,48 @@ function resolveRelease(text){
  return (bestS>=2 && bestS>second) ? best : null;
 }
 
-/* File-upload path (fallback) */
+/* File-upload path — same angle / low-light tolerant pipeline as the live scanner. */
 function handleLabel(file){
  if(!file) return;
  var status=document.getElementById('vin-ocr-status');
  status.className='vin-ocr-status'; status.textContent='Reading the label on your device…';
  var url=URL.createObjectURL(file);
- loadTesseract().then(function(){
-  return Tesseract.recognize(url,'eng',{tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 '});
- }).then(function(r){
-  URL.revokeObjectURL(url); // discard image reference; nothing is uploaded or stored
-  var code=resolveRelease((r&&r.data&&r.data.text)||'');
-  if(code){ status.className='vin-ocr-status'; status.textContent='Read ✓  '+code; vinFill(code); }
-  else { status.className='vin-ocr-status err'; status.textContent='Couldn’t read the VIN-TAGe clearly. Try the camera scan, fill the frame with just the code, and avoid glare — or type it above.'; }
- }).catch(function(){
-  URL.revokeObjectURL(url);
-  status.className='vin-ocr-status err'; status.textContent='Label reader couldn’t load (needs an internet connection). You can still type the code above.';
- });
+ var img=new Image();
+ img.onerror=function(){ URL.revokeObjectURL(url); status.className='vin-ocr-status err'; status.textContent='Couldn’t open that image. Try another photo, or type the code above.'; };
+ img.onload=function(){
+  var maxW=2200, sc=(img.naturalWidth>maxW)?(maxW/img.naturalWidth):1;
+  var cw=Math.max(1,Math.round(img.naturalWidth*sc)), ch=Math.max(1,Math.round(img.naturalHeight*sc));
+  var base=document.createElement('canvas'); base.width=cw; base.height=ch;
+  base.getContext('2d').drawImage(img,0,0,cw,ch);
+  URL.revokeObjectURL(url); // nothing is uploaded or stored
+  _ocrImageResolve(base).then(function(code){
+   if(code){ status.className='vin-ocr-status'; status.textContent='Read ✓  '+code; vinFill(code); }
+   else { status.className='vin-ocr-status err'; status.textContent='Couldn’t read the VIN-TAGe clearly. Try a straighter, closer photo of just the code and avoid glare — or type it above.'; }
+  }).catch(function(){
+   status.className='vin-ocr-status err'; status.textContent='Label reader couldn’t load (needs an internet connection). You can still type the code above.';
+  });
+ };
+ img.src=url;
+}
+/* Run the scanner's crop sweep (upscale + Otsu/min-max + block/sparse + rotations) over a
+   still photo; returns a resolved code or null. Reuses the shared worker + SCAN_ATTEMPTS. */
+async function _ocrImageResolve(base){
+ await loadTesseract();
+ if(!_scanWorker){ _scanWorker=await Tesseract.createWorker('eng'); await _scanWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:'6'}); _scanPsm='6'; }
+ var sw=base.width, sh=base.height, i, a, c, r, code;
+ for(i=0;i<SCAN_ATTEMPTS.length;i++){
+  a=SCAN_ATTEMPTS[i];
+  if(a.psm!==_scanPsm){ try{ await _scanWorker.setParameters({tessedit_pageseg_mode:a.psm}); _scanPsm=a.psm; }catch(e){} }
+  c=_cropCanvasFrom(base,sw,sh,0.05,a.fy,0.90,a.fh,1500,a.prep,a.rot||0);
+  if(!c) continue;
+  r=await _scanWorker.recognize(c); code=resolveRelease((r&&r.data&&r.data.text)||'');
+  if(code) return code;
+ }
+ // Last resort: sparse read of the whole photo (handles odd framing / orientation)
+ try{ await _scanWorker.setParameters({tessedit_pageseg_mode:'11'}); _scanPsm='11'; }catch(e){}
+ c=_cropCanvasFrom(base,sw,sh,0,0,1,1,1900,'otsu',0);
+ if(c){ r=await _scanWorker.recognize(c); code=resolveRelease((r&&r.data&&r.data.text)||''); if(code) return code; }
+ return null;
 }
 
 /* Live-camera scanner: continuous OCR of the framed band; auto-fills on a confident match. */
@@ -3751,20 +3776,23 @@ function _rotCanvasDeg(src,deg){
 /* Crop a fractional region of the video at ~targetW px wide (keeps resolution high —
    small text was the #1 failure cause), grayscale, then either min-max contrast stretch
    or Otsu binarization, and optional small rotation. */
-function _cropCanvas(v,fx,fy,fw,fh,targetW,prep,rotDeg){
- var vw=v.videoWidth,vh=v.videoHeight; if(!vw||!vh) return null;
- var cx=Math.round(vw*fx),cw=Math.round(vw*fw),cy=Math.round(vh*fy),ch=Math.round(vh*fh);
+function _cropCanvasFrom(src,sw,sh,fx,fy,fw,fh,targetW,prep,rotDeg){
+ if(!sw||!sh) return null;
+ var cx=Math.round(sw*fx),cw=Math.round(sw*fw),cy=Math.round(sh*fy),ch=Math.round(sh*fh);
  var scale=targetW/cw; if(scale>2)scale=2; if(scale<0.4)scale=0.4;
  var W=Math.max(48,Math.round(cw*scale)),H=Math.max(24,Math.round(ch*scale));
  var cvs=document.createElement('canvas'); cvs.width=W; cvs.height=H;
  var ctx=cvs.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
- ctx.drawImage(v,cx,cy,cw,ch,0,0,W,H);
+ ctx.drawImage(src,cx,cy,cw,ch,0,0,W,H);
  var img=ctx.getImageData(0,0,W,H),d=img.data,i,g,mn=255,mx=0;
  for(i=0;i<d.length;i+=4){ g=(0.299*d[i]+0.587*d[i+1]+0.114*d[i+2])|0; d[i]=d[i+1]=d[i+2]=g; if(g<mn)mn=g; if(g>mx)mx=g; }
  if(prep==='otsu'){ var thr=_otsu(d); for(i=0;i<d.length;i+=4){ g=d[i]>thr?255:0; d[i]=d[i+1]=d[i+2]=g; } }
  else { var rng=(mx-mn)||1; for(i=0;i<d.length;i+=4){ g=((d[i]-mn)*255/rng)|0; d[i]=d[i+1]=d[i+2]=g; } }
  ctx.putImageData(img,0,0);
  return rotDeg?_rotCanvasDeg(cvs,rotDeg):cvs;
+}
+function _cropCanvas(v,fx,fy,fw,fh,targetW,prep,rotDeg){
+ return _cropCanvasFrom(v,v.videoWidth,v.videoHeight,fx,fy,fw,fh,targetW,prep,rotDeg);
 }
 /* Each auto tick runs the next attempt in this list (one OCR call → stays responsive);
    over a few ticks it sweeps bands top-to-bottom, tries min-max + Otsu, block + sparse
