@@ -3748,7 +3748,7 @@ async function scanStart(){
  var modal=document.getElementById('scan-modal'); modal.classList.add('open');
  setScanStatus('Starting camera…');
  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ setScanStatus('This browser can’t open the camera. Use “Upload a Photo Instead.”',true); return; }
- try{ _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:2560},height:{ideal:1440}},audio:false}); }
+ try{ _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false}); }
  catch(e){ setScanStatus('Camera blocked. Allow camera access, or use “Upload a Photo Instead.”',true); return; }
  var v=document.getElementById('scan-video'); v.srcObject=_scanStream; try{ await v.play(); }catch(e){}
  try{ _torchTrack=_scanStream.getVideoTracks()[0]; var caps=(_torchTrack&&_torchTrack.getCapabilities)?_torchTrack.getCapabilities():{}; var tb=document.getElementById('scan-torch'); if(tb) tb.style.display=(caps&&caps.torch)?'block':'none'; _torchOn=false; }catch(e){}
@@ -3805,7 +3805,15 @@ function _cropCanvas(v,fx,fy,fw,fh,targetW,prep,rotDeg){
    over a few ticks it sweeps bands top-to-bottom, tries min-max + Otsu, block + sparse
    page modes, and a couple of rotations — so a tilted/curved label anywhere in the box
    still resolves. Validated against real angled photos. */
-var _scanAttempt=0,_scanPsm='6';
+var _scanPi=0,_scanEi=0,_scanPsm='6';
+/* The center band with the best-performing recipes — tried EVERY tick so a well-placed
+   label decodes in ~1 pass instead of waiting for a round-robin to reach it. */
+var SCAN_PRIMARY=[
+ {fy:0.42,fh:0.14,prep:'otsu',  psm:'11',rot:0},
+ {fy:0.42,fh:0.16,prep:'minmax',psm:'6', rot:0},
+ {fy:0.42,fh:0.14,prep:'minmax',psm:'11',rot:0}
+];
+/* Broader exploration (off-center bands, rotations) — also the full sweep used by upload. */
 var SCAN_ATTEMPTS=[
  {fy:0.42,fh:0.14,prep:'otsu',  psm:'11',rot:0},
  {fy:0.42,fh:0.14,prep:'minmax',psm:'11',rot:0},
@@ -3831,10 +3839,12 @@ async function scanTick(manual){
  var v=document.getElementById('scan-video'); if(!v||!v.videoWidth) return;
  _scanBusy=true;
  try{
-  var n=manual?5:2, lastRaw='';
-  for(var k=0;k<n && !_scanDone;k++){
-   var a=SCAN_ATTEMPTS[_scanAttempt%SCAN_ATTEMPTS.length]; _scanAttempt++;
-   var res=await _scanAttemptRun(v,a); if(res.raw) lastRaw=res.raw;
+  var lastRaw='', queue;
+  if(manual){ queue=SCAN_PRIMARY.concat(SCAN_ATTEMPTS); }            // thorough one-shot
+  else { queue=[ SCAN_PRIMARY[_scanPi++ % SCAN_PRIMARY.length],      // best center recipe, every tick
+                 SCAN_ATTEMPTS[_scanEi++ % SCAN_ATTEMPTS.length] ]; } // + one exploratory pass
+  for(var k=0;k<queue.length && !_scanDone;k++){
+   var res=await _scanAttemptRun(v,queue[k]); if(res.raw) lastRaw=res.raw;
    if(res.code){ onDecoded(res.code); break; }
   }
   if(!_scanDone && manual){ var dbg=(lastRaw||'').replace(/\s+/g,' ').trim().slice(0,44); setScanStatus('Couldn’t match it yet. Read: “'+(dbg||'(nothing)')+'” — get the VIN-TAGe code inside the box, hold steady, avoid glare.',true); }
@@ -7293,7 +7303,7 @@ function closeVideoModal() {
     <button class="scan-btn ghost scan-torch" id="scan-torch" onclick="toggleTorch()">Light</button>
     <button class="scan-btn ghost" onclick="scanStop()">Cancel</button>
    </div>
-   <div class="scan-note">Runs on your device &middot; the photo is not uploaded or saved &middot; scanner v8</div>
+   <div class="scan-note">Runs on your device &middot; the photo is not uploaded or saved &middot; scanner v10</div>
   </div>
  </div>
 </div>
