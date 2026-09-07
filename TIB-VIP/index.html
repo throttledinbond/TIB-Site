@@ -592,6 +592,13 @@ function vinDecode(){
   if (wm) wm.remove();
   if (vinIsExample && barrel){ const w=document.createElement('div'); w.className='vin-watermark'; w.textContent='Example Report'; panel.appendChild(w); }
   panel.classList.add('visible');
+  if (barrel) {
+   // Scroll the freshly-rendered report into view (esp. on phones).
+   try {
+    var _noff = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64;
+    window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - _noff - 12, behavior: 'smooth' });
+   } catch(e){}
+  }
  }, 300);
 }
 function vinBuildResult(b, p){
