@@ -507,7 +507,7 @@ a{color:inherit;text-decoration:none;}
 .hw-headline{font-size:clamp(26px,2.9vw,44px);font-weight:700;line-height:1.04;letter-spacing:-.01em;color:var(--cream);text-shadow:0 2px 22px rgba(0,0,0,.7);margin-top:16px;margin-bottom:16px;}
 .hw-headline .gold{color:var(--gold-lt);}
 .hw-sub{font-size:clamp(14px,1.4vw,16px);line-height:1.6;color:var(--cream3);text-shadow:0 1px 8px rgba(0,0,0,.85);margin-bottom:26px;max-width:40ch;}
-.hw-actions{margin-top:auto;width:100%;}
+.hw-actions{margin-top:auto;margin-bottom:16px;width:100%;}
 .hw-ctas{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start;align-items:stretch;}
 .hw-cta-primary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--gold);color:var(--charcoal);padding:11px 26px;border:none;transition:background .15s;white-space:nowrap;cursor:pointer;}
 .hw-cta-primary:hover{background:var(--gold-lt);}
@@ -518,7 +518,7 @@ a{color:inherit;text-decoration:none;}
 .hw-availrow{margin-top:14px;}
 .hw-availlink{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);padding-bottom:1px;}
 /* Hero release cards — transparent, see-through bottles, pulsing, over the car */
-#home .bottle-grid{grid-template-columns:repeat(3,1fr);gap:10px;}
+#home .bottle-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
 #home .bottle-card{background:transparent;overflow:visible;border:none;}
 #home .bottle-card:hover{background:transparent;transform:translateY(-2px);}
 #home .bottle-card.active{background:transparent;outline:none;}
@@ -554,6 +554,7 @@ a{color:inherit;text-decoration:none;}
  #home{min-height:auto;}
  .hw-grid{grid-template-columns:1fr;gap:26px;padding-top:calc(var(--nav-h) + 26px);}
  .hw-sub{max-width:none;}
+ .hw-actions{margin-bottom:0;}
  #home .bottle-card-img-wrap{height:clamp(120px,33vw,168px);padding:12px 6px 0;}
  #home .bottle-card-info{padding:10px 8px 12px;}
  #home .bottle-card-name{font-size:10.5px;}
@@ -1781,24 +1782,6 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
     <div class="bottle-card-code">TIB 26 CS G1 00002</div>
     <div class="limited-pill">Limited Single-Barrel Release</div>
-    </div>
-    </div>
-
-    <div class="bottle-card" onclick="openBottle(2)" id="bottle-card-2">
-    <div class="bottle-card-ribbon" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--gold);">Barn Find</div>
-    <div class="bottle-card-img-wrap">
-    <img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" loading="lazy" crossorigin="anonymous">
-    <div class="bf-sash">
-    <img class="bf-sash-logo" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous">
-    <span class="bf-sash-txt">Coming Fall 2026</span>
-    </div>
-    </div>
-    <div class="bottle-card-info">
-    <div class="bottle-card-series">BF · Barn Find</div>
-    <div class="bottle-card-name">Kentucky Straight<br>Bourbon Whiskey</div>
-    <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">Pending</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">11 Yr</span><span class="bc-stat-l">Age</span></div></div>
-    <div class="bottle-card-code">TIB 26 BF G1 00003</div>
-    <div class="limited-pill" id="bf-limited-pill" style="display:none;">Limited Vintage Release</div>
     </div>
     </div>
 
