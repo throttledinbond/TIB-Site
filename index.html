@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
 <!-- Google tag (gtag.js) — Google Analytics (G-) + Google Ads (AW-) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQG2P2BG96"></script>
 <script>
@@ -26,7 +27,6 @@ fbq('track', 'PageView');
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></noscript>
 <!-- End Meta Pixel Code -->
-<meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>THROTTLED IN BOND™ — The Spirit of American Muscle™</title>
@@ -66,8 +66,7 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
         "https://www.instagram.com/throttledinbond",
         "https://www.youtube.com/@ThrottledInBond",
         "https://x.com/throttledinbond",
-        "https://www.tiktok.com/@throttledinbond",
-        "https://blog.throttledinbond.com/blog"
+        "https://www.tiktok.com/@throttledinbond"
       ]
     },
     {
@@ -1426,6 +1425,40 @@ sup.tm, .tm {
 .vin-result-header-text{flex:1;}
 .vin-result-subtitle{font-size:12px;font-style:italic;color:var(--ink2);margin-top:2px;margin-bottom:0;}
 
+/* ── Full Story (expandable, replaces the Wix blog post) ── */
+.fs-toggle-wrap{display:flex;justify-content:center;margin-top:clamp(8px,2vh,20px);}
+.fs-toggle{display:inline-flex;align-items:center;gap:14px;background:transparent;border:1px solid var(--gold);color:var(--cream);padding:16px 28px;font:inherit;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s;}
+.fs-toggle:hover,.fs-toggle:focus-visible{background:var(--gold);color:var(--charcoal);}
+.fs-toggle:focus-visible{outline:2px solid var(--gold-lt);outline-offset:3px;}
+.fs-toggle-meta{font-weight:400;letter-spacing:.14em;color:var(--cream3);}
+.fs-toggle:hover .fs-toggle-meta,.fs-toggle:focus-visible .fs-toggle-meta{color:var(--charcoal);}
+.fs-chev{width:12px;height:12px;flex-shrink:0;transition:transform .3s ease;}
+.fs-toggle[aria-expanded="true"] .fs-chev{transform:rotate(180deg);}
+.fs-toggle[aria-expanded="true"] .fs-toggle-meta{display:none;}
+.fs-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s ease;}
+.fs-panel.open{grid-template-rows:1fr;}
+.fs-panel-inner{overflow:hidden;min-height:0;}
+.fs-article{max-width:none;margin:0;padding:clamp(36px,6vh,64px) 0 clamp(12px,2vh,24px);}
+.fs-article .eyebrow{text-align:center;}
+.fs-title{font-size:clamp(28px,4vw,48px);font-weight:700;letter-spacing:-.01em;line-height:1.05;color:var(--cream);text-align:center;margin:6px 0 14px;}
+.fs-byline{text-align:center;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--cream3);}
+.fs-article .gold-line{margin:24px auto 32px;}
+.fs-article p{font-size:clamp(15px,1.4vw,18px);line-height:1.8;color:var(--cream3);margin:0 0 22px;}
+.fs-article em{color:var(--cream2);}
+.fs-quote{max-width:760px;margin:36px auto;padding:6px 0 6px 24px;border-left:2px solid var(--gold);font-size:clamp(18px,2vw,24px);font-weight:600;line-height:1.45;color:var(--cream);}
+.fs-fig{margin:6px 0 22px;border:1px solid var(--charcoal4);background:var(--charcoal2);padding:8px;box-sizing:border-box;}
+.fs-fig img{display:block;width:100%;height:auto;}
+.fs-fig figcaption{margin-top:8px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream3);text-align:center;}
+.fs-fig.fs-left{float:left;margin-right:clamp(24px,3vw,40px);}
+.fs-fig.fs-right{float:right;margin-left:clamp(24px,3vw,40px);}
+.fs-fig.fs-tall{width:min(30%,320px);}
+.fs-fig.fs-wide{width:min(42%,480px);}
+.fs-fig.fs-center{width:min(55%,620px);margin:34px auto 10px;}
+.fs-clear{clear:both;}
+@media(max-width:720px){.fs-fig.fs-left,.fs-fig.fs-right{float:none;margin:28px auto;}.fs-fig.fs-tall{width:min(70%,300px);}.fs-fig.fs-wide,.fs-fig.fs-center{width:88%;}}
+.fs-end{display:flex;flex-direction:column;align-items:center;gap:22px;margin-top:40px;}
+.fs-tagline{font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);text-align:center;}
+@media(prefers-reduced-motion:reduce){.fs-panel,.fs-chev{transition:none;}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1686,7 +1719,6 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="nav-link" onclick="navTo('story')">The Story</span>
  <span class="nav-link" onclick="navTo('vintage')">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
  <span class="nav-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
- <a class="nav-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" style="color:var(--cream3);text-decoration:none;">Blog</a>
  </div>
  <div class="nav-auth-wrap" id="nav-auth-wrap">
  <button id="nav-auth-btn" onclick="authNavClick()">The Garage</button>
@@ -1714,7 +1746,6 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
  <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
  <span class="mobile-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
- <a class="mobile-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" onclick="toggleMenu()" style="text-decoration:none;">Blog</a>
  <span class="mobile-link" onclick="authNavClick();toggleMenu()">The Garage</span>
  <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
 </div>
@@ -1909,6 +1940,89 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
       </div>
     </div>
 
+    <!-- Part 2: Full Story (expandable — replaces the Wix blog post) -->
+    <div class="fs-toggle-wrap" id="full-story">
+      <button type="button" class="fs-toggle" id="fs-toggle" aria-expanded="false" aria-controls="fs-panel" onclick="toggleFullStory()">
+        <span class="fs-toggle-label">Read the Full Story</span>
+        <span class="fs-toggle-meta">6 min read</span>
+        <svg class="fs-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+    </div>
+
+    <div class="fs-panel" id="fs-panel" role="region" aria-labelledby="fs-title" inert>
+      <div class="fs-panel-inner">
+        <article class="fs-article">
+          <div class="eyebrow">The Full Story</div>
+          <h3 class="fs-title" id="fs-title">The Spirit of American Muscle<span class="tm">&#8482;</span></h3>
+          <div class="fs-byline">By David &nbsp;·&nbsp; Founder</div>
+          <div class="gold-line"></div>
+
+          <p>For some, classic muscle cars are just old machines, a mass of rusted steel, dried rubber, and pitted chrome. For others, they are legends, passed down through stories, photographs, and the rumble of an engine you can feel in your chest. For me, they are both.</p>
+
+          <figure class="fs-fig fs-tall fs-right">
+            <img src="story/media/01-dad-65-mustang.jpg" alt="David's dad standing in the street beside his '65 Mustang, circa 1972" width="340" height="604" loading="lazy">
+            <figcaption>Dad and his '65 Mustang, circa 1972</figcaption>
+          </figure>
+
+          <p>I grew up on the stories my dad would tell of his first cars, the icons of the ‘60s; Mustangs, a Camaro, Thunderbird, Lemans, and more. His eyes light up, and so do mine, when he talks about his rides. Those cars came to life in my imagination. Every detail planted seeds of nostalgia for a life I had only lived in my mind. And that’s where my obsession began.</p>
+
+          <p>Growing up in the 80s, there were no smartphones for entertainment on car rides. Instead I had my eyes fixed out the side window, a rolling car show if I looked hard enough. I stretched my neck at every stoplight, hoping to spot a fastback, Charger, or any chrome-lined beast that might be prowling the streets. Each sighting was a jolt of excitement that fueled a dream. <em>Someday I’ll have a muscle car of my own.</em></p>
+
+          <p>But there’s this thing about “someday”: it’s slippery. One year turns into five, five to ten, and before you know it, decades have passed and that dream is still parked somewhere in the distance. Life happens. Responsibilities pile up. But that passion doesn’t go away. It never did for me anyway. In my 30s, when asked what I wanted for Christmas, a birthday, or Father's Day, my answer was always the same: <em>Late 1960s American Muscle.</em> The gift usually came as a bottle of Whiskey instead, which is always met with a smile, but I was determined, and the search began. <em>"Late 1960s American Muscle"</em> replaced "someday" as my mantra.</p>
+
+          <blockquote class="fs-quote">Owning classic American muscle isn’t just about horsepower and turning heads. If that's what you're after, buy a modern build and a pair of designer shoes.</blockquote>
+
+          <p>Nothing truly compares to seeing eyes light up on every street corner as that classic rumble enters the concrete jungle. The sight of American muscle on modern streets is a reminder that choosing the right vintage sets you apart and always has a place in American history. American muscle cars are a cultural element that will never die.</p>
+
+          <figure class="fs-fig fs-tall fs-left">
+            <img src="story/media/02-taillights-dusk.jpg" alt="The Mustang's red taillights glowing in a parking lot at dusk" width="1050" height="1400" loading="lazy">
+          </figure>
+
+          <p>I knew exactly what I was looking for. Not just <em>a</em> car... <em>the</em> car. A 1968 Ford Mustang. The modern hunt happens online, scrolling Facebook Marketplace and ads served by social media algorithms. Listings are often outright scams with sketchy vehicle history, and little to no maintenance records. Finding a car that is complete and runs is hard enough, but finding one in your price range and within your car building skill range is a true miracle. The pure ones go quickly, so you have to be ready with cash and a trailer.</p>
+
+          <p>After a couple years of browsing I was ready to make the move. I had set aside a little bit of money. Thankfully classic car prices still run a little less than modern cars, unless of course you're looking for a concourse quality show car, which I was not. I almost pulled the trigger on a couple cars that were not exactly what I wanted, thinking that maybe I could sell later or trade my way up. But I always returned to focusing on what I really wanted. And one day it appeared on Facebook, a 1968 Ford Mustang GT. It ran, so the listing said. But it warned that a classic was not for the faint of heart. The only way to know the true condition was to take a look and get it on the road.</p>
+
+          <p>How do you convince your wife that buying a 56 year old car is a good idea? Bring her along, and promise her a date night after. Maybe she had heard enough of my mantra and decided to let me have my mid-life crisis, but I believe she knew what it would mean to me to find that needle in a haystack, and she would like to be there to celebrate.</p>
+
+          <p>When we arrived we found the car parked out front of a small house in St. Petersburg, FL. I was telling myself not to get too excited while trying to remember my checklist; how much rust is too much, do the body panels line up, doors open/close with ease, is the chassis straight, and so much more. I knew there had been some body work, and it was clear the paint was not original. It seemed there had been an accident in the past but the title was clean. With a couple pumps of the pedal, and then holding it to the floor while turning the key, it fired up. Despite minor pinging and an imperfect idle, it ran. As we took it around the neighborhood it was clear the brakes weren’t amazing and the shocks sagged, but it had potential.</p>
+
+          <p>As we returned and climbed out my wife asked, “Um… is it supposed to smoke like that”. I turned to see the unmistakable sign of a radiator overheating. The owner opened the hood, seemed genuinely surprised, and then to my shock, he reached for the radiator cap.</p>
+
+          <p>Before I could say “NOOO!!!”, a boiling geyser of coolant hit the hood and splashed in every direction. Miraculously my wife and I were spared, but he was undoubtedly burned as his shirt was half soaked and steaming. He shrugged it off and said, “You’re probably not going to buy it now”. I responded, “It’s a no for now, but I’ll think about it.” We left empty handed but knew I would eventually find the right car.</p>
+
+          <figure class="fs-fig fs-tall fs-right">
+            <img src="story/media/03-the-library-whiskey.jpg" alt="A glass of whiskey, neat, at The Library speakeasy in St. Pete, FL" width="1050" height="1400" loading="lazy">
+          </figure>
+
+          <p>We went from there to our date night as planned and slipped into a quiet speakeasy style bar in St Pete. Not only have I managed to find a wife who supported the muscle car dream, she also enjoys sipping whiskey with me. This night it was a glass of Angels Envy for her, and Bardstown Bourbon Company Bottled-In-Bond for me.</p>
+
+          <p>We chatted about the car and about whiskey. I was concerned about the engine overheating. Was it the first time, or was this a regular issue that hadn’t been dealt with? Then she asked me to remind her what the whiskey term “Bottled-In-Bond” means. After explaining I thought out loud, “wouldn’t it be cool to have a whiskey brand called ‘Throttled In Bond<span class="tm">&#8482;</span>’, inspired by American muscle cars and the nostalgia and culture surrounding them?” It was more than a fleeting thought because I bought the domain name right then. But the idea didn’t go anywhere because obviously I didn’t have a car to build it on.</p>
+
+          <p>I browsed listing after listing, doing my best to avoid the “no low ball offers, I know what I have” guys, but something kept me coming back to the GT. I looked for the listing a week or so later but it was gone, sold no doubt to someone with a similar dream. Maybe a motorcycle instead? I even took my parents to look at a classic motorcycle, but with signs of poor mechanical work it was an immediate no.</p>
+
+          <figure class="fs-fig fs-wide fs-left">
+            <img src="story/media/04-mustang-spanish-moss.jpg" alt="The white 1968 Mustang GT parked on sunlit pavers under Spanish moss-draped oaks" width="1400" height="934" loading="lazy">
+          </figure>
+
+          <p>Then, to my surprise, the GT listing was back. My suspicions told me the sale fell through, not a good sign. So I told myself to let it go. The listing disappeared and reappeared another time or two, haunting me. Six weeks after the first look I saw the price drop. I told my wife I was going to take another look. She responded with the one raised eyebrow emoji face (🤨) and kind of washed her hands of anything that happened next.</p>
+
+          <p>I gave the car an even more detailed inspection this time, checked the engine temp for a true cold start, and made it clear I was still skeptical despite a new thermostat. I drove a bit with the seller, then we let it sit in the driveway and run, to see what happened next. No overheating. As it rumbled I made a risky offer, lower than the current asking price. He took a deep breath and accepted. I had just made a life long dream a reality and with it was born Throttled In Bond<span class="tm">&#8482;</span>, The Spirit of American Muscle<span class="tm">&#8482;</span>.</p>
+
+          <div class="fs-clear"></div>
+          <figure class="fs-fig fs-center">
+            <img src="story/media/05-david-68-mustang.jpg" alt="David in a black '68' shirt in front of the white Mustang at sunset" width="768" height="429" loading="lazy">
+          </figure>
+
+          <div class="fs-end">
+            <div class="fs-tagline">The Spirit of American Muscle<span class="tm">&#8482;</span></div>
+            <button type="button" class="fs-toggle" onclick="toggleFullStory(false)">
+              <span class="fs-toggle-label">Close the Story</span>
+              <svg class="fs-chev" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="transform:rotate(180deg);"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6"/></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
 
   </div>
 </section>
@@ -2963,7 +3077,6 @@ faqLoad();
  <span class="footer-link" onclick="navTo('story')">The Story</span>
  <span class="footer-link" onclick="navTo('vintage')">VIN-TAGe<span class="tm">™</span></span>
  <span class="footer-link" onclick="window.location.href='https://shop.throttledinbond.com'">Shop</span>
- <a class="footer-link" href="https://blog.throttledinbond.com/blog" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Blog</a>
  <span class="footer-link" onclick="navTo('inventory')">The Barrel Inventory</span>
  </div>
  </div>
@@ -6911,6 +7024,32 @@ function leaderboardLoadOnce(){ if(_leaderboardLoaded || typeof leaderboardLoad!
 triggerReveals();
 
 // ── VIDEO MODAL ──
+// ── FULL STORY (expandable; replaces the Wix blog post) ──
+function toggleFullStory(force) {
+  var panel = document.getElementById('fs-panel');
+  var btn = document.getElementById('fs-toggle');
+  if (!panel || !btn) return;
+  var open = (typeof force === 'boolean') ? force : !panel.classList.contains('open');
+  panel.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.querySelector('.fs-toggle-label').textContent = open ? 'Close the Story' : 'Read the Full Story';
+  if (open) {
+    panel.removeAttribute('inert');
+    if (typeof gtag === 'function') gtag('event', 'full_story_open');
+  } else {
+    panel.setAttribute('inert', '');
+    panel.querySelectorAll('video').forEach(function (v) { v.pause(); });
+    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+window.addEventListener('load', function () {
+  if (location.hash === '#full-story') {
+    toggleFullStory(true);
+    var t = document.getElementById('full-story');
+    if (t) t.scrollIntoView({ block: 'start' });
+  }
+});
+
 function openVideoModal() {
   const modal = document.getElementById('video-modal');
   const iframe = document.getElementById('video-iframe');

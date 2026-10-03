@@ -23,7 +23,6 @@ Each bottle's VIN-TAGe code (format TIB YY SS G# #####) decodes to the barrel, p
 ## Links
 
 - Website: https://www.throttledinbond.com/
-- Blog: https://blog.throttledinbond.com/blog
 - Instagram: https://www.instagram.com/throttledinbond
 - YouTube: https://www.youtube.com/@ThrottledInBond
 - X: https://x.com/throttledinbond
