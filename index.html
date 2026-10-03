@@ -1610,10 +1610,10 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
     <p class="body-copy" style="margin-bottom:16px;">You&rsquo;re in. Welcome to THROTTLED IN BOND&trade; and The Garage. We&rsquo;re a small, founder-operated brand, and every enthusiast who joins helps fuel what we&rsquo;re building.</p>
     <p class="body-copy" style="margin-bottom:12px;font-size:13px;color:var(--cream3);">Come ride with us. Follow along and say hello:</p>
     <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:22px;">
-      <a href="https://www.instagram.com/throttledinbond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">Instagram</a>
-      <a href="https://www.youtube.com/@ThrottledInBond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">YouTube</a>
-      <a href="https://x.com/throttledinbond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">X</a>
-      <a href="https://www.tiktok.com/@throttledinbond" target="_blank" rel="noopener" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">TikTok</a>
+      <a href="https://www.instagram.com/throttledinbond" target="_blank" rel="noopener noreferrer" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">Instagram</a>
+      <a href="https://www.youtube.com/@ThrottledInBond" target="_blank" rel="noopener noreferrer" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">YouTube</a>
+      <a href="https://x.com/throttledinbond" target="_blank" rel="noopener noreferrer" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">X</a>
+      <a href="https://www.tiktok.com/@throttledinbond" target="_blank" rel="noopener noreferrer" style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;">TikTok</a>
     </div>
     <p class="body-copy" style="margin-bottom:16px;font-size:13px;color:var(--cream3);">Know someone who&rsquo;d appreciate a good barrel? Share the brand with your friends and your own audience. It means the world to us.</p>
     <div style="display:flex;flex-direction:column;gap:8px;">
@@ -4791,7 +4791,7 @@ async function garageLoad() {
   if (!_currentUser) return;
   var { data, error } = await _supabase.from('garage').select('*').eq('user_id', _currentUser.id).order('id', { ascending: false });
   if (error) { console.error('Garage load error:', error.message, error.code); 
-    document.getElementById('garage-content').innerHTML = '<div class="garage-empty"><div class="eyebrow" style="color:#8B3A2A;">Load Error: ' + error.message + '</div></div>';
+    document.getElementById('garage-content').innerHTML = '<div class="garage-empty"><div class="eyebrow" style="color:#8B3A2A;">Load Error: ' + fbEscape(error.message) + '</div></div>';
     return; 
   }
   if (!data || data.length === 0) {
