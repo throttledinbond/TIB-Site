@@ -40,9 +40,9 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
 <meta property="og:image" content="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLED%20IN%20BOND.png?v=4">
 <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLED%20IN%20BOND.png?v=4">
 <meta property="og:image:type" content="image/png">
-<meta property="og:url" content="https://www.throttledinbond.com/">
+<meta property="og:url" content="https://www.throttledspirits.com/">
 <meta property="og:type" content="website">
-<link rel="canonical" href="https://www.throttledinbond.com/">
+<link rel="canonical" href="https://www.throttledspirits.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="THROTTLED IN BOND™">
 <meta name="twitter:description" content="Throttled In Bond is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Available for shipping to 42 states through Bourbon Outfitter.">
@@ -54,10 +54,10 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://www.throttledinbond.com/#brand",
+      "@id": "https://www.throttledspirits.com/#brand",
       "name": "Throttled In Bond",
       "alternateName": "THROTTLED IN BOND",
-      "url": "https://www.throttledinbond.com/",
+      "url": "https://www.throttledspirits.com/",
       "logo": "https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png",
       "slogan": "The Spirit of American Muscle",
       "description": "Throttled In Bond is a small, independent, founder-operated American whiskey brand producing allocated, single-barrel, cask-strength, non-chill-filtered releases. Every bottle carries a proprietary VIN-TAGe code tracing it to its exact barrel, proof, age, and origin.",
@@ -71,10 +71,10 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
     },
     {
       "@type": "WebSite",
-      "@id": "https://www.throttledinbond.com/#website",
-      "url": "https://www.throttledinbond.com/",
+      "@id": "https://www.throttledspirits.com/#website",
+      "url": "https://www.throttledspirits.com/",
       "name": "Throttled In Bond",
-      "publisher": { "@id": "https://www.throttledinbond.com/#brand" }
+      "publisher": { "@id": "https://www.throttledspirits.com/#brand" }
     },
     {
       "@type": "Product",
@@ -83,7 +83,7 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
       "brand": { "@type": "Brand", "name": "Throttled In Bond" },
       "category": "Kentucky Straight Bourbon Whiskey",
       "description": "Six-year single-barrel Kentucky Straight Bourbon Whiskey, bottled at cask strength and non-chill-filtered.",
-      "url": "https://www.throttledinbond.com/whiskey",
+      "url": "https://www.throttledspirits.com/whiskey",
       "additionalProperty": [
         { "@type": "PropertyValue", "name": "VIN-TAGe", "value": "TIB 26 FS G1 00001" },
         { "@type": "PropertyValue", "name": "Proof", "value": "117.8" },
@@ -107,7 +107,7 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
       "brand": { "@type": "Brand", "name": "Throttled In Bond" },
       "category": "High Rye Bourbon, Rum Cask Finish",
       "description": "Six-year single-barrel high-rye bourbon finished in a rum cask, bottled at cask strength and non-chill-filtered.",
-      "url": "https://www.throttledinbond.com/whiskey",
+      "url": "https://www.throttledspirits.com/whiskey",
       "additionalProperty": [
         { "@type": "PropertyValue", "name": "VIN-TAGe", "value": "TIB 26 CS G1 00002" },
         { "@type": "PropertyValue", "name": "Proof", "value": "108.2" },
@@ -131,7 +131,7 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
       "brand": { "@type": "Brand", "name": "Throttled In Bond" },
       "category": "Kentucky Straight Bourbon Whiskey",
       "description": "An eleven-year single-barrel Kentucky Straight Bourbon Whiskey. Coming Fall 2026.",
-      "url": "https://www.throttledinbond.com/whiskey",
+      "url": "https://www.throttledspirits.com/whiskey",
       "releaseDate": "2026-09",
       "additionalProperty": [
         { "@type": "PropertyValue", "name": "VIN-TAGe", "value": "TIB 26 BF G1 00003" },
@@ -144,7 +144,7 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
         "priceCurrency": "USD",
         "price": "149.99",
         "availability": "https://schema.org/PreOrder",
-        "url": "https://www.throttledinbond.com/whiskey",
+        "url": "https://www.throttledspirits.com/whiskey",
         "seller": { "@type": "Organization", "name": "Bourbon Outfitter" }
       }
     }
@@ -4573,7 +4573,7 @@ function welcomeShow(name) {
   setTimeout(function(){ openModal('welcome-modal'); }, 700);
 }
 function welcomeShare() {
-  var url = 'https://www.throttledinbond.com/';
+  var url = 'https://www.throttledspirits.com/';
   var text = 'Check out THROTTLED IN BOND, The Spirit of American Muscle. Single barrel, barrel strength whiskey.';
   if (navigator.share) { navigator.share({ title: 'THROTTLED IN BOND', text: text, url: url }).catch(function(){}); }
   else if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(function(){ showNotif('Share', 'Link Copied', 'The link is on your clipboard. Paste it anywhere to share.', 'OK'); }); }
@@ -4746,7 +4746,7 @@ async function authSignOut() {
 async function authForgotPassword() {
   var email = document.getElementById('signin-email').value.trim();
   if (!email) { document.getElementById('signin-msg').textContent = 'Enter your email above first.'; return; }
-  await _supabase.auth.resetPasswordForEmail(email, { redirectTo: 'https://www.throttledinbond.com' });
+  await _supabase.auth.resetPasswordForEmail(email, { redirectTo: 'https://www.throttledspirits.com' });
   document.getElementById('signin-msg').style.color = 'var(--gold)';
   document.getElementById('signin-msg').textContent = 'Password reset email sent. Open the link to set a new password.';
 }
@@ -6280,7 +6280,7 @@ async function inviteOpen() {
   openModal('invite-modal');
   var { data } = await _supabase.rpc('get_referral_info');
   var info = (data && data[0]) || {};
-  _inviteLink = 'https://www.throttledinbond.com/?ref=' + (info.code || '');
+  _inviteLink = 'https://www.throttledspirits.com/?ref=' + (info.code || '');
   if (linkEl) linkEl.value = _inviteLink;
   var n = Number(info.referred_count) || 0;
   if (cnt) cnt.textContent = n > 0 ? ('You\'ve brought in ' + n + (n === 1 ? ' collector' : ' collectors') + '. Keep spreading the word.') : 'Be the first to bring a friend into the community.';
@@ -6441,7 +6441,7 @@ async function adminResetPassword(userId) {
   var email = prompt('Enter the email address for this user to send a password reset:');
   if (!email || !email.includes('@')) return;
   var { error } = await _supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://www.throttledinbond.com'
+    redirectTo: 'https://www.throttledspirits.com'
   });
   if (error) {
     showNotif('Admin', 'Error', 'Could not send reset email: ' + error.message, 'OK');

@@ -45,4 +45,4 @@ Disallow:
 User-agent: AdsBot-Google-Mobile
 Disallow:
 
-Sitemap: https://www.throttledinbond.com/sitemap.xml
+Sitemap: https://www.throttledspirits.com/sitemap.xml

@@ -1,4 +1,6 @@
 const ALLOWED_ORIGINS = new Set([
+  'https://www.throttledspirits.com',
+  'https://throttledspirits.com',
   'https://www.throttledinbond.com',
   'https://throttledinbond.com',
 ]);

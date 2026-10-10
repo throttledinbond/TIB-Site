@@ -18,11 +18,11 @@ Sold and shipped by Bourbon Outfitter, a licensed retailer that ships to 42 U.S.
 
 ## VIN-TAGe provenance system
 
-Each bottle's VIN-TAGe code (format TIB YY SS G# #####) decodes to the barrel, proof, age, origin, and mash bill of that specific bottle. Decode a bottle at https://www.throttledinbond.com/decoder
+Each bottle's VIN-TAGe code (format TIB YY SS G# #####) decodes to the barrel, proof, age, origin, and mash bill of that specific bottle. Decode a bottle at https://www.throttledspirits.com/decoder
 
 ## Links
 
-- Website: https://www.throttledinbond.com/
+- Website: https://www.throttledspirits.com/
 - Instagram: https://www.instagram.com/throttledinbond
 - YouTube: https://www.youtube.com/@ThrottledInBond
 - X: https://x.com/throttledinbond
