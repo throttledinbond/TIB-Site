@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Throttled In Bond&trade; &ndash; Industry VIP Access</title>
+<title>Throttled&trade; &ndash; Industry VIP Access</title>
 <meta name="robots" content="noindex, nofollow, noarchive">
-<link rel="icon" type="image/png" href="https://www.throttledspirits.com/favicon.png?v=20260710">
+<link rel="icon" type="image/png" href="/brand/favicon-32.png">
+<link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/hero-car-1920.webp" type="image/webp" crossorigin="anonymous">
 <style>
 @font-face { font-family:'BasierSquare'; src:url('https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BasierSquare-Regular.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
@@ -97,9 +98,6 @@ button{font-family:var(--f);}
 .bottle-card-code{font-size:10px;font-weight:400;letter-spacing:.14em;color:var(--cream3);}
 .limited-pill{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border:1px solid var(--rust);color:#E7B9AB;background:rgba(139,58,42,.18);margin-bottom:10px;}
 .bottle-card-ribbon{position:absolute;top:16px;left:0;z-index:10;background:var(--gold);color:var(--charcoal);font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;box-shadow:0 2px 8px rgba(0,0,0,.45);}
-.bf-sash{position:absolute;top:50%;left:-30%;width:160%;transform:translateY(-50%) rotate(-45deg);background:var(--rust);box-shadow:0 4px 16px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;gap:9px;padding:10px 14px;z-index:6;pointer-events:none;--bf-fs:clamp(13px,1.7vw,18px);}
-.bf-sash-logo{height:var(--bf-fs);width:auto;display:block;flex-shrink:0;}
-.bf-sash-txt{font-size:var(--bf-fs);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#F4EEE3;line-height:1;white-space:nowrap;}
 #bottle-detail{background:var(--charcoal2);overflow:hidden;max-height:0;transition:max-height .5s cubic-bezier(.4,0,.2,1);position:relative;}
 #bottle-detail.open{max-height:1600px;}
 .bottle-detail-inner{display:grid;grid-template-columns:1fr 2fr;gap:0;}
@@ -140,7 +138,6 @@ button{font-family:var(--f);}
  .bottle-card-code{font-size:8px;letter-spacing:.06em;}
  .limited-pill{font-size:6px;padding:3px 5px;letter-spacing:.06em;margin-bottom:8px;}
  .bottle-card-ribbon{font-size:6px;padding:3px 6px;top:8px;letter-spacing:.1em;}
- .bf-sash{--bf-fs:9px;padding:6px 10px;}
 }
 
 /* ══ DECODER (matches main site #vintage) ══ */
@@ -307,6 +304,59 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
  .vin-ref-toggle .vin-ref-caret{flex-shrink:0;transition:transform .2s;font-size:9px;}
  .vin-ref-toggle.open .vin-ref-caret{transform:rotate(180deg);}
 }
+
+/* ══ HERO: two-column layout matching the main site ══ */
+#home{position:relative;overflow:hidden;min-height:calc(100vh - 95px);display:flex;flex-direction:column;justify-content:flex-start;background:var(--charcoal);}
+#home .hero-bg img{object-position:center 40%;opacity:.42;}
+#home .hero-overlay{background:linear-gradient(180deg,rgba(26,25,23,.42) 0%,rgba(26,25,23,.12) 45%,rgba(26,25,23,.9) 100%);}
+.hw-grid{flex:1;position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:30px clamp(20px,5vw,56px) 44px;display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.7fr);gap:24px clamp(28px,4vw,56px);align-items:stretch;align-content:center;box-sizing:border-box;}
+.hw-head{grid-column:1 / -1;}
+.hw-slogan{text-align:left;font-size:clamp(26px,2.9vw,44px);font-weight:700;letter-spacing:-.01em;line-height:1.05;text-transform:uppercase;color:var(--cream);text-shadow:0 2px 18px rgba(0,0,0,.7);}
+.hw-slogan .tm{font-size:.38em;vertical-align:top;line-height:1;}
+.hw-subrow{margin-top:10px;font-size:clamp(10px,1.2vw,12px);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 4px rgba(0,0,0,.85);}
+.hw-copy{text-align:left;display:flex;flex-direction:column;align-items:flex-start;height:100%;}
+.hw-headline{font-size:clamp(26px,2.9vw,44px);font-weight:700;line-height:1.04;letter-spacing:-.01em;color:var(--cream);text-shadow:0 2px 22px rgba(0,0,0,.7);margin-top:16px;margin-bottom:16px;}
+.hw-headline .gold{color:var(--gold-lt);}
+.hw-sub{font-size:clamp(14px,1.4vw,16px);line-height:1.6;color:var(--cream3);text-shadow:0 1px 8px rgba(0,0,0,.85);margin-bottom:26px;max-width:40ch;}
+.hw-actions{margin-top:auto;margin-bottom:16px;width:100%;}
+.hw-ctas{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start;align-items:stretch;}
+.hw-cta-primary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--gold);color:var(--charcoal);padding:11px 26px;border:none;transition:background .15s;white-space:nowrap;cursor:pointer;text-decoration:none;}
+.hw-cta-primary:hover{background:var(--gold-lt);}
+.hw-cta-main{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;}
+.hw-cta-sub{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
+#home .btn-ghost{display:flex;align-items:center;justify-content:center;background:rgba(20,19,17,.4);color:var(--cream);border:1px solid var(--cream3);padding:14px 22px;}
+#home .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+#home .bottle-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+#home .bottle-card{background:transparent;overflow:visible;border:none;}
+#home .bottle-card:hover{background:transparent;transform:translateY(-2px);}
+#home .bottle-card.active{background:transparent;outline:none;}
+#home .bottle-card-img-wrap{height:clamp(240px,26vw,380px);padding:18px 8px 0;overflow:visible;background:transparent;}
+#home .bottle-card-img{opacity:.8;filter:drop-shadow(0 18px 34px rgba(0,0,0,.6));transition:none;animation:hwpulse 3s ease-in-out infinite;}
+@keyframes hwpulse{0%,100%{transform:translateY(0);filter:drop-shadow(0 18px 34px rgba(0,0,0,.6));}45%{transform:translateY(-9px);filter:drop-shadow(0 24px 42px rgba(200,149,42,.28));}}
+#home .bottle-card:nth-child(2) .bottle-card-img{animation-delay:.3s;}
+#home .bottle-card:hover .bottle-card-img,#home .bottle-card.active .bottle-card-img{animation-play-state:paused;transform:translateY(-9px);}
+@media(prefers-reduced-motion:reduce){#home .bottle-card-img{animation:none;}}
+#home .bottle-card-info{padding:14px 10px 6px;text-align:center;text-shadow:0 1px 7px rgba(0,0,0,.92),0 0 2px rgba(0,0,0,.9);}
+#home .bottle-card-name{font-size:clamp(12px,1vw,14px);}
+#home .bottle-card-stats{justify-content:center;}
+#home .bc-stat{background:transparent;border:1px solid var(--gold-dk);max-width:80px;backdrop-filter:blur(1px);}
+#home .bc-stat-v{font-size:14px;}
+#home .limited-pill{margin-top:4px;}
+#home .bottle-card-ribbon{top:14px;}
+.hw-report-wrap{position:relative;z-index:2;background:var(--charcoal2);}
+.hw-report-inner{max-width:1200px;margin:0 auto;}
+@media(max-width:900px){
+ #home{min-height:auto;}
+ .hw-grid{grid-template-columns:1fr;gap:26px;padding-top:26px;}
+ .hw-sub{max-width:none;}
+ .hw-actions{margin-bottom:0;}
+ #home .bottle-card-img-wrap{height:clamp(120px,33vw,168px);padding:12px 6px 0;}
+ #home .bottle-card-info{padding:10px 8px 12px;}
+ #home .bottle-card-name{font-size:10.5px;}
+ #home .bc-stat-v{font-size:12px;}
+ #home .bottle-card-code{font-size:8px;}
+ #home .bottle-card-ribbon{font-size:6px;padding:3px 6px;}
+}
 </style>
 </head>
 <body>
@@ -314,8 +364,8 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
 <div class="vipbar">Industry VIP Access &nbsp;&middot;&nbsp; Invitation Only</div>
 <header class="nav">
  <div class="nav-in">
-  <img class="lm" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" crossorigin="anonymous">
-  <img class="wm" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Wordmark-White.png" alt="Throttled In Bond" crossorigin="anonymous">
+  <img class="lm" src="/brand/thr-mark-white.png" alt="" crossorigin="anonymous">
+  <img class="wm" src="/brand/throttled-wordmark-white.png" alt="Throttled" crossorigin="anonymous">
   <span class="vip-chip">VIP Access</span>
  </div>
 </header>
@@ -329,83 +379,66 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
   </picture>
  </div>
  <div class="hero-overlay"></div>
- <div class="hero-inner">
-  <div class="hero-bottles">
-   <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" title="Founders Select — view details" onclick="heroToRelease(0)" crossorigin="anonymous">
-   <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" title="Barn Find — view details" onclick="heroToRelease(2)" crossorigin="anonymous">
-   <img class="hero-bottle-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" title="Collection Series — view details" onclick="heroToRelease(1)" crossorigin="anonymous">
+ <span id="whiskey" aria-hidden="true" style="position:absolute;top:0;left:0;width:1px;height:1px;"></span>
+ <div class="hw-grid">
+
+  <!-- Slogan + descriptor across the top of both columns -->
+  <div class="hw-head">
+   <div class="hw-slogan">The Spirit of American Muscle<span class="tm">&trade;</span></div>
+   <div class="hw-subrow">Industry VIP Access &nbsp;&middot;&nbsp; For The Trade</div>
   </div>
-  <div class="hero-eyebrow">Industry VIP Access &nbsp;&middot;&nbsp; For The Trade</div>
-  <h1 class="hero-headline">THE SPIRIT OF AMERICAN MUSCLE<span class="tm">&trade;</span></h1>
-  <p class="hero-tagline">Single Barrel &nbsp;&middot;&nbsp; Barrel Strength</p>
-  <div class="hero-ctas">
-   <a class="btn-primary" href="https://libdib.com/brands/throttledinbondspiritsllc" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Order Cases Here</a>
-   <button class="btn-ghost" onclick="document.getElementById('whiskey').scrollIntoView({behavior:'smooth'})">Explore The Releases</button>
-   <button class="btn-ghost" onclick="document.getElementById('vintage').scrollIntoView({behavior:'smooth'})">Decode a Bottle</button>
+
+  <!-- LEFT: concise copy -->
+  <div class="hw-copy">
+   <h1 class="hw-headline">Barrel&#8209;Strength<br><span class="gold">Bourbon</span></h1>
+   <p class="hw-sub">Single barrel, hand selected, VIN-TAG<span class="lowercase-e">e</span><span class="tm">&trade;</span> coded. Every bottle carries its own story.</p>
+   <div class="hw-actions">
+    <div class="hw-ctas">
+     <a class="hw-cta-primary" href="https://libdib.com/brands/throttledinbondspiritsllc" target="_blank" rel="noopener noreferrer"><span class="hw-cta-main">Order Cases Here</span><span class="hw-cta-sub">Trade orders via LibDib</span></a>
+     <button class="btn-ghost" onclick="document.getElementById('vintage').scrollIntoView({behavior:'smooth'})">Decode a Bottle</button>
+    </div>
+   </div>
+  </div>
+
+  <!-- RIGHT: the two G1 releases -->
+  <div class="hw-releases">
+   <div class="bottle-grid">
+    <div class="bottle-card" onclick="openBottle(0)" id="bottle-card-0">
+     <div class="bottle-card-ribbon">Founders Select</div>
+     <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" crossorigin="anonymous"></div>
+     <div class="bottle-card-info">
+      <div class="bottle-card-series">FS · Founders Select</div>
+      <div class="bottle-card-name">Kentucky Straight<br>Bourbon Whiskey</div>
+      <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">117.8</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+      <div class="bottle-card-code">TIB 26 FS G1 00001</div>
+      <div class="limited-pill">Limited Single-Barrel Release</div>
+     </div>
+    </div>
+    <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
+     <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
+     <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" crossorigin="anonymous"></div>
+     <div class="bottle-card-info">
+      <div class="bottle-card-series">CS · Collection Series</div>
+      <div class="bottle-card-name">High Rye Bourbon<br>Rum Cask Finish</div>
+      <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
+      <div class="bottle-card-code">TIB 26 CS G1 00002</div>
+      <div class="limited-pill">Limited Single-Barrel Release</div>
+     </div>
+    </div>
+   </div>
   </div>
  </div>
 </section>
 
-<!-- WHISKEY / BOTTLE SHOWCASE -->
-<section id="whiskey" class="section">
- <div class="section-inner">
-  <div class="whiskey-two-col">
-   <div class="whiskey-copy-col">
-    <div class="eyebrow">First Generation &nbsp;&middot;&nbsp; G1 &nbsp;&middot;&nbsp; 2026</div>
-    <h2 class="display-sm" style="margin-top:6px;white-space:nowrap;">The Whiskey</h2>
-    <div class="gold-line" style="margin:20px 0;"></div>
-    <p class="body-copy" style="font-size:clamp(14px,1.15vw,16px);">Three unique single barrel expressions, each hand selected by the founders. Every barrel was chosen for its character, complexity, and story, nothing added, nothing removed.</p>
-    <p class="body-copy" style="margin-top:16px;font-size:clamp(14px,1.15vw,16px);">Bottled at barrel strength, each expression carries the full character of its heritage, the kind of depth that only comes from time in the barrel and the patience to wait for it.</p>
-   </div>
-   <div class="whiskey-releases-col">
-    <div class="bottles-eyebrow-row">
-     <div class="eyebrow">Select A Release</div>
-     <div style="font-size:11px;font-weight:400;color:var(--cream3);letter-spacing:.08em;">Click a bottle to see details</div>
-    </div>
-    <div class="bottle-grid">
-     <div class="bottle-card" onclick="openBottle(0)" id="bottle-card-0">
-      <div class="bottle-card-ribbon">Founders Select</div>
-      <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png" alt="Founders Select" loading="lazy" crossorigin="anonymous"></div>
-      <div class="bottle-card-info">
-       <div class="bottle-card-series">FS · Founders Select</div>
-       <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
-       <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">117.8</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
-       <div class="bottle-card-code">TIB 26 FS G1 00001</div>
-       <div class="limited-pill">Limited Single-Barrel Release</div>
-      </div>
-     </div>
-     <div class="bottle-card" onclick="openBottle(1)" id="bottle-card-1">
-      <div class="bottle-card-ribbon" style="background:var(--charcoal4);color:var(--cream);">Collection Series</div>
-      <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png" alt="Collection Series" loading="lazy" crossorigin="anonymous"></div>
-      <div class="bottle-card-info">
-       <div class="bottle-card-series">CS · Collection Series</div>
-       <div class="bottle-card-name">High Rye Bourbon, Rum Cask Finish</div>
-       <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">108.2</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">6 Yr</span><span class="bc-stat-l">Age</span></div></div>
-       <div class="bottle-card-code">TIB 26 CS G1 00002</div>
-       <div class="limited-pill">Limited Single-Barrel Release</div>
-      </div>
-     </div>
-     <div class="bottle-card" onclick="openBottle(2)" id="bottle-card-2">
-      <div class="bottle-card-ribbon" style="background:var(--charcoal);color:var(--gold);border:1px solid var(--gold);">Barn Find</div>
-      <div class="bottle-card-img-wrap"><img class="bottle-card-img" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png" alt="Barn Find" loading="lazy" crossorigin="anonymous">
-       <div class="bf-sash"><img class="bf-sash-logo" src="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLEDINBOND-Logomark-White.png" alt="" aria-hidden="true" crossorigin="anonymous"><span class="bf-sash-txt">Coming Fall 2026</span></div>
-      </div>
-      <div class="bottle-card-info">
-       <div class="bottle-card-series">BF · Barn Find</div>
-       <div class="bottle-card-name">Kentucky Straight Bourbon Whiskey</div>
-       <div class="bottle-card-stats"><div class="bc-stat"><span class="bc-stat-v">Pending</span><span class="bc-stat-l">Proof</span></div><div class="bc-stat"><span class="bc-stat-v">11 Yr</span><span class="bc-stat-l">Age</span></div></div>
-       <div class="bottle-card-code">TIB 26 BF G1 00003</div>
-      </div>
-     </div>
-    </div>
-   </div>
-  </div>
+<!-- Bottle report — opens directly below the hero when a release is selected -->
+<div class="hw-report-wrap">
+ <div class="hw-report-inner">
   <div id="bottle-detail" style="position:relative;">
    <div class="bottle-detail-inner" id="bottle-detail-inner"></div>
    <button class="bottle-detail-close" onclick="closeBottle()">✕</button>
   </div>
  </div>
-</section>
+</div>
 
 <!-- DECODER -->
 <section id="vintage" class="section">
@@ -431,7 +464,6 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
      <div class="vin-pills">
       <div class="vin-pill" onclick="vinFill('TIB 26 FS G1 00001')">TIB 26 FS G1 00001</div>
       <div class="vin-pill" onclick="vinFill('TIB 26 CS G1 00002')">TIB 26 CS G1 00002</div>
-      <div class="vin-pill" onclick="vinFill('TIB 26 BF G1 00003')">TIB 26 BF G1 00003</div>
      </div>
      <!-- Scan / Upload Label (on-device OCR) -->
      <div class="vin-upload-wrap">
@@ -465,7 +497,6 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
      <div class="series-rows">
       <div class="series-row"><span class="s-code">FS</span><span class="s-name">Founders Select</span></div>
       <div class="series-row"><span class="s-code">CS</span><span class="s-name">Collection Series</span></div>
-      <div class="series-row"><span class="s-code">BF</span><span class="s-name">Barn Find</span></div>
      </div>
     </div>
     <div class="ref-divider"></div>
@@ -518,8 +549,8 @@ footer{border-top:1px solid var(--charcoal4);padding:30px 0 40px;text-align:cent
 </section>
 
 <footer>
- Throttled In Bond&trade; &middot; Industry VIP Access &middot; By Invitation
- <div class="proto-note">The Barrel Archive below is live &ndash; it always shows the current published barrel stories from Throttled In Bond. The label reader runs entirely in your browser; the photo is not uploaded or stored.</div>
+ Throttled&trade; &middot; Industry VIP Access &middot; By Invitation
+ <div class="proto-note">The Barrel Archive below is live &ndash; it always shows the current published barrel stories from Throttled. The label reader runs entirely in your browser; the photo is not uploaded or stored.</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -532,8 +563,7 @@ var _supabase = supabase.createClient(
 /* Per-series bottle render used as the archive cover when a barrel has no photo yet */
 var SERIES_RENDER = {
  FS:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png',
- CS:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png',
- BF:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png'
+ CS:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png'
 };
 
 /* ── shared helpers (from main site) ── */
@@ -544,11 +574,10 @@ function bsFact(lbl,val,gold){ if(!val) return ''; return '<div class="bs-fact">
 
 /* ── VIN-TAGe DECODER (exact from main site) ── */
 const GRAIN_COLORS = { C:'background:#C8952A;color:#1A1917', R:'background:#8B3A2A;color:#fff', W:'background:#8B7355;color:#fff', MB:'background:#3E3B35;color:#D6CCBA' };
-const VIN_BRANDS = {'TIB':'THROTTLED IN BOND™'};
+const VIN_BRANDS = {'TIB':'THROTTLED™'};
 const VIN_SERIES = {
  'FS':{name:'Founders Select',desc:'The flagship release. The barrel that started it all.'},
  'CS':{name:'Collection Series',desc:'Curated selections for the dedicated collector.'},
- 'BF':{name:'Barn Find',desc:'Discovered barrels. Rare, aged, and worth the hunt.'},
 };
 const VIN_GEN = {
  'G1':{name:'First Generation',desc:'The inaugural release of this series.'},
@@ -559,7 +588,6 @@ const VIN_GRAIN = {C:'Corn',R:'Rye',W:'Wheat',MB:'Malted Barley'};
 const VIN_BARRELS = {
  'TIB 26 FS G1 00001': { whiskey:'Founders Select', series:'FS', gen:'G1', barrel:'00001', subtitle:'Kentucky Straight Bourbon Whiskey', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png', proof:'117.8', age:'6 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'F26', mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}] },
  'TIB 26 CS G1 00002': { whiskey:'Collection Series', series:'CS', gen:'G1', barrel:'00001', subtitle:'High Rye Bourbon, Rum Cask Finish', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png', proof:'108.2', age:'6 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'F26', mashBill:[{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}] },
- 'TIB 26 BF G1 00003': { whiskey:'Barn Find', series:'BF', gen:'G1', barrel:'00001', subtitle:'American Whiskey, Double Oak Finish', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png', proof:'PNDG', age:'11 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'PNDG', mashBill:[{k:'C',p:0},{k:'R',p:0},{k:'W',p:0},{k:'MB',p:0}] }
 };
 
 /* VIP page has no login; keep the result card identical to the logged-out (regular) view. */
@@ -569,7 +597,7 @@ function garageSave(){ /* no-op in prototype */ }
 
 let vinIsExample = false;
 function vinFill(code){
- var liveCodes = ['TIB 26 FS G1 00001','TIB 26 CS G1 00002','TIB 26 BF G1 00003'];
+ var liveCodes = ['TIB 26 FS G1 00001','TIB 26 CS G1 00002'];
  vinIsExample = liveCodes.indexOf(code) === -1;
  document.getElementById('vin-input').value = code;
  vinDecode();
@@ -672,10 +700,9 @@ function rtcAct(i){
 const BOTTLES = [
  { id:0, series:'FS', seriesName:'Founders Select', gen:'G1', code:'TIB 26 FS G1 00001', barrel:'00001', name:'Kentucky Straight Bourbon Whiskey', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/FS_G1_Render.png', proof:'117.8', age:'6 Years', origin:'Kentucky', distiller:'Bardstown Bourbon Company', distDate:'12/10/2019', category:'Single Barrel', bottling:'F26', desc:'Founders Select 6 year single-barrel Kentucky straight bourbon is the expression that started it all. From the very first tasting, this mash bill stood apart. Balanced and inviting, this pour does not try to overpower, it draws you in. Layered, nuanced, and quietly confident, it opens light and builds into something warmer, deeper, and undeniably memorable.', mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}] },
  { id:1, series:'CS', seriesName:'Collection Series', gen:'G1', code:'TIB 26 CS G1 00002', barrel:'00001', name:'High Rye Bourbon, Rum Cask Finish', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/CS_G1_Render.png', proof:'108.2', age:'6 Years', origin:'Kentucky', distiller:'Wilderness Trail', distDate:'5/24/2020', category:'Single Barrel', bottling:'F26', desc:'Collection Series 6 year single-barrel High Rye Bourbon finished in rum casks brings together structure and softness in a way that feels both familiar and unexpected. Built on a bold, rye-forward foundation, then rounded by time in a well-aged rum cask, this expression opens with restraint and evolves into layered warmth and sweet depth. It is balanced without losing its edge. A whiskey that holds its line while inviting you back for more.', mashBill:[{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}] },
- { id:2, series:'BF', seriesName:'Barn Find', gen:'G1', code:'TIB 26 BF G1 00003', barrel:'00001', name:'Kentucky Straight Bourbon Whiskey', img:'https://raw.githubusercontent.com/throttledinbond/TIB-site/main/BF_G1_Render.png', proof:'PNDG', age:'11 Years', origin:'Kentucky', distiller:'Jim Beam', distDate:'N/A', category:'Single Barrel', bottling:'F26', desc:'A true Barn Find. Discovered after years in the rickhouse. Deep, complex, and satisfyingly rare.', mashBill:[{k:'C',p:0},{k:'R',p:0},{k:'W',p:0},{k:'MB',p:0}] }
 ];
 let activeBottle = null;
-function heroToRelease(id){ try{ document.getElementById('whiskey').scrollIntoView({behavior:'smooth'}); }catch(e){} }
+function heroToRelease(id){ openBottle(id); }
 function openBottle(id){
  if (activeBottle === id){ closeBottle(); return; }
  activeBottle = id;
@@ -746,7 +773,7 @@ function archiveLoadList(){
   var draft=s.status!=='published'?'<span class="archive-draft">Draft</span>':'';
   var meta=[s.series,s.generation,s.barrel_no?('No. '+s.barrel_no):''].filter(Boolean).join(' · ');
   html+='<div class="archive-card" onclick="archiveOpen(\''+s.id+'\')">'
-   +'<div class="archive-card-img'+renderCls+'">'+(cover?('<img src="'+safeUrl(cover)+'" alt="" loading="lazy">'):'<span class="archive-noimg">TIB</span>')+'</div>'
+   +'<div class="archive-card-img'+renderCls+'">'+(cover?('<img src="'+safeUrl(cover)+'" alt="'+fbEscape(s.title||'Barrel story photo')+'" loading="lazy">'):'<span class="archive-noimg">THROTTLED&#8482;</span>')+'</div>'
    +'<div class="archive-card-body"><div class="archive-card-series">'+fbEscape(meta)+draft+'</div>'
    +'<div class="archive-card-title">'+fbEscape(s.title||'Untitled')+'</div>'
    +(s.vintage_code?('<div class="archive-card-code">'+fbEscape(s.vintage_code)+'</div>'):'')
@@ -848,7 +875,7 @@ async function archiveLoadLive(){
  try{
   var res=await _supabase.functions.invoke('vip-archive');
   if(res.error) throw res.error;
-  var stories=(res.data&&res.data.stories)||[];
+  var stories=((res.data&&res.data.stories)||[]).filter(function(st){ return st && st.series!=='BF'; });
   _archiveStories=stories;
   if(!_archiveStories.length){ listEl.innerHTML='<p style="color:var(--cream3);font-size:13px;">No published barrel stories yet. Check back soon.</p>'; return; }
   archiveLoadList();
@@ -859,6 +886,6 @@ async function archiveLoadLive(){
 document.querySelectorAll('.hero-bottle-img').forEach(function(el){ el.classList.add('invite'); });
 archiveLoadLive();
 </script>
-<script src="/vintage-scanner.js?v=10" defer></script>
+<script src="/vintage-scanner.js?v=11" defer></script>
 </body>
 </html>

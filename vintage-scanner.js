@@ -1,5 +1,5 @@
 /*!
- * Throttled In Bond — shared VIN-TAGe label scanner
+ * THROTTLED — shared VIN-TAGe label scanner
  * ONE source of truth for the camera scanner + photo-upload OCR, used by BOTH the main
  * site and the /TIB-VIP/ page. Edit this file once and bump ?v= in each page's <script>
  * tag to roll the update everywhere.
@@ -21,8 +21,7 @@
   /* ---------- valid releases (self-contained; the resolver's only data) ---------- */
   var SCAN_CODES = {
     'TIB 26 FS G1 00001': { proof:'117.8', mashBill:[{k:'C',p:74},{k:'R',p:18},{k:'W',p:0},{k:'MB',p:8}] },
-    'TIB 26 CS G1 00002': { proof:'108.2', mashBill:[{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}] },
-    'TIB 26 BF G1 00003': { proof:'PNDG',  mashBill:[{k:'C',p:0}, {k:'R',p:0}, {k:'W',p:0},{k:'MB',p:0}] }
+    'TIB 26 CS G1 00002': { proof:'108.2', mashBill:[{k:'C',p:64},{k:'R',p:24},{k:'W',p:0},{k:'MB',p:12}] }
   };
 
   /* ---------- inject styles (hardcoded colors so it works on any page) ---------- */
