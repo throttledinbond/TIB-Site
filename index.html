@@ -35,9 +35,9 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/hero-car-1920.webp" type="image/webp" crossorigin="anonymous">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png">
-<meta name="description" content="Throttled is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Available for shipping to 42 states through Bourbon Outfitter.">
+<meta name="description" content="Throttled is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Free shipping to 42 states through Bourbon Outfitter.">
 <meta property="og:title" content="THROTTLED™">
-<meta property="og:description" content="Throttled is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Available for shipping to 42 states through Bourbon Outfitter.">
+<meta property="og:description" content="Throttled is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Free shipping to 42 states through Bourbon Outfitter.">
 <meta property="og:image" content="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLED%20IN%20BOND.png?v=4">
 <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLED%20IN%20BOND.png?v=4">
 <meta property="og:image:type" content="image/png">
@@ -46,7 +46,7 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
 <link rel="canonical" href="https://www.throttledspirits.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="THROTTLED™">
-<meta name="twitter:description" content="Throttled is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Available for shipping to 42 states through Bourbon Outfitter.">
+<meta name="twitter:description" content="Throttled is an allocated, single-barrel, cask-strength American whiskey brand. Every bottle carries a VIN-TAGe code tracing its exact barrel, proof, age, and origin. Free shipping to 42 states through Bourbon Outfitter.">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/throttledinbond/TIB-site/main/THROTTLED%20IN%20BOND.png?v=4">
 <!-- Structured data (Schema.org) for search + AI discovery -->
 <script type="application/ld+json">
@@ -98,7 +98,12 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
         "price": "69.99",
         "availability": "https://schema.org/InStock",
         "url": "https://bourbonoutfitter.com/products/throttled-in-bond-founders-select",
-        "seller": { "@type": "Organization", "name": "Bourbon Outfitter" }
+        "seller": { "@type": "Organization", "name": "Bourbon Outfitter" },
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
+          "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }
+        }
       }
     },
     {
@@ -122,7 +127,12 @@ src="https://www.facebook.com/tr?id=1760507628301408&ev=PageView&noscript=1"/></
         "price": "84.99",
         "availability": "https://schema.org/InStock",
         "url": "https://bourbonoutfitter.com/products/throttled-in-bond-collection-series",
-        "seller": { "@type": "Organization", "name": "Bourbon Outfitter" }
+        "seller": { "@type": "Organization", "name": "Bourbon Outfitter" },
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" },
+          "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "US" }
+        }
       }
     }
   ]
@@ -444,6 +454,7 @@ a{color:inherit;text-decoration:none;}
 .cart-ship-banner{background:linear-gradient(90deg,rgba(200,149,42,.16),rgba(200,149,42,.04));border:1px solid var(--gold-dk);padding:11px 14px;margin-bottom:16px;font-size:12.5px;color:var(--cream3);line-height:1.55;}
 .cart-ship-banner strong{color:var(--gold-lt);}
 .cart-ship-banner.unlocked{border-color:var(--gold);background:rgba(200,149,42,.14);}
+.cart-summary-row.cart-ship-free span:last-child{color:var(--gold-lt);font-weight:800;letter-spacing:.08em;}
 .bottle-card-series{font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
 .bottle-card-name{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--cream);letter-spacing:-.01em;margin-bottom:8px;line-height:1.3;}
 .bottle-card-code{font-size:10px;font-weight:400;letter-spacing:.14em;color:var(--cream3);}
@@ -1743,7 +1754,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
    <p class="hw-sub">Hand selected, VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span> coded, every bottle carries its own story.</p>
    <div class="hw-actions">
     <div class="hw-ctas">
-     <button class="hw-cta-primary" onclick="openCartBuilder()"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Ships to 42 states</span></button>
+     <button class="hw-cta-primary" onclick="openCartBuilder()"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Free shipping &middot; 42 states</span></button>
      <button class="btn-ghost" onclick="navTo('vintage')">Decode VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
     </div>
     <div class="hw-availrow"><span class="hw-availlink" onclick="openMapModal()">Click For Availability Map</span></div>
@@ -3064,7 +3075,7 @@ faqLoad();
   <div style="position:relative;background:var(--charcoal2);width:min(900px,95vw);max-height:90vh;overflow-y:auto;z-index:1;border-top:2px solid var(--gold);padding:32px clamp(16px,4vw,48px) 28px;">
     <button onclick="closeMapModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--charcoal4);font-size:20px;line-height:1;transition:color .2s;" onmouseover="this.style.color='var(--cream)'" onmouseout="this.style.color='var(--charcoal4)'">&#x2715;</button>
 
-    <div class="eyebrow" style="margin-bottom:10px;">Available For Shipping To 42 States</div>
+    <div class="eyebrow" style="margin-bottom:10px;">Free Shipping To 42 States</div>
     <h2 class="display-sm" style="margin-bottom:20px;">Availability Map</h2>
 
     <!-- Tooltip — inside modal so position:fixed works correctly -->
@@ -3131,7 +3142,7 @@ faqLoad();
  <button class="btn-ghost" onclick="closeModal('cart-modal')">Close</button>
  </div>
  <div class="retail-disclosure js-retail-disclosure" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--charcoal4);"></div>
- <div style="margin-top:10px;font-size:11px;color:var(--cream3);line-height:1.5;">Prices shown are estimates. Final price, tax, and shipping are calculated at Bourbon Outfitter checkout.</div>
+ <div style="margin-top:10px;font-size:11px;color:var(--cream3);line-height:1.5;">Prices shown are estimates. Final price and tax are calculated at checkout. Shipping is free.</div>
  </div>
 </div>
 
@@ -3143,7 +3154,7 @@ faqLoad();
  <div class="modal-eyebrow">Purchase</div>
  <div class="modal-title" id="fb-title">Available Summer 2026</div>
  <div class="modal-body" id="fb-body">Our whiskey will be listed on Bourbon Outfitter when bottles are available. Join The Barrel Inventory to be first in line when bottles drop.</div>
- <div id="fb-ship-note" style="display:none;background:rgba(200,149,42,.1);border:1px solid var(--gold-dk);padding:10px 14px;margin:12px 0 2px;font-size:12.5px;color:var(--cream3);line-height:1.5;"><strong style="color:var(--gold-lt);">Bourbon Outfitter: $10 shipping on 6 bottles.</strong> Add 6 bottles and Bourbon Outfitter drops shipping to a flat $10, applied automatically at their checkout.</div>
+ <div id="fb-ship-note" style="display:none;background:rgba(200,149,42,.1);border:1px solid var(--gold-dk);padding:10px 14px;margin:12px 0 2px;font-size:12.5px;color:var(--cream3);line-height:1.5;"><strong style="color:var(--gold-lt);">Free shipping on every order.</strong> No minimum and no code. Applied automatically at Bourbon Outfitter checkout.</div>
  <div class="modal-actions" id="fb-actions">
  <button class="btn-primary" onclick="navTo('inventory');closeModal('find-bottle-modal')">Join The Barrel Inventory</button>
  <button class="btn-ghost" onclick="closeModal('find-bottle-modal')">Close</button>
@@ -3195,7 +3206,7 @@ faqLoad();
               <div style="background:var(--charcoal2);padding:7px 6px;text-align:center;"><div style="font-size:11px;font-weight:600;color:var(--gold);">3</div><div style="font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">Expressions</div></div>
               <div style="background:var(--charcoal2);padding:7px 6px;text-align:center;"><div style="font-size:11px;font-weight:600;color:var(--gold);">KY</div><div style="font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">Origin</div></div>
             </div>
-            <p style="font-size:11px;color:var(--cream3);line-height:1.6;margin-bottom:12px;font-style:italic;">Three unique single barrel expressions, each hand selected. Available for shipping to 42 states through our licensed retail partner.</p>
+            <p style="font-size:11px;color:var(--cream3);line-height:1.6;margin-bottom:12px;font-style:italic;">Three unique single barrel expressions, each hand selected. Free shipping to 42 states through our licensed retail partner.</p>
             <div style="border-top:1px solid var(--charcoal4);padding-top:12px;">
               <div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Trade Inquiries</div>
               <div style="font-size:11px;color:var(--cream3);">info@throttledspirits.com</div>
@@ -3393,7 +3404,7 @@ function openBottle(id) {
  }).join('');
 
  var buyBtn = boLive(b.series)
-   ? '<button class="hw-cta-primary" onclick="openCartBuilder(\'' + b.series + '\')"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Ships to 42 states</span></button>'
+   ? '<button class="hw-cta-primary" onclick="openCartBuilder(\'' + b.series + '\')"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Free shipping &middot; 42 states</span></button>'
    : '<div style="font-size:12px;color:var(--cream3);">Not yet available. <span onclick="navTo(\'inventory\')" style="color:var(--gold);cursor:pointer;border-bottom:1px solid var(--gold-dk);">Join The Barrel Inventory</span></div>';
 
  document.getElementById('bottle-detail-inner').innerHTML = `
@@ -3768,7 +3779,16 @@ window.addEventListener('load', boCheckAvailability);
 // ── CASE SHIPPING PROMO ──
 // $10/case shipping is applied automatically at Bourbon Outfitter checkout on 6-bottle orders (no code).
 // Set endsAt to the offer's end date (it auto-hides after). Set active:false to turn it off entirely.
-var CASE_SHIP_PROMO = { active: true, endsAt: '2026-09-06T23:59:59-04:00' };
+var CASE_SHIP_PROMO = { active: false, endsAt: '2026-09-06T23:59:59-04:00' }; // retired; replaced by FREE_SHIP
+// ── FREE SHIPPING (Bourbon Outfitter) ──
+// Bourbon Outfitter ships Throttled orders free. Set active:false to hide every free-shipping message,
+// or set endsAt (e.g. '2026-12-31T23:59:59-05:00') to have it switch off automatically.
+var FREE_SHIP = { active: true, endsAt: null };
+function freeShipLive(){
+  if (!FREE_SHIP.active) return false;
+  if (!FREE_SHIP.endsAt) return true;
+  try { return new Date() <= new Date(FREE_SHIP.endsAt); } catch(e){ return true; }
+}
 function caseShipPromoLive(){
   if (!CASE_SHIP_PROMO.active) return false;
   try { return new Date() <= new Date(CASE_SHIP_PROMO.endsAt); } catch(e){ return true; }
@@ -3818,12 +3838,14 @@ function cartRender(){
 
   var totalBottles = (_cartQty.FS||0) + (_cartQty.CS||0);
   var subtotal = (_cartQty.FS||0)*cartPrice('FS') + (_cartQty.CS||0)*cartPrice('CS');
-  var shipping = (totalBottles > 0) ? ((totalBottles >= 6 && caseShipPromoLive()) ? CART_SHIPPING.caseFlat : CART_SHIPPING.standard) : 0;
+  var shipping = (totalBottles > 0) ? (freeShipLive() ? 0 : ((totalBottles >= 6 && caseShipPromoLive()) ? CART_SHIPPING.caseFlat : CART_SHIPPING.standard)) : 0;
   var total = subtotal + shipping;
   var sumEl = document.getElementById('cart-summary');
   if (sumEl){
     var shipRow = (totalBottles > 0)
-      ? '<div class="cart-summary-row"><span>Estimated shipping</span><span>$' + shipping.toFixed(2) + '</span></div>'
+      ? (shipping === 0
+          ? '<div class="cart-summary-row cart-ship-free"><span>Shipping</span><span>FREE</span></div>'
+          : '<div class="cart-summary-row"><span>Estimated shipping</span><span>$' + shipping.toFixed(2) + '</span></div>')
       : '';
     sumEl.innerHTML =
       '<div class="cart-summary-row"><span>' + totalBottles + ' bottle' + (totalBottles===1?'':'s') + ' selected</span><span></span></div>' +
@@ -3834,7 +3856,13 @@ function cartRender(){
   // Shipping incentive banner — always visible during the promo, nudging toward a case of 6.
   var shipBanner = document.getElementById('cart-ship-banner');
   if (shipBanner){
-    if (caseShipPromoLive()){
+    if (freeShipLive()){
+      shipBanner.style.display = '';
+      shipBanner.className = 'cart-ship-banner unlocked';
+      shipBanner.innerHTML = (totalBottles > 0)
+        ? '<strong>Free shipping applied!</strong>'
+        : '<strong>Free Shipping - Limited Time Offer!!</strong>';
+    } else if (caseShipPromoLive()){
       shipBanner.style.display = '';
       if (totalBottles >= 6){
         shipBanner.className = 'cart-ship-banner unlocked';
@@ -4075,7 +4103,7 @@ function openFindBottle(series) {
   var avail = boLive(series);
   if (avail) {
     if (t) t.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;font-size:19px;font-weight:700;letter-spacing:.02em;line-height:1;">Buy<img src="/brand/throttled-wordmark-white.png" alt="Throttled&trade;" style="height:18px;width:auto;max-width:80%;display:block;flex:0 1 auto;"></span>';
-    if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our licensed retail partner, who ships to 42 states.';
+    if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our licensed retail partner, who ships free to 42 states.';
     if (a) a.innerHTML = '<a class="btn-primary buy-cta" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
       '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
   } else {
@@ -4085,7 +4113,7 @@ function openFindBottle(series) {
       '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
   }
   var sn = document.getElementById('fb-ship-note');
-  if (sn) sn.style.display = (avail && caseShipPromoLive()) ? '' : 'none';
+  if (sn) sn.style.display = (avail && freeShipLive()) ? '' : 'none';
   openModal('find-bottle-modal');
 }
 
@@ -4207,7 +4235,7 @@ function renderMap() {
       .on('mousemove', function(event, d) {
         const avail = !UNAVAIL_STATES.has(d.properties.name);
         tipName.textContent = d.properties.name;
-        tipStatus.textContent = avail ? 'Available for shipping. Click to see retailers' : 'Not yet available for shipping to this state';
+        tipStatus.textContent = avail ? 'Free shipping available. Click to see retailers' : 'Not yet available for shipping to this state';
         tipStatus.style.color = avail ? '#C8952A' : '#D6CCBA';
         tip.style.left = (event.clientX + 14) + 'px';
         tip.style.top = (event.clientY - 52) + 'px';
@@ -4337,7 +4365,7 @@ async function renderCommunityCountries(){
 async function shareTradeCard() {
   const shareData = {
     title: 'Throttled™ — Trade Inquiry',
-    text: 'Single barrel, barrel strength whiskey now available. Three unique expressions, each hand selected. Available through Bourbon Outfitter in 42 states. Trade inquiries: info@throttledspirits.com',
+    text: 'Single barrel, barrel strength whiskey now available. Three unique expressions, each hand selected. Available through Bourbon Outfitter with free shipping to 42 states. Trade inquiries: info@throttledspirits.com',
     url: window.location.href
   };
   try {
