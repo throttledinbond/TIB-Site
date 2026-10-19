@@ -438,6 +438,15 @@ a{color:inherit;text-decoration:none;}
 .csp-text{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline;}
 .csp-head{font-size:14px;font-weight:800;color:var(--gold-lt);letter-spacing:.02em;}
 .csp-detail{font-size:12.5px;color:var(--cream3);line-height:1.5;}
+/* Hero free-shipping sash (shown only while FREE_SHIP is live) */
+.hw-ship-sash{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;white-space:nowrap;margin:0 0 14px;padding:9px 16px;background:rgba(20,19,17,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--gold-lt);border:1px solid var(--gold);cursor:pointer;font-family:inherit;text-transform:uppercase;line-height:1;animation:shipPulse 2.2s ease-in-out infinite}
+.hw-ship-sash:hover,.hw-ship-sash:focus-visible{background:rgba(20,19,17,.9);border-color:var(--gold-lt);animation-play-state:paused}
+.hw-ship-sash:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+.hw-ship-sash-main{font-size:13px;font-weight:800;letter-spacing:.2em}
+.hw-ship-sash-sep{width:4px;height:4px;background:var(--gold);transform:rotate(45deg);flex-shrink:0}
+.hw-ship-sash-sub{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--cream2)}
+@keyframes shipPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,149,42,.55);transform:scale(1)}50%{box-shadow:0 0 0 9px rgba(200,149,42,0);transform:scale(1.04)}}
+@media(prefers-reduced-motion:reduce){.hw-ship-sash{animation:none}}
 /* Cart builder */
 .cart-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--charcoal4);}
 .cart-row-img{width:40px;height:60px;object-fit:contain;flex-shrink:0;}
@@ -1753,6 +1762,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
    <h1 class="hw-headline">Barrel&#8209;Strength<br><span class="gold">Bourbon</span></h1>
    <p class="hw-sub">Hand selected, VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span> coded, every bottle carries its own story.</p>
    <div class="hw-actions">
+    <button type="button" class="hw-ship-sash js-free-ship" onclick="openCartBuilder()" aria-label="Free shipping, limited time. Build your order" style="display:none;"><span class="hw-ship-sash-main">Free Shipping</span><span class="hw-ship-sash-sep" aria-hidden="true"></span><span class="hw-ship-sash-sub">Limited Time!</span></button>
     <div class="hw-ctas">
      <button class="hw-cta-primary" onclick="openCartBuilder()"><span class="hw-cta-main">Build Your Order Now!</span><span class="hw-cta-sub">Free shipping &middot; 42 states</span></button>
      <button class="btn-ghost" onclick="navTo('vintage')">Decode VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></button>
@@ -3773,6 +3783,7 @@ async function boCheckAvailability() {
 }
 function boApplyAvailability() {
   applyCaseShipPromo();
+  if (typeof applyFreeShip === 'function') applyFreeShip();
 }
 window.addEventListener('load', boCheckAvailability);
 
@@ -3784,6 +3795,13 @@ var CASE_SHIP_PROMO = { active: false, endsAt: '2026-09-06T23:59:59-04:00' }; //
 // Bourbon Outfitter ships Throttled orders free. Set active:false to hide every free-shipping message,
 // or set endsAt (e.g. '2026-12-31T23:59:59-05:00') to have it switch off automatically.
 var FREE_SHIP = { active: true, endsAt: null };
+// Show/hide every element tagged .js-free-ship based on FREE_SHIP.
+function applyFreeShip(){
+  var show = freeShipLive() && (typeof boLive === 'function' ? boLive() : true);
+  var els = document.querySelectorAll('.js-free-ship');
+  for (var i=0;i<els.length;i++){ els[i].style.display = show ? '' : 'none'; }
+}
+window.addEventListener('load', applyFreeShip);
 function freeShipLive(){
   if (!FREE_SHIP.active) return false;
   if (!FREE_SHIP.endsAt) return true;
