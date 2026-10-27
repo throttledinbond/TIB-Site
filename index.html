@@ -3167,7 +3167,7 @@ faqLoad();
  <div id="cart-rows"></div>
  <div id="cart-summary" style="margin-top:14px;border-top:1px solid var(--charcoal4);padding-top:14px;"></div>
  <div class="modal-actions" style="margin-top:18px;">
- <a id="cart-buy-btn" class="btn-primary buy-cta" href="#" target="_blank" rel="noopener noreferrer" style="text-decoration:none;pointer-events:none;opacity:.45;">Buy on Bourbon Outfitter</a>
+ <a id="cart-buy-btn" class="btn-primary buy-cta" data-buy-source="cart_builder" href="#" target="_blank" rel="noopener noreferrer" style="text-decoration:none;pointer-events:none;opacity:.45;">Buy on Bourbon Outfitter</a>
  <button class="btn-ghost" onclick="closeModal('cart-modal')">Close</button>
  </div>
  <div class="retail-disclosure js-retail-disclosure" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--charcoal4);"></div>
@@ -3845,8 +3845,8 @@ var _cartQty = { FS: 0, CS: 0 };
 var CART_SHIPPING = { standard: 29.99, caseFlat: 10.00 };
 function cartVariant(s){ return (RETAIL.variants && RETAIL.variants[s]) ? RETAIL.variants[s] : ''; }
 function cartPrice(s){ return (RETAIL.prices && RETAIL.prices[s]) ? Number(RETAIL.prices[s]) : 0; }
-function openCartBuilder(preSeries){ _cartQty = { FS:0, CS:0 }; if (preSeries && boLive(preSeries) && cartVariant(preSeries)) _cartQty[preSeries] = 1; cartRender(); openModal('cart-modal'); }
-function cartAdjust(s, delta){ _cartQty[s] = Math.max(0, Math.min(36, (_cartQty[s]||0) + delta)); cartRender(); }
+function openCartBuilder(preSeries){ _cartQty = { FS:0, CS:0 }; if (preSeries && boLive(preSeries) && cartVariant(preSeries)) _cartQty[preSeries] = 1; cartRender(); openModal('cart-modal'); trackEvent('cart_builder_open', { pre_series: preSeries || 'none' }); }
+function cartAdjust(s, delta){ _cartQty[s] = Math.max(0, Math.min(36, (_cartQty[s]||0) + delta)); cartRender(); trackEvent('cart_qty_change', { series: s, new_qty: _cartQty[s] }); }
 function cartBuildUrl(){
   var parts = [];
   ['FS','CS'].forEach(function(s){ var v = cartVariant(s), q = _cartQty[s]||0; if (v && q>0) parts.push(v + ':' + q); });
@@ -4036,7 +4036,7 @@ function giftRender(){
     if (tier.route === 'bo'){
       var url = giftBuildBoUrl();
       if (url){
-        actEl.innerHTML = '<a class="btn-primary buy-cta" href="' + url + '" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Buy on Bourbon Outfitter</a>';
+        actEl.innerHTML = '<a class="btn-primary buy-cta" data-buy-source="gift_builder" href="' + url + '" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Buy on Bourbon Outfitter</a>';
       } else {
         actEl.innerHTML = '<div style="font-size:12px;color:var(--cream3);">Founders Select or Collection Series are required for a direct Bourbon Outfitter cart. Or switch to a Branded / Signature tier to submit an inquiry.</div>';
       }
@@ -4128,8 +4128,22 @@ function trackBuyConversion(){ try { if (ADS_BUY_CONVERSION && typeof gtag === '
 document.addEventListener('click', function(e){
   var a = (e.target && e.target.closest) ? e.target.closest('a.retailer-link, a.buy-cta') : null;
   if (!a) return;
-  trackEvent('buy_click', { link_url: a.getAttribute('href') || '', link_text: (a.textContent || '').trim() });
+  trackEvent('buy_click', { link_url: a.getAttribute('href') || '', link_text: (a.textContent || '').trim(), source: a.getAttribute('data-buy-source') || 'unknown' });
   trackBuyConversion();
+}, true);
+
+// Cart builder checkout: fires alongside buy_click when the cart builder's buy button is clicked.
+document.addEventListener('click', function(e){
+  var a = (e.target && e.target.closest) ? e.target.closest('#cart-buy-btn') : null;
+  if (!a) return;
+  var fs = _cartQty.FS || 0, cs = _cartQty.CS || 0;
+  trackEvent('cart_build_checkout', {
+    total_bottles: fs + cs,
+    total_value: Number((fs * cartPrice('FS') + cs * cartPrice('CS')).toFixed(2)),
+    fs_qty: fs,
+    cs_qty: cs,
+    cart_url: cartBuildUrl()
+  });
 }, true);
 
 function openFindBottle(series) {
@@ -4141,7 +4155,7 @@ function openFindBottle(series) {
   if (avail) {
     if (t) t.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;font-size:19px;font-weight:700;letter-spacing:.02em;line-height:1;">Buy<img src="/brand/throttled-wordmark-white.png" alt="Throttled&trade;" style="height:18px;width:auto;max-width:80%;display:block;flex:0 1 auto;"></span>';
     if (b) b.textContent = 'Purchase online through Bourbon Outfitter, our licensed retail partner, who ships free to 42 states.';
-    if (a) a.innerHTML = '<a class="btn-primary buy-cta" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
+    if (a) a.innerHTML = '<a class="btn-primary buy-cta" data-buy-source="find_bottle" href="' + safeUrl(retailUrl(series)) + '" target="_blank" rel="noopener noreferrer" onclick="closeModal(\'find-bottle-modal\')" style="text-decoration:none;">Buy on Bourbon Outfitter</a>' +
       '<button class="btn-ghost" onclick="closeModal(\'find-bottle-modal\')">Close</button>';
   } else {
     if (t) t.textContent = 'Available Summer 2026';
