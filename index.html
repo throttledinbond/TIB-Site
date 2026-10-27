@@ -447,6 +447,30 @@ a{color:inherit;text-decoration:none;}
 .hw-ship-sash-sub{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--cream2)}
 @keyframes shipPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,149,42,.55);transform:scale(1)}50%{box-shadow:0 0 0 9px rgba(200,149,42,0);transform:scale(1.04)}}
 @media(prefers-reduced-motion:reduce){.hw-ship-sash{animation:none}}
+/* Availability map: filter chips + venue markers */
+.map-filters{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:16px}
+.map-chip{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--cream3);background:transparent;border:1px solid var(--charcoal4);padding:7px 12px;cursor:pointer;transition:color .2s,border-color .2s,background .2s,opacity .2s;opacity:.55}
+.map-chip.on{opacity:1;color:var(--cream);border-color:var(--gold-dk);background:rgba(200,149,42,.08)}
+.map-chip:hover{border-color:var(--gold)}
+.map-chip:focus-visible{outline:2px solid var(--gold-lt);outline-offset:2px}
+.map-chip-sw{width:11px;height:11px;background:var(--gold);flex-shrink:0;display:inline-block}
+.map-chip-sw.na{background:var(--charcoal4);opacity:.6}
+.map-chip-ic{display:inline-flex;color:var(--gold-lt)}
+.map-prompt{font-size:13px;color:var(--gold-lt);letter-spacing:.04em;margin:-4px 0 14px}
+.map-tip-row{display:flex;justify-content:space-between;gap:16px;font-size:11px;letter-spacing:.06em;margin-top:5px;white-space:nowrap}
+.map-tip-row span:first-child{color:var(--cream3);text-transform:uppercase;letter-spacing:.12em;font-size:10px}
+.map-tip-row span:last-child{color:var(--gold-lt)}
+.map-tip-row.no span:last-child{color:var(--cream3);opacity:.7}
+.map-tip-hint{font-size:10px;color:var(--cream3);margin-top:7px;letter-spacing:.08em}
+.map-chip-na{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--cream3);padding:7px 2px}
+.map-marker{cursor:pointer}
+.map-marker circle{fill:#1A1917;stroke:#E8B84B;stroke-width:1.5}
+.map-marker:hover circle{fill:#2A2825}
+.map-marker .map-count{font:700 9px/1 sans-serif;fill:#1A1917}
+.map-marker .map-count-bg{fill:#E8B84B;stroke:none}
+.sa-group{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:18px 0 8px;display:flex;align-items:center;gap:7px}
+.sa-group:first-child{margin-top:0}
+.sa-group svg{color:var(--gold-lt)}
 /* Cart builder */
 .cart-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--charcoal4);}
 .cart-row-img{width:40px;height:60px;object-fit:contain;flex-shrink:0;}
@@ -3095,16 +3119,11 @@ faqLoad();
     </div>
 
     <!-- Legend -->
-    <div style="display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">
-        <div style="width:12px;height:12px;background:var(--gold);flex-shrink:0;"></div>
-        Available Online &nbsp;·&nbsp; Shipped By Our Retail Partner
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cream3);">
-        <div style="width:12px;height:12px;background:var(--charcoal4);flex-shrink:0;opacity:.6;"></div>
-        Not Available Yet
-      </div>
+    <div class="map-filters">
+      <span class="map-chip-na"><span class="map-chip-sw"></span>Ships To You &middot; Free Shipping</span>
+      <span class="map-chip-na"><span class="map-chip-sw na"></span>Not Available Yet</span>
     </div>
+    <div class="map-prompt">Select your state to see where to buy</div>
 
     <!-- Map container -->
     <div id="us-map-container" style="width:100%;position:relative;"></div>
@@ -4201,8 +4220,38 @@ window.addEventListener('scroll', () => {
 const UNAVAIL_STATES = new Set(['Alabama','Arkansas','Kentucky','Massachusetts','Mississippi','South Dakota','Utah','Vermont']);
 let mapLoaded = false;
 
+var MAP_LAYERS = { ship: true, bar: false, liquor_store: false };
+var _mapRetailers = null, _mapDraw = null;
+var MAP_ICON = {
+  bar: '<path d="M6 4h12l-1.6 8.2A4.5 4.5 0 0 1 12 16a4.5 4.5 0 0 1-4.4-3.8L6 4z" fill="none" stroke="#E8B84B" stroke-width="1.8" stroke-linejoin="round"/><path d="M7.2 9h9.6" stroke="#E8B84B" stroke-width="1.8"/><path d="M12 16v4M8.5 20h7" stroke="#E8B84B" stroke-width="1.8" stroke-linecap="round"/>',
+  liquor_store: '<path d="M10 2.5h4v3.2c0 .6.3 1.1.8 1.5 1.3 1 2.2 2.4 2.2 4.1V20a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 20v-8.7c0-1.7.9-3.1 2.2-4.1.5-.4.8-.9.8-1.5V2.5z" fill="none" stroke="#E8B84B" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 13.5h10" stroke="#E8B84B" stroke-width="1.8"/>'
+};
+var MAP_TYPE_WORD = { bar: ['bar & restaurant','bars & restaurants'], liquor_store: ['liquor store','liquor stores'] };
+function mapVenueCounts(stateName){
+  var abbr = (typeof STATE_NAME_TO_ABBR !== 'undefined' && STATE_NAME_TO_ABBR[stateName]) || '';
+  var c = { bar: 0, liquor_store: 0 };
+  (_mapRetailers || []).forEach(function(r){
+    var st = (r.state || '').trim().toLowerCase();
+    if ((r.type === 'bar' || r.type === 'liquor_store') && (st === abbr.toLowerCase() || st === stateName.toLowerCase())) c[r.type]++;
+  });
+  return c;
+}
+function mapToggleLayer(btn){
+  var k = btn.getAttribute('data-layer');
+  MAP_LAYERS[k] = !MAP_LAYERS[k];
+  btn.classList.toggle('on', MAP_LAYERS[k]);
+  btn.setAttribute('aria-pressed', MAP_LAYERS[k] ? 'true' : 'false');
+  if (_mapDraw) _mapDraw();
+}
+async function mapFetchRetailers(){
+  try {
+    var res = await _supabase.from('retailers').select('name,city,state,type,url,bottles').eq('active', true);
+    _mapRetailers = (res && res.data) || [];
+  } catch(e){ _mapRetailers = []; }
+  if (_mapDraw) _mapDraw();
+}
 function openMapModal() {
-  loadRetailersOnMap();
+  mapFetchRetailers();
   openModal('map-modal');
   if (!mapLoaded) { loadMap(); mapLoaded = true; }
 }
@@ -4239,35 +4288,50 @@ function renderMap() {
 
   d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(us => {
     const features = topojson.feature(us, us.objects.states).features;
-    svg.selectAll('path.state')
+    const shipOn = d => MAP_LAYERS.ship && !UNAVAIL_STATES.has(d.properties.name);
+    const hasVenue = d => { const c = mapVenueCounts(d.properties.name); return (MAP_LAYERS.bar && c.bar) || (MAP_LAYERS.liquor_store && c.liquor_store); };
+    const clickable = d => true;
+    const baseFill = d => shipOn(d) ? '#C8952A' : '#3E3B35';
+    const baseOp = d => shipOn(d) ? 0.75 : 0.5;
+    const fillTip = d => {
+      const name = d.properties.name, c = mapVenueCounts(name);
+      const rows = [
+        ['Online', UNAVAIL_STATES.has(name) ? '' : 'Free shipping'],
+        ['By the glass', c.bar ? c.bar + (c.bar === 1 ? ' location' : ' locations') : ''],
+        ['By the bottle', c.liquor_store ? c.liquor_store + (c.liquor_store === 1 ? ' store' : ' stores') : '']
+      ];
+      tipStatus.innerHTML = '';
+      rows.forEach(r => {
+        const row = document.createElement('div'); row.className = 'map-tip-row' + (r[1] ? '' : ' no');
+        const a = document.createElement('span'); a.textContent = r[0];
+        const b = document.createElement('span'); b.textContent = r[1] || 'Not yet';
+        row.appendChild(a); row.appendChild(b); tipStatus.appendChild(row);
+      });
+      const hint = document.createElement('div'); hint.className = 'map-tip-hint';
+      hint.textContent = 'Click for where to buy'; tipStatus.appendChild(hint);
+    };
+    const states = svg.selectAll('path.state')
       .data(features)
       .join('path')
       .attr('class','state')
       .attr('d', path)
-      .attr('fill', d => UNAVAIL_STATES.has(d.properties.name) ? '#3E3B35' : '#C8952A')
-      .attr('opacity', d => UNAVAIL_STATES.has(d.properties.name) ? 0.5 : 0.75)
       .attr('stroke','#1A1917')
       .attr('stroke-width', W < 500 ? 0.5 : 1)
-      .style('cursor', d => UNAVAIL_STATES.has(d.properties.name) ? 'default' : 'pointer')
       .style('transition','fill .15s, opacity .15s')
       .on('mousemove', function(event, d) {
-        const avail = !UNAVAIL_STATES.has(d.properties.name);
         tipName.textContent = d.properties.name;
-        tipStatus.textContent = avail ? 'Free shipping available. Click to see retailers' : 'Not yet available for shipping to this state';
-        tipStatus.style.color = avail ? '#C8952A' : '#D6CCBA';
+        fillTip(d);
         tip.style.left = (event.clientX + 14) + 'px';
         tip.style.top = (event.clientY - 52) + 'px';
         tip.style.opacity = '1';
-        if (avail) { d3.select(this).attr('fill','#E8B84B').attr('opacity',1); }
+        if (shipOn(d) || hasVenue(d)) { d3.select(this).attr('fill','#E8B84B').attr('opacity',1); } else { d3.select(this).attr('opacity',0.75); }
       })
       .on('mouseleave', function(event, d) {
         tip.style.opacity = '0';
-        if (!UNAVAIL_STATES.has(d.properties.name)) {
-          d3.select(this).attr('fill','#C8952A').attr('opacity',0.75);
-        }
+        d3.select(this).attr('fill', baseFill(d)).attr('opacity', baseOp(d));
       })
       .on('click', function(event, d) {
-        if (!UNAVAIL_STATES.has(d.properties.name)) openStateAvailability(d.properties.name);
+        if (clickable(d)) openStateAvailability(d.properties.name);
       });
 
     svg.append('path')
@@ -4275,7 +4339,43 @@ function renderMap() {
       .attr('fill','none')
       .attr('stroke','#1A1917')
       .attr('stroke-width', W < 500 ? 0.5 : 1)
+      .style('pointer-events','none')
       .attr('d', path);
+
+    const markerLayer = svg.append('g').attr('class','map-markers');
+    const R = W < 500 ? 10 : 14;
+    _mapDraw = function(){
+      states.attr('fill', baseFill).attr('opacity', baseOp).style('cursor', d => clickable(d) ? 'pointer' : 'default');
+      markerLayer.selectAll('*').remove();
+      features.forEach(f => {
+        const name = f.properties.name, c = mapVenueCounts(name);
+        const types = ['bar','liquor_store'].filter(t => c[t] && MAP_LAYERS[t]);
+        if (!types.length) return;
+        let [cx, cy] = path.centroid(f);
+        if (name === 'Florida') { cx += R * 1.6; cy += R * 0.6; } // centroid sits in the Gulf; nudge onto the peninsula
+        if (!isFinite(cx) || !isFinite(cy)) return;
+        types.forEach((t, i) => {
+          const x = cx + (i - (types.length - 1) / 2) * (R * 2.3);
+          const g = markerLayer.append('g').attr('class','map-marker').attr('transform', `translate(${x},${cy})`)
+            .attr('role','button').attr('tabindex','0').attr('aria-label', name + ': ' + c[t] + ' ' + MAP_TYPE_WORD[t][c[t] === 1 ? 0 : 1])
+            .on('click', () => openStateAvailability(name))
+            .on('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStateAvailability(name); } })
+            .on('mousemove', event => {
+              tipName.textContent = name; fillTip(f);
+              tip.style.left = (event.clientX + 14) + 'px'; tip.style.top = (event.clientY - 52) + 'px'; tip.style.opacity = '1';
+            })
+            .on('mouseleave', () => { tip.style.opacity = '0'; });
+          g.append('circle').attr('r', R);
+          const s = (R * 1.25) / 24;
+          g.append('g').attr('transform', `translate(${-12 * s},${-12 * s}) scale(${s})`).html(MAP_ICON[t]);
+          if (c[t] > 1) {
+            g.append('circle').attr('class','map-count-bg').attr('cx', R * 0.75).attr('cy', -R * 0.75).attr('r', R * 0.5);
+            g.append('text').attr('class','map-count').attr('x', R * 0.75).attr('y', -R * 0.75).attr('text-anchor','middle').attr('dominant-baseline','central').text(c[t]);
+          }
+        });
+      });
+    };
+    _mapDraw();
   }).catch(() => {
     container.innerHTML = '<p style="color:#3E3B35;text-align:center;padding:40px 0;font-size:13px;">Map unavailable. Check your connection and try again.</p>';
   });
@@ -6859,36 +6959,27 @@ async function adminMarkAvailable(bottleId, available) {
 }
 
 
-async function loadRetailersOnMap() {
-  var { data } = await _supabase.from('retailers').select('*').eq('active', true);
-  if (!data || data.length === 0) return;
-  var list = document.getElementById('map-retailer-list');
-  if (!list) return;
-  var html = '<div style="margin-top:16px;border-top:1px solid var(--charcoal4);padding-top:12px;">' +
-    '<div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:8px;">Retail Locations</div>';
-  data.forEach(function(r) {
-    html += '<div class="retailer-item">' +
-      '<div><div class="retailer-name">' + fbEscape(r.name) + '</div>' +
-      '<div class="retailer-type">' + (r.city||'') + (r.city&&r.state?', ':'') + (r.state||'') + '</div></div>' +
-      (r.url ? '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy on ' + fbEscape(r.name) + '</a>' : '') +
-    '</div>';
-  });
-  html += '</div>';
-  list.innerHTML = html;
-}
 
 // ── STATE CLICK → RETAILERS (online ships everywhere + in-state stores) ──
 var STATE_NAME_TO_ABBR = {"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA","Colorado":"CO","Connecticut":"CT","Delaware":"DE","District of Columbia":"DC","Florida":"FL","Georgia":"GA","Hawaii":"HI","Idaho":"ID","Illinois":"IL","Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA","Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI","Minnesota":"MN","Mississippi":"MS","Missouri":"MO","Montana":"MT","Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ","New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND","Ohio":"OH","Oklahoma":"OK","Oregon":"OR","Pennsylvania":"PA","Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD","Tennessee":"TN","Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA","West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY"};
 
+var RETAILER_TYPE_LABEL = { bar: 'Bar & Restaurant', liquor_store: 'Liquor Store', online: 'Online' };
 function retailerRow(r) {
-  var loc = [r.city, r.state].filter(Boolean).join(', ');
-  var typ = (r.type || '').replace('_', ' ');
+  var city = (r.city || '').trim(), st = (r.state || '').trim();
+  // If the full address (with state) was typed into City, don't repeat the state.
+  var hasState = st && new RegExp('(^|[\\s,])' + st.replace(/[^A-Za-z]/g,'') + '(\\s+\\d{5})?$', 'i').test(city);
+  var loc = hasState ? city : [city, st].filter(Boolean).join(', ');
+  var typ = RETAILER_TYPE_LABEL[r.type] || (r.type || '').replace('_', ' ');
   var isBO = /bourbonoutfitter\.com/i.test(r.url || '');
+  var isPlace = (r.type || '') !== 'online';
   var buy = '';
   if (r.url && isBO && !boLive()) {
     buy = '<span class="retailer-link" style="opacity:.6;">Coming soon</span>';
   } else if (r.url) {
-    buy = '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">Buy on ' + fbEscape(r.name) + '</a>';
+    buy = '<a class="retailer-link" href="' + safeUrl(r.url) + '" target="_blank" rel="noopener noreferrer">' + (isPlace ? 'Visit' : 'Buy on ' + fbEscape(r.name)) + '</a>';
+  } else if (isPlace && loc) {
+    var maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.name + ', ' + loc);
+    buy = '<a class="retailer-link" href="' + safeUrl(maps) + '" target="_blank" rel="noopener noreferrer">Directions</a>';
   }
   return '<div class="retailer-item">' +
     '<div><div class="retailer-name">' + fbEscape(r.name) + '</div>' +
@@ -6913,15 +7004,23 @@ async function openStateAvailability(stateName) {
   var data = (res && res.data) || [];
   var online = data.filter(function(r){ return (r.type || '') === 'online'; });
   var inState = data.filter(function(r){ return (r.type || '') !== 'online' && (norm(r.state) === norm(abbr) || norm(r.state) === norm(stateName)); });
+  var bars = inState.filter(function(r){ return r.type === 'bar'; });
+  var stores = inState.filter(function(r){ return r.type !== 'bar'; });
+  var shipsHere = !UNAVAIL_STATES.has(stateName);
+  if (!shipsHere) online = [];
 
   var html = '';
   if (online.length) {
-    html += '<div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Available Online &middot; Shipped By Our Retail Partner</div>';
+    html += '<div class="sa-group">Order Online &middot; Free Shipping</div>';
     online.forEach(function(r){ html += retailerRow(r); });
   }
-  if (inState.length) {
-    html += '<div style="font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dk);margin:' + (online.length ? '18px' : '0') + ' 0 8px;">In ' + fbEscape(stateName) + '</div>';
-    inState.forEach(function(r){ html += retailerRow(r); });
+  if (bars.length) {
+    html += '<div class="sa-group"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M6 4h12l-1.6 8.2A4.5 4.5 0 0 1 12 16a4.5 4.5 0 0 1-4.4-3.8L6 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7.2 9h9.6" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v4M8.5 20h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> By The Glass</div>';
+    bars.forEach(function(r){ html += retailerRow(r); });
+  }
+  if (stores.length) {
+    html += '<div class="sa-group"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M10 2.5h4v3.2c0 .6.3 1.1.8 1.5 1.3 1 2.2 2.4 2.2 4.1V20a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 20v-8.7c0-1.7.9-3.1 2.2-4.1.5-.4.8-.9.8-1.5V2.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 13.5h10" stroke="currentColor" stroke-width="1.8"/></svg> By The Bottle</div>';
+    stores.forEach(function(r){ html += retailerRow(r); });
   }
   if (!online.length && !inState.length) {
     html = '<div style="font-size:13px;color:var(--cream3);line-height:1.6;">Coming soon to ' + fbEscape(stateName) + '. Join The Barrel Inventory to be first to know when bottles are available near you.</div>';
