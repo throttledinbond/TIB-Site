@@ -16,7 +16,7 @@
 (function(){
   if (window.__TIB_SCANNER__) return;   // guard against double-loading
   window.__TIB_SCANNER__ = true;
-  var VER = 'v10';
+  var VER = 'v12';
 
   /* ---------- valid releases (self-contained; the resolver's only data) ---------- */
   var SCAN_CODES = {
@@ -195,23 +195,28 @@
 
   /* ---------- camera scanner ---------- */
   var _scanStream=null,_scanTimer=null,_scanBusy=false,_scanWorker=null,_torchTrack=null,_torchOn=false,_scanDone=false;
+  /* ---------- analytics (GA4 via the page's trackEvent helper; silently skipped if absent) ---------- */
+  var _scanT0=0, _scanLive=false, _upT0=0;
+  function _t(n,p){ try{ if(typeof window.trackEvent==='function') window.trackEvent(n,p||{}); }catch(e){} }
+  function _secs(t0){ return t0 ? Math.round((Date.now()-t0)/100)/10 : 0; }
   function _scanFrame(){ return document.querySelector('.scan-frame'); }
   function setScanStatus(t,err){ var e=document.getElementById('scan-status'); if(e){ e.className='scan-status'+(err?' err':''); e.textContent=t; } }
 
   async function scanStart(){
     var modal=document.getElementById('scan-modal'); if(!modal){ injectModal(); modal=document.getElementById('scan-modal'); }
     modal.classList.add('open');
+    _scanT0=Date.now(); _scanLive=false; _t('vin_scan_start',{method:'camera'});
     setScanStatus('Starting camera…');
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ setScanStatus('This browser can’t open the camera. Use “Upload a Photo Instead.”',true); return; }
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ _t('vin_scan_fail',{method:'camera',reason:'no_camera_support',seconds:_secs(_scanT0)}); setScanStatus('This browser can’t open the camera. Use “Upload a Photo Instead.”',true); return; }
     try{ _scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false}); }
-    catch(e){ setScanStatus('Camera blocked. Allow camera access, or use “Upload a Photo Instead.”',true); return; }
+    catch(e){ _t('vin_scan_fail',{method:'camera',reason:'camera_blocked',seconds:_secs(_scanT0)}); setScanStatus('Camera blocked. Allow camera access, or use “Upload a Photo Instead.”',true); return; }
     var v=document.getElementById('scan-video'); v.srcObject=_scanStream; try{ await v.play(); }catch(e){}
     try{ _torchTrack=_scanStream.getVideoTracks()[0]; var caps=(_torchTrack&&_torchTrack.getCapabilities)?_torchTrack.getCapabilities():{}; var tb=document.getElementById('scan-torch'); if(tb) tb.style.display=(caps&&caps.torch)?'block':'none'; _torchOn=false; }catch(e){}
     try{
       await loadTesseract();
       if(!_scanWorker){ setScanStatus('Loading scanner…'); _scanWorker=await Tesseract.createWorker('eng'); await _scanWorker.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ',tessedit_pageseg_mode:'6'}); }
-    }catch(e){ setScanStatus('Scanner couldn’t load (needs internet). Use “Upload a Photo Instead.”',true); return; }
-    _scanDone=false;
+    }catch(e){ _t('vin_scan_fail',{method:'camera',reason:'scanner_load_failed',seconds:_secs(_scanT0)}); setScanStatus('Scanner couldn’t load (needs internet). Use “Upload a Photo Instead.”',true); return; }
+    _scanDone=false; _scanLive=true;
     var fr=_scanFrame(); if(fr){ fr.classList.remove('ok'); fr.classList.add('scanning'); }
     setScanStatus('Scanning… get the VIN-TAGe code inside the box');
     if(_scanTimer) clearInterval(_scanTimer);
@@ -245,6 +250,7 @@
 
   function onDecoded(code){
     if(_scanDone) return; _scanDone=true;
+    if(_scanLive){ _scanLive=false; _t('vin_scan_success',{method:'camera',seconds:_secs(_scanT0)}); }
     if(_scanTimer){ clearInterval(_scanTimer); _scanTimer=null; }
     if(_scanStream){ _scanStream.getTracks().forEach(function(t){ t.stop(); }); _scanStream=null; }
     var fr=_scanFrame(); if(fr){ fr.classList.remove('scanning'); fr.classList.add('ok'); }
@@ -257,7 +263,7 @@
     var v=document.getElementById('scan-video'); if(v) v.srcObject=null;
     _torchTrack=null; _torchOn=false; var tb=document.getElementById('scan-torch'); if(tb){ tb.style.display='none'; tb.textContent='Light'; }
     var os=document.getElementById('vin-ocr-status'); if(os){ os.className='vin-ocr-status'; os.textContent='Decoded ✓  '+code; }
-    if(typeof window.vinFill==='function') window.vinFill(code);
+    if(typeof window.vinFill==='function') window.vinFill(code,'scan_camera');
   }
   function toggleTorch(){
     if(!_torchTrack) return; _torchOn=!_torchOn;
@@ -265,6 +271,9 @@
     var tb=document.getElementById('scan-torch'); if(tb) tb.textContent=_torchOn?'Light On':'Light';
   }
   function scanStop(){
+    // Closed the camera while it was still scanning, without a read.
+    if(_scanLive && !_scanDone){ _t('vin_scan_fail',{method:'camera',reason:'gave_up',seconds:_secs(_scanT0)}); }
+    _scanLive=false;
     _scanDone=true;
     if(_scanTimer){ clearInterval(_scanTimer); _scanTimer=null; }
     if(_scanStream){ _scanStream.getTracks().forEach(function(t){ t.stop(); }); _scanStream=null; }
@@ -296,11 +305,12 @@
   }
   function handleLabel(file){
     if(!file) return;
+    _upT0=Date.now(); _t('vin_scan_start',{method:'upload'});
     var status=document.getElementById('vin-ocr-status');
     if(status){ status.className='vin-ocr-status'; status.textContent='Reading the label on your device…'; }
     var url=URL.createObjectURL(file);
     var img=new Image();
-    img.onerror=function(){ URL.revokeObjectURL(url); if(status){ status.className='vin-ocr-status err'; status.textContent='Couldn’t open that image. Try another photo, or type the code above.'; } };
+    img.onerror=function(){ _t('vin_scan_fail',{method:'upload',reason:'image_unreadable',seconds:_secs(_upT0)}); URL.revokeObjectURL(url); if(status){ status.className='vin-ocr-status err'; status.textContent='Couldn’t open that image. Try another photo, or type the code above.'; } };
     img.onload=function(){
       var maxW=2200, sc=(img.naturalWidth>maxW)?(maxW/img.naturalWidth):1;
       var cw=Math.max(1,Math.round(img.naturalWidth*sc)), ch=Math.max(1,Math.round(img.naturalHeight*sc));
@@ -308,9 +318,11 @@
       base.getContext('2d').drawImage(img,0,0,cw,ch);
       URL.revokeObjectURL(url);
       _ocrImageResolve(base).then(function(code){
-        if(code){ if(status){ status.className='vin-ocr-status'; status.textContent='Read ✓  '+code; } if(typeof window.vinFill==='function') window.vinFill(code); }
-        else if(status){ status.className='vin-ocr-status err'; status.textContent='Couldn’t read the VIN-TAGe clearly. Try a straighter, closer photo of just the code and avoid glare — or type it above.'; }
+        if(code){ _t('vin_scan_success',{method:'upload',seconds:_secs(_upT0)}); if(status){ status.className='vin-ocr-status'; status.textContent='Read ✓  '+code; } if(typeof window.vinFill==='function') window.vinFill(code,'scan_upload'); }
+        else { _t('vin_scan_fail',{method:'upload',reason:'no_match',seconds:_secs(_upT0)}); }
+        if(!code && status){ status.className='vin-ocr-status err'; status.textContent='Couldn’t read the VIN-TAGe clearly. Try a straighter, closer photo of just the code and avoid glare — or type it above.'; }
       }).catch(function(){
+        _t('vin_scan_fail',{method:'upload',reason:'scanner_load_failed',seconds:_secs(_upT0)});
         if(status){ status.className='vin-ocr-status err'; status.textContent='Label reader couldn’t load (needs an internet connection). You can still type the code above.'; }
       });
     };

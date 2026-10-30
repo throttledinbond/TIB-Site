@@ -2059,7 +2059,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <div class="vintage-col-label">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span> Lookup</div>
  <div class="vin-input-wrap">
  <input type="text" class="vin-input" id="vin-input" placeholder="TIB 26 FS G1 00001" maxlength="20" autocomplete="off" spellcheck="false">
- <button class="decode-btn" onclick="vinDecode()">DECODE</button>
+ <button class="decode-btn" onclick="vinDecode('typed')">DECODE</button>
  </div>
  <div class="vin-hint">Format: <strong>TIB YY SS G# #####</strong> &nbsp;·&nbsp; Found on your bottle label</div>
  <div class="vin-example-label">Try an example</div>
@@ -3565,14 +3565,17 @@ const VIN_BARRELS = {
 
 let vinIsExample = false;
 
-function vinFill(code) {
+// method tells analytics how the code got into the decoder: pill (sample code chips), scan_camera,
+// scan_upload, archive (story link). Typing + DECODE/Enter is 'typed' (vinDecode's default).
+function vinFill(code, method) {
  var liveCodes = ['TIB 26 FS G1 00001','TIB 26 CS G1 00002'];
  vinIsExample = liveCodes.indexOf(code) === -1;
  document.getElementById('vin-input').value = code;
- vinDecode();
+ vinDecode(method || 'pill');
 }
 
-function vinDecode() {
+function vinDecode(method) {
+ if (typeof method !== 'string') method = 'typed';
  const raw = document.getElementById('vin-input').value.trim().toUpperCase().replace(/\s+/g,' ');
  const panel = document.getElementById('vin-result');
  panel.classList.remove('visible');
@@ -3592,6 +3595,16 @@ function vinDecode() {
  panel.innerHTML = '';
  } else {
  panel.innerHTML = vinBuildError(raw, parsed);
+ }
+ // Analytics: every real decode attempt and whether it worked.
+ if (raw.length >= 5) {
+  trackEvent('vin_decode', {
+   // not_found = right VIN-TAGe shape (known brand prefix) but no such barrel; bad_format = anything else
+   result: (barrel && parsed) ? 'success' : ((parsed && parsed.brandInfo) ? 'not_found' : 'bad_format'),
+   method: method,
+   series: (parsed && parsed.brandInfo) ? parsed.series : '',
+   code: raw.slice(0, 24)
+  });
  }
 
  if (barrel) {
@@ -3674,7 +3687,15 @@ function vinBuildError(code, p) {
  return `<div class="vin-error"><div class="vin-error-icon">⊘</div><div class="vin-error-text"><strong>Barrel Not Found</strong>"${code}" isn't in our system yet. Check your label and try again.${hint}</div></div>`;
 }
 
-document.getElementById('vin-input').addEventListener('keydown', e => { if(e.key==='Enter') vinDecode(); });
+document.getElementById('vin-input').addEventListener('keydown', e => { if(e.key==='Enter') vinDecode('typed'); });
+// Analytics: count the decoder section being seen (once per page load), however the visitor got there.
+(function(){
+  var sec = document.getElementById('vintage'); if (!sec || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    if (entries.some(function(en){ return en.isIntersecting; })) { trackEvent('vin_section_view', {}); io.disconnect(); }
+  }, { threshold: 0.35 });
+  io.observe(sec);
+})();
 document.getElementById('vin-input').addEventListener('input', function(e) {
  vinIsExample = false;
  let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
@@ -4211,6 +4232,7 @@ function selectBottle(id) {
 // ── SCROLL TO TOP BUTTON ──
 const scrollTopBtn = document.getElementById('scroll-top');
 window.addEventListener('scroll', () => {
+ if (!scrollTopBtn) return; // element isn't on the page; avoid an error on every scroll
  if (window.scrollY > 400) scrollTopBtn.classList.add('visible');
  else scrollTopBtn.classList.remove('visible');
 }, { passive: true });
@@ -5790,7 +5812,7 @@ function archiveToBottle(series){
 }
 function archiveDecode(code){
   if(typeof navTo==='function') navTo('vintage');
-  setTimeout(function(){ try{ vinFill(code); }catch(e){} }, 480);
+  setTimeout(function(){ try{ vinFill(code, 'archive'); }catch(e){} }, 480);
 }
 
 // ── ADMIN: barrel stories ──
@@ -7192,6 +7214,6 @@ function closeVideoModal() {
 .vin-ocr-status.err{color:#E88A6A;}
 </style>
 <!-- Live camera label scanner -->
-<script src="/vintage-scanner.js?v=11" defer></script>
+<script src="/vintage-scanner.js?v=12" defer></script>
 </body>
 </html>
