@@ -1730,6 +1730,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="nav-link" onclick="navTo('whiskey')">Whiskey</span>
  <span class="nav-link" onclick="navTo('story')">The Story</span>
  <span class="nav-link" onclick="navTo('vintage')">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
+ <a class="nav-link js-events-link" href="/events/" style="display:none;text-decoration:none;">Events</a>
  </div>
  <div class="nav-auth-wrap" id="nav-auth-wrap">
  <button id="nav-auth-btn" onclick="authNavClick()">The Garage</button>
@@ -1756,6 +1757,7 @@ var _supabase = supabase.createClient('https://pzbfwzikctpyszthwpvt.supabase.co'
  <span class="mobile-link" onclick="navTo('whiskey');toggleMenu()">Whiskey</span>
  <span class="mobile-link" onclick="navTo('story');toggleMenu()">The Story</span>
  <span class="mobile-link" onclick="navTo('vintage');toggleMenu()">VIN-TAG<span class="lowercase-e">e</span><span class="tm">™</span></span>
+ <a class="mobile-link js-events-link" href="/events/" style="display:none;text-decoration:none;">Events</a>
  <span class="mobile-link" onclick="authNavClick();toggleMenu()">The Garage</span>
  <button class="mobile-cta" onclick="navTo('inventory');toggleMenu()">Never Miss A Release</button>
 </div>
@@ -3328,6 +3330,21 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // ── SMOOTH SCROLL ──
+// ── EVENTS LINK: shown only while /events/events.json has an upcoming event ──
+(function(){
+  fetch('/events/events.json?t=' + Date.now(), { cache: 'no-store' })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      var now = Date.now();
+      var live = d && Array.isArray(d.events) && d.events.some(function(ev){
+        return ev && !ev.hidden && ev.end && new Date(ev.end).getTime() > now;
+      });
+      if (!live) return;
+      document.querySelectorAll('.js-events-link').forEach(function(el){ el.style.display = ''; });
+    })
+    .catch(function(){});
+})();
+
 function navTo(id) {
   document.body.style.overflow = '';
  const el = document.getElementById(id);

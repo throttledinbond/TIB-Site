@@ -1,0 +1,28 @@
+{
+  "_readme": "Add one object per event to 'events'. The site shows the Events menu link only while an event's 'end' is in the future. Times are ISO 8601 with the local UTC offset (Florida EST = -05:00, EDT = -04:00). Leave a link as \"\" to hide its button. Flyer goes in /events/ (1080x1350 or 1080x1080 works best).",
+  "events": [
+    {
+      "id": "main-straight-monday-2026-12-07",
+      "title": "The Main Straight Monday",
+      "eyebrow": "Featuring THROTTLED™",
+      "tagline": "Classic & exotic car meet plus a tasting of THROTTLED's inaugural release. Celebrate The Spirit of American Muscle™.",
+      "start": "2026-12-07T19:00:00-05:00",
+      "end": "2026-12-07T21:00:00-05:00",
+      "timezone": "America/New_York",
+      "venue": "The Collective at Escape Brewing Company",
+      "address": "11495 Trinity Blvd, Trinity, FL 34655",
+      "age": "Free · Open to all ages",
+      "note": "Whiskey tasting and all alcohol service 21+ with valid ID. Arrive early to show your car.",
+      "flyer": "/events/main-straight-monday-2026-12-07.jpg",
+      "links": {
+        "tickets": "https://www.eventbrite.com/e/the-main-straight-monday-featuring-throttled-spirits-tickets-2004824815993",
+        "ticketsLabel": "RSVP Free on Eventbrite",
+        "facebook": "https://www.facebook.com/share/1JR1KhhZpe/",
+        "instagram": ""
+      },
+      "tiers": [],
+      "description": "A classic & exotic car meet featuring THROTTLED whiskey. Come celebrate The Spirit of American Muscle™.\n\nThe Main Straight Monday car meet joins with THROTTLED Spirits to bring you The Spirit of American Muscle™. Rows of classic American muscle and exotic cars fill the lot while THROTTLED, a locally owned whiskey brand, pours a taste of its inaugural release (21+).\n\nTaste the first bottles alongside the founders, grab a signature cocktail or a neat pour, and spend the evening with a crowd that loves cars and good whiskey in equal measure.\n\nPresented by The Main Straight car club and THROTTLED, hosted at The Collective at Escape Brewing Company.\n\n## What to expect\n\n- Classic & exotic car meet. Bring your ride or come admire the lineup\n- Taste the inaugural release of THROTTLED, with the founders on hand (21+)\n- Full bar and kitchen from The Collective at Escape Brewing\n\n## Good to know\n\n- Free to attend. Open to all ages\n- The whiskey tasting and all alcohol service are 21+ with valid ID\n- Want to show your car? Arrive early to get a spot in the meet\n- All beverage service is provided by Escape Brewing Company\n\nCome celebrate The Spirit of American Muscle™. See you on the straight.\n\nNO BURNOUTS · NO EXCESSIVE REVVING",
+      "fine": "Whiskey tasting is 21+ with valid ID. Please drink responsibly, and don't drink and drive."
+    }
+  ]
+}
